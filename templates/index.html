@@ -1,0 +1,23 @@
+$def with (name)
+
+<head>
+    <title>Friends</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="static/styles/stylesheet.css">
+
+</head>
+
+<body>
+
+    <h1>Friends</h1>
+
+    <img src="static/images/friends.jpeg" alt="Friends">
+    
+    $if name:
+        <p>I just wanted to say <em>hello</em> to $name.</p>
+    $else:
+        <p><em>Hello</em>, world!</p>
+
+    <h3>Login, or become a Friend!</h3>
+
+</body>

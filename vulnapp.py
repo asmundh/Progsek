@@ -1,11 +1,16 @@
-def application(environ, start_response):
-    """Simplest possible application object"""
-    data = str.encode('Hello, World!\n')
-    status = '200 OK'
-    response_headers = [
-        ('Content-type','text/plain'),
-        ('Content-Length', str(len(data)))
-    ]
-    start_response(status, response_headers)
-    return iter([data])
+import web
+render = web.template.render('templates/')
 
+urls = (
+    '/', 'application'
+)
+
+class application():
+
+    def GET(self):
+        name = 'Bob'
+        return render.index(name)
+        
+if __name__ == "__main__":
+    app = web.application(urls, globals())
+    app.run()
