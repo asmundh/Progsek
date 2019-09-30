@@ -1,4 +1,4 @@
-$def with (name)
+$def with (friends)
 
 <head>
     <title>Friends</title>
@@ -12,12 +12,16 @@ $def with (name)
     <h1>Friends</h1>
 
     <img src="static/images/friends.jpeg" alt="Friends">
-    
-    $if name:
-        <p>I just wanted to say <em>hello</em> to $name.</p>
-    $else:
-        <p><em>Hello</em>, world!</p>
 
-    <h3>Login, or become a Friend!</h3>
+    <h3>Login, or become a friend!</h3>
+
+    <h3>Regitered friends:</h3>
+    
+    
+    <ul>
+        $for name in friends:
+            <li id="t$name.userid">$name.username</li>
+        </ul>
+    
 
 </body>

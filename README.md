@@ -1,8 +1,12 @@
+Prerequisites
+
+Python >= 3.5
+
 INSTALL
 
 pip install -r requirements.txt
 
 RUN
 
-gunicorn --workers=2 vulnapp 
+python vulnapp 
  
