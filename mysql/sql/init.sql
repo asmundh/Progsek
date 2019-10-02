@@ -1,7 +1,4 @@
 
-create database db;
-
-use db
 
 CREATE TABLE `db`.`users` (
   `userid` INT NOT NULL,
@@ -10,7 +7,7 @@ CREATE TABLE `db`.`users` (
   PRIMARY KEY (`userid`));
 
 insert into users values (0, "admin", "password");
-insert into users values (0, "bernt", "inge");
+insert into users values (1, "bernt", "inge");
 
 
 GRANT ALL PRIVILEGES ON db.* TO 'root'@'%';
