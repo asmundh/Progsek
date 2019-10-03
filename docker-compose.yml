@@ -1,11 +1,13 @@
 version: "2"
 services:
-  
 
   db:
     build:
       context: ./mysql
       dockerfile: Dockerfile
+    networks:
+      backend:
+        ipv4_address: 10.5.0.5
 
 
   app:
@@ -18,4 +20,14 @@ services:
     ports:
       - "8080:8080"
       - "443:443"
+    networks:
+      backend:
+        ipv4_address: 10.5.0.6
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+        config:
+          - subnet: 10.5.0.0/16
   

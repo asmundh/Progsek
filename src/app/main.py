@@ -9,7 +9,7 @@ urls = (
 # Connect to database
 db = web.database(
     dbn="mysql",
-    host='172.18.0.22',
+    host='10.5.0.5',
     port=3306,
     user='root',
     pw='root',
