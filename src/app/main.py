@@ -6,6 +6,7 @@ import mysql.connector
 urls = (
     '/', 'index',
     '/logout', 'logout',
+    '/register', 'register',
 )
 
 # Access datavase using mysql connector package
@@ -35,39 +36,74 @@ render._add_global(session, 'session')
 
 class index():
 
+    # Define the login form 
     login_form = form.Form(
         form.Textbox("username", description="Username"),
         form.Password("password", description="Password"),
-        form.Button("submit", type="submit", description="Login"),
+        form.Button("Log In", type="submit", description="Login"),
     )
 
+    # Get main page
     def GET(self):
-        cursor = db.cursor()
-        query = ("SELECT userid, username from users")
-        cursor.execute(query)
-        friends = cursor.fetchall()
-        cursor.close()
+        # Show other registered users if the user is logged in
+        if session.username:
+            cursor = db.cursor()
+            query = ("SELECT userid, username from users")
+            cursor.execute(query)
+            friends = cursor.fetchall()
+            cursor.close()
+        else:
+            friends = [[],[]]
         return render.index(self.login_form, friends)
 
+    # Log In
+    def POST(self):
+        # Validate login credential with database query
+        cursor = db.cursor()
+        query = ("SELECT userid, username from users where username = (%s) and password = (%s)")
+        data = web.input()
+        cursor.execute(query, (data.username, data.password))
+        friends = cursor.fetchall()
+        # If there is a matching user/password in the database the user is logged in
+        if len(friends) == 1:
+            query = ("SELECT userid, username from users")
+            cursor.execute(query)
+            friends = cursor.fetchall()
+            session.username = data.username
+            cursor.close()
+            return render.index(self.login_form, friends)
+        cursor.close()
+
+
+class register:
+
+    # Define the register form 
+    register_form = form.Form(
+        form.Textbox("username", description="Username"),
+        form.Password("password", description="Password"),
+        form.Button("Register", type="submit", description="Register"),
+    )
+
+    # Get the registration form
+    def GET(self):
+        return render.register(self.register_form)
+
+    # Register new user in database
     def POST(self):
         cursor = db.cursor()
-        query = ("SELECT userid, username, password from users")
-        cursor.execute(query)
-        friends = cursor.fetchall()
-        cursor.close()
+        query = ("INSERT INTO users VALUES ((%s), (%s))")
         data = web.input()
-        print("name:", data.username)
-        for user in friends:
-            if data.username == user[1] and data.password == user[2]:
-                session.username = data.username
-                return render.index(self.login_form, friends[:2])
+        cursor.execute(query, (data.username, data.password))
+        cursor.close()
+        return render.register(self.register_form)
 
 
 class logout:
 
+    # Kill session
     def GET(self):
         session.kill()
-        return "Logged out"
+        return "Logged Out"
 
 if __name__ == "__main__":
     app.run()
