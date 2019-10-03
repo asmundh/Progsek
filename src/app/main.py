@@ -6,6 +6,16 @@ urls = (
     '/', 'index'
 )
 
+# Connect to database
+db = web.database(
+    dbn="mysql",
+    host='172.18.0.22',
+    port=3306,
+    user='root',
+    pw='root',
+    db='db'
+)
+
 # Initialize application using the web py framework
 app = web.application(urls, globals())
 
@@ -22,8 +32,8 @@ class index():
 
 
     def GET(self):
-        #friends = db.select('users')
-        return render.index(login_form)
+        friends = db.select('users')
+        return render.index(login_form, friends)
 
 
 if __name__ == "__main__":

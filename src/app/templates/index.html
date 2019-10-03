@@ -1,4 +1,4 @@
-$def with (login_form)
+$def with (login_form, friends)
 
 <head>
     <title>Friends</title>
@@ -19,6 +19,10 @@ $def with (login_form)
         $:login_form.render()
     </form> 
 
-    
+    <h3>Registered friends:</h3>
+        <ul>
+            $for name in friends:
+                <li id="t$name.userid">$name.username</li>
+        </ul>
 
 </body>
