@@ -21,8 +21,8 @@ $def with (login_form, friends)
 
     <h3>Registered friends:</h3>
         <ul>
-            $for name in friends:
-                <li id="t$name.userid">$name.username</li>
+            $for user in friends:
+                <li id="user[0]">$user[1]</li>
         </ul>
 
 </body>

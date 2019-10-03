@@ -1,21 +1,15 @@
 import web
 from web import form
-
+import mysql.connector
 
 urls = (
     '/', 'index'
 )
 
-# Connect to database
-db = web.database(
-    dbn="mysql",
-    host='10.5.0.5',
-    port=3306,
-    user='root',
-    pw='root',
-    db='db'
-)
-
+db2 = mysql.connector.connect(user='root', password='root',
+                              host='10.5.0.5',
+                              database='db')
+                              
 # Initialize application using the web py framework
 app = web.application(urls, globals())
 
@@ -32,7 +26,10 @@ class index():
 
 
     def GET(self):
-        friends = db.select('users')
+        cursor = db2.cursor()
+        query = ("SELECT userid, username from users")
+        cursor.execute(query)
+        friends = cursor.fetchall()        
         return render.index(login_form, friends)
 
 
