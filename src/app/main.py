@@ -91,7 +91,7 @@ class register:
     # Register new user in database
     def POST(self):
         cursor = db.cursor()
-        query = ("INSERT INTO users VALUES ((%s), (%s))")
+        query = ("INSERT INTO users VALUES (NULL, (%s), (%s))")
         data = web.input()
         cursor.execute(query, (data.username, data.password))
         cursor.close()
