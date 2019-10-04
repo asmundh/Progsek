@@ -1,20 +1,12 @@
 import web
-import mysql.connector
 from forms import login_form, register_form
+import model
 
 # Define application routes
 urls = (
     '/', 'index',
     '/logout', 'logout',
     '/register', 'register',
-)
-
-# Access datavase using mysql connector package
-db = mysql.connector.connect(
-    user='root', 
-    password='root',
-    host='10.5.0.5',
-    database='db'
 )
                               
 # Initialize application using the web py framework
@@ -39,11 +31,7 @@ class index():
     def GET(self):
         # Show other registered users if the user is logged in
         if session.username:
-            cursor = db.cursor()
-            query = ("SELECT userid, username from users")
-            cursor.execute(query)
-            friends = cursor.fetchall()
-            cursor.close()
+            friends = model.get_users()
         else:
             friends = [[],[]]
         return render.index(login_form, friends)
@@ -51,21 +39,13 @@ class index():
     # Log In
     def POST(self):
         # Validate login credential with database query
-        cursor = db.cursor()
-        query = ("SELECT userid, username from users where username = (%s) and password = (%s)")
         data = web.input()
-        cursor.execute(query, (data.username, data.password))
-        friends = cursor.fetchall()
+        user = model.match_user(data.username, data.password)
         # If there is a matching user/password in the database the user is logged in
-        if len(friends) == 1:
-            query = ("SELECT userid, username from users")
-            cursor.execute(query)
-            friends = cursor.fetchall()
+        if len(user) == 1:
+            friends = model.get_users()
             session.username = data.username
-            cursor.close()
             return render.index(login_form, friends)
-        cursor.close()
-
 
 class register:
 
@@ -75,11 +55,8 @@ class register:
 
     # Register new user in database
     def POST(self):
-        cursor = db.cursor()
-        query = ("INSERT INTO users VALUES (NULL, (%s), (%s))")
         data = web.input()
-        cursor.execute(query, (data.username, data.password))
-        cursor.close()
+        model.register_user(data.username, data.password)
         return render.register(register_form)
 
 

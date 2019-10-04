@@ -1,12 +1,13 @@
-Prerequisites
+# Simple python web application
 
-Python >= 3.5
+Python webpy application running on uswgi server with nginx using docker connected to another docker-runned mysql database.
 
-INSTALL
+Web Server image: https://github.com/tiangolo/uwsgi-nginx-docker
+webpy framework: http://webpy.org/
 
-pip install -r requirements.txt
 
-RUN
+### prerequisites:
+docker https://www.docker.com/
 
-python vulnapp 
- 
+### Run
+docker-compose up
