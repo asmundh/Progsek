@@ -18,4 +18,6 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["/start.sh"]
+RUN chmod +x ./wait
+
+CMD ["./wait-for-it.sh", "-h", "10.5.0.5", "db:3306", "--", "/start.sh"]

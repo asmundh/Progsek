@@ -14,11 +14,11 @@ services:
      context: ./src
      dockerfile: Dockerfile
 
-    links:
-      - db
     ports:
       - "8080:8080"
       - "443:443"
+    depends_on:
+      - db
     networks:
       backend:
         ipv4_address: 10.5.0.6
