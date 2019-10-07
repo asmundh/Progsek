@@ -18,15 +18,17 @@ def get_users():
 
 def match_user(username, password):
     cursor = db.cursor()
-    query = ("SELECT userid, username from users where username = (%s) and password = (%s)")
-    cursor.execute(query, (username, password))
+    query = ("SELECT userid, username from users where username = \"" + username + 
+            "\" and password = " + password)
+    cursor.execute(query)
     user = cursor.fetchall()
     return user
 
 def set_user(username, password):
     cursor = db.cursor()
-    query = ("INSERT INTO users VALUES (NULL, (%s), (%s))")
-    cursor.execute(query, (username, password))
+    query = ("INSERT INTO users VALUES (NULL, " + username + 
+            ", " + password + ")")
+    cursor.execute(query)
     cursor.close()
 
 def get_guestbook_entries():

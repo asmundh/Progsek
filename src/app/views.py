@@ -44,10 +44,12 @@ class index():
         data = web.input()
         user = model.match_user(data.username, data.password)
         # If there is a matching user/password in the database the user is logged in
-        if len(user) == 1:
+        if len(user):
             friends = model.get_users()
             session.username = data.username
-            return render.index(login_form, friends)
+        else:
+            friends = [[],[]]
+        return render.index(login_form, friends)
 
 
 class register:
