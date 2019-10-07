@@ -13,3 +13,10 @@ register_form = form.Form(
     form.Password("password", description="Password"),
     form.Button("Register", type="submit", description="Register"),
 )
+
+# Define the guestbook form
+guestbook_form = form.Form(
+    form.Textbox("entry", description="Entry"),
+    form.Button("Submit", type="submit", description="submit")
+)
+

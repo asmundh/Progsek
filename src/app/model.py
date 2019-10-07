@@ -23,8 +23,23 @@ def match_user(username, password):
     user = cursor.fetchall()
     return user
 
-def register_user(username, password):
+def set_user(username, password):
     cursor = db.cursor()
     query = ("INSERT INTO users VALUES (NULL, (%s), (%s))")
     cursor.execute(query, (username, password))
     cursor.close()
+
+def get_guestbook_entries():
+    cursor = db.cursor()
+    query = ("SELECT entryid, text FROM guestbook")
+    cursor.execute(query)
+    entries = cursor.fetchall()
+    cursor.close()
+    return entries
+
+def set_guestbook_entry(entry):
+    cursor = db.cursor()
+    query = ("INSERT INTO guestbook VALUES (NULL, \"" + entry + "\")")
+    cursor.execute(query)
+    cursor.close()
+    

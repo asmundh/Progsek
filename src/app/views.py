@@ -1,5 +1,5 @@
 import web
-from forms import login_form, register_form
+from forms import login_form, register_form, guestbook_form
 import model
 
 # Define application routes
@@ -7,6 +7,7 @@ urls = (
     '/', 'index',
     '/logout', 'logout',
     '/register', 'register',
+    '/guestbook', 'guestbook',
 )
                               
 # Initialize application using the web py framework
@@ -24,6 +25,7 @@ else:
 
 # Add session to global variables
 render._add_global(session, 'session')
+
 
 class index():
 
@@ -47,6 +49,7 @@ class index():
             session.username = data.username
             return render.index(login_form, friends)
 
+
 class register:
 
     # Get the registration form
@@ -56,13 +59,25 @@ class register:
     # Register new user in database
     def POST(self):
         data = web.input()
-        model.register_user(data.username, data.password)
-        return render.register(register_form)
+        model.set_user(data.username, data.password)
+        raise web.seeother('/')
 
+
+class guestbook:
+
+    # Get guestbook entries
+    def GET(self):
+        entries = model.get_guestbook_entries()
+        return render.guestbook(entries, guestbook_form)
+
+    def POST(self):
+        data = web.input()
+        model.set_guestbook_entry(data.entry)
+        return web.seeother("/guestbook")
 
 class logout:
 
     # Kill session
     def GET(self):
         session.kill()
-        return "Logged Out"
+        raise web.seeother('/')

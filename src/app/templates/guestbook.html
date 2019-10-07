@@ -1,0 +1,22 @@
+$def with (entries, guesbook_form)
+
+<head>
+    <title>Friends</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="static/stylesheet.css">
+
+</head>
+
+<body>
+    <h1>Guestbook</h1>
+    <ul>
+        $for entry in entries:
+            <li id="entry[0]">$entry[1]</li>
+
+    </ul>
+    $if session.username:
+    <h2>Write an entry<h2>
+    <form method="POST">
+        $:guesbook_form.render()
+    </form>
+</body>
