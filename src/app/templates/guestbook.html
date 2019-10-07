@@ -15,8 +15,11 @@ $def with (entries, guesbook_form)
 
     </ul>
     $if session.username:
-    <h2>Write an entry<h2>
-    <form method="POST">
-        $:guesbook_form.render()
-    </form>
+        <h2>Write an entry</h2>
+        <form method="POST">
+            $:guesbook_form.render()
+        </form>
+
+    <br>
+    <a href="/">Home</a>
 </body>
