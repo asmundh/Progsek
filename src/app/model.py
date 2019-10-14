@@ -19,15 +19,15 @@ def get_users():
 def match_user(username, password):
     cursor = db.cursor()
     query = ("SELECT userid, username from users where username = \"" + username + 
-            "\" and password = " + password)
+            "\" and password = \"" + password + "\"")
     cursor.execute(query)
     user = cursor.fetchall()
     return user
 
 def set_user(username, password):
     cursor = db.cursor()
-    query = ("INSERT INTO users VALUES (NULL, " + username + 
-            ", " + password + ")")
+    query = ("INSERT INTO users VALUES (NULL, \"" + username + 
+            "\", \"" + password + "\")")
     cursor.execute(query)
     cursor.close()
 

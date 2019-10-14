@@ -82,4 +82,5 @@ class logout:
     # Kill session
     def GET(self):
         session.kill()
+        session.username = None
         raise web.seeother('/')
