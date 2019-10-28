@@ -74,6 +74,9 @@ class guestbook:
 
     def POST(self):
         data = web.input()
+        entry = web.data()
+        print(data)
+        print(entry)
         model.set_guestbook_entry(data.entry)
         return web.seeother("/guestbook")
 

@@ -1,4 +1,4 @@
-$def with (entries, guesbook_form)
+$def with (entries, guestbook_form)
 
 <head>
     <title>Friends</title>
@@ -11,14 +11,17 @@ $def with (entries, guesbook_form)
     <h1>Guestbook</h1>
     <ul>
         $for entry in entries:
-            <li id="entry[0]">$entry[1]</li>
+            <p id="$entry[0]">$entry[1]</p>
 
     </ul>
+
+
+
     $if session.username:
         <h2>Write an entry</h2>
         <form method="POST">
-            $:guesbook_form.render()
-        </form>
+            $:guestbook_form.render()
+        </form> 
 
     <br>
     <a href="/">Home</a>
