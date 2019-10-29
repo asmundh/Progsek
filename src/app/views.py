@@ -1,6 +1,7 @@
 import web
 from forms import login_form, register_form, guestbook_form
 import model
+from utils import get_nav_bar
 
 # Define application routes
 urls = (
@@ -27,11 +28,14 @@ else:
 # Add session to global variables
 render._add_global(session, 'session')
 
+
 class Index():
     
     # Get main page
     def GET(self):
-        return render.index()
+        nav = get_nav_bar(session)
+        return render.index(nav)
+
 
 class Login():
 
@@ -41,7 +45,8 @@ class Login():
             friends = model.get_users()
         else:
             friends = [[],[]]
-        return render.login(login_form, friends)
+        nav = get_nav_bar(session)
+        return render.login(nav, login_form, friends)
 
     # Log In
     def POST(self):
@@ -54,19 +59,21 @@ class Login():
             session.username = data.username
         else:
             friends = [[],[]]
-        return render.login(login_form, friends)
+        nav = get_nav_bar(session)
+        return render.login(nav, login_form, friends)
 
 
 class Register:
 
     # Get the registration form
     def GET(self):
-        return render.register(register_form)
+        nav = get_nav_bar(session)
+        return render.register(nav, register_form)
 
     # Register new user in database
     def POST(self):
         data = web.input()
-        model.set_user(data.username, data.password)
+        model.set_user(nav, data.username, data.password)
         raise web.seeother('/')
 
 
@@ -75,7 +82,8 @@ class Guestbook:
     # Get guestbook entries
     def GET(self):
         entries = model.get_guestbook_entries()
-        return render.guestbook(entries, guestbook_form)
+        nav = get_nav_bar(session)
+        return render.guestbook(nav, entries, guestbook_form)
 
     def POST(self):
         data = web.input()

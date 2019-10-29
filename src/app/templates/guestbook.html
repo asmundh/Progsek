@@ -1,4 +1,4 @@
-$def with (entries, guestbook_form)
+$def with (nav, entries, guestbook_form)
 
 <head>
     <title>Friends</title>
@@ -8,6 +8,9 @@ $def with (entries, guestbook_form)
 </head>
 
 <body>
+
+    $:nav
+
     <h1>Guestbook</h1>
     <ul>
         $for entry in entries:
@@ -23,6 +26,5 @@ $def with (entries, guestbook_form)
             $:guestbook_form.render()
         </form> 
 
-    <br>
-    <a href="/">Home</a>
-</body>
+    </body>
+    

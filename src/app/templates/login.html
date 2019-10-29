@@ -1,16 +1,28 @@
-$def with (login_form, friends)
+$def with (nav, login_form, friends)
 
-<h3>Log In</h3>
-<form method="POST">
-    $:login_form.render()
-</form> 
+<head>
+    <title>Beelance2</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="static/stylesheet.css">
 
-$if session.username:
-    <h1>Logged in as $session.username</h1>
-    <a href="logout">Logout</a>
+</head>
 
-    <h3>Registered friends:</h3>
-        <ul>
-            $for user in friends:
-                <li id="user[0]">$user[1]</li>
-        </ul>
+<body>
+    
+    $:nav
+
+    <h3>Log In</h3>
+    <form method="POST">
+        $:login_form.render()
+    </form> 
+
+    $if session.username:
+        <h1>Logged in as $session.username</h1>
+
+        <h3>Registered friends:</h3>
+            <ul>
+                $for user in friends:
+                    <li id="user[0]">$user[1]</li>
+            </ul>
+
+</body>

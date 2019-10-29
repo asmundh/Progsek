@@ -1,4 +1,4 @@
-$def with (register_form)
+$def with (nav, register_form)
 
 <head>
     <title>Friends</title>
@@ -8,6 +8,9 @@ $def with (register_form)
 </head>
 
 <body>
+
+    $:nav
+
     <h2>Become a friend!</h2>
     <form method="POST">
         $:register_form.render()
