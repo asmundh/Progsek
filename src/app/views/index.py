@@ -1,11 +1,10 @@
 import web
-from forms import login_form, register_form, guestbook_form
-import model
-from utils import get_nav_bar
-from guestbook import Guestbook
-from login import Login
-from logout import Logout
-from register import Register
+from views.utils import get_nav_bar
+from views.guestbook import Guestbook
+from views.login import Login
+from views.logout import Logout
+from views.register import Register
+from views.admin import Admin
 
 # Define application routes
 urls = (
@@ -46,8 +45,3 @@ class Index:
     def GET(self):
         nav = get_nav_bar(session)
         return render.index(nav)
-
-class Admin:
-
-    def GET(self):
-        session = web.ctx.session

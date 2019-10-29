@@ -1,7 +1,7 @@
 import web
-from forms import register_form
-import model
-from utils import get_nav_bar
+from views.forms import register_form
+import models.register
+from views.utils import get_nav_bar
 
 # Get html templates
 render = web.template.render('templates/')
@@ -18,6 +18,6 @@ class Register:
     # Register new user in database
     def POST(self):
         data = web.input()
-        model.set_user(data.username, data.password)
+        models.register.set_user(data.username, data.password)
         raise web.seeother('/')
 
