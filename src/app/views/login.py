@@ -1,7 +1,7 @@
 import web
-from forms import login_form
-import model
-from utils import get_nav_bar
+from views.forms import login_form
+import models.login
+from views.utils import get_nav_bar
 
 # Get html templates
 render = web.template.render('templates/')
@@ -12,7 +12,7 @@ class Login():
         session = web.ctx.session
         # Show other registered users if the user is logged in
         if session.username:
-            friends = model.get_users()
+            friends = models.login.get_users()
         else:
             friends = [[],[]]
         nav = get_nav_bar(session)
@@ -23,10 +23,10 @@ class Login():
         session = web.ctx.session
         # Validate login credential with database query
         data = web.input()
-        user = model.match_user(data.username, data.password)
+        user = models.login.match_user(data.username, data.password)
         # If there is a matching user/password in the database the user is logged in
         if len(user):
-            friends = model.get_users()
+            friends = models.login.get_users()
             session.username = data.username
         else:
             friends = [[],[]]
