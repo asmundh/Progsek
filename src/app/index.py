@@ -14,6 +14,7 @@ urls = (
     '/logout', 'Logout',
     '/register', 'Register',
     '/guestbook', 'Guestbook',
+    '/admin', 'Admin',
 )
                               
 # Initialize application using the web py framework
@@ -32,6 +33,7 @@ else:
 # Add session to global variables
 render._add_global(session, 'session')
 
+# Make the session available cross modules through webctx
 def session_hook():
     web.ctx.session = session
     web.template.Template.globals['session'] = session
