@@ -1,3 +1,13 @@
 body {
-    background-color: gray
+    background-color: lightblue;
+    display: flex; /* or inline-flex */
+    flex-direction: column
+}
+
+h1 {
+    margin: auto;
+}
+
+img {
+    margin: auto;
 }

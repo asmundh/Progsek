@@ -1,7 +1,6 @@
-$def with (login_form, friends)
 
 <head>
-    <title>Friends</title>
+    <title>Beelance2</title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="static/stylesheet.css">
 
@@ -9,9 +8,9 @@ $def with (login_form, friends)
 
 <body>
 
-    <h1>Friends</h1>
+    <h1>Beelance2</h1>
 
-    <img src="static/friends.jpeg" alt="Friends">
+    <img src="static/honeybee.png" alt="Honeybee">
     
     <br>
     <br>
@@ -19,19 +18,6 @@ $def with (login_form, friends)
     <br>
     <a href="guestbook">- Guestbook</a>
 
-    <h3>Log In</h3>
-    <form method="POST">
-        $:login_form.render()
-    </form> 
 
-    $if session.username:
-        <h1>Logged in as $session.username</h1>
-        <a href="logout">Logout</a>
-
-        <h3>Registered friends:</h3>
-            <ul>
-                $for user in friends:
-                    <li id="user[0]">$user[1]</li>
-            </ul>
 
 </body>

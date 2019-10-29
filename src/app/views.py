@@ -4,10 +4,11 @@ import model
 
 # Define application routes
 urls = (
-    '/', 'index',
-    '/logout', 'logout',
-    '/register', 'register',
-    '/guestbook', 'guestbook',
+    '/', 'Index',
+    '/login', 'Login',
+    '/logout', 'Logout',
+    '/register', 'Register',
+    '/guestbook', 'Guestbook',
 )
                               
 # Initialize application using the web py framework
@@ -26,17 +27,21 @@ else:
 # Add session to global variables
 render._add_global(session, 'session')
 
-
-class index():
-
+class Index():
+    
     # Get main page
+    def GET(self):
+        return render.index()
+
+class Login():
+
     def GET(self):
         # Show other registered users if the user is logged in
         if session.username:
             friends = model.get_users()
         else:
             friends = [[],[]]
-        return render.index(login_form, friends)
+        return render.login(login_form, friends)
 
     # Log In
     def POST(self):
@@ -49,10 +54,10 @@ class index():
             session.username = data.username
         else:
             friends = [[],[]]
-        return render.index(login_form, friends)
+        return render.login(login_form, friends)
 
 
-class register:
+class Register:
 
     # Get the registration form
     def GET(self):
@@ -65,7 +70,7 @@ class register:
         raise web.seeother('/')
 
 
-class guestbook:
+class Guestbook:
 
     # Get guestbook entries
     def GET(self):
@@ -80,7 +85,7 @@ class guestbook:
         model.set_guestbook_entry(data.entry)
         return web.seeother("/guestbook")
 
-class logout:
+class Logout:
 
     # Kill session
     def GET(self):
