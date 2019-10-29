@@ -2,6 +2,10 @@ import web
 from forms import login_form, register_form, guestbook_form
 import model
 from utils import get_nav_bar
+from guestbook import Guestbook
+from login import Login
+from logout import Logout
+from register import Register
 
 # Define application routes
 urls = (
@@ -28,75 +32,20 @@ else:
 # Add session to global variables
 render._add_global(session, 'session')
 
+def session_hook():
+    web.ctx.session = session
+    web.template.Template.globals['session'] = session
 
-class Index():
+app.add_processor(web.loadhook(session_hook))
+
+class Index:
     
     # Get main page
     def GET(self):
         nav = get_nav_bar(session)
         return render.index(nav)
 
-
-class Login():
+class Admin:
 
     def GET(self):
-        # Show other registered users if the user is logged in
-        if session.username:
-            friends = model.get_users()
-        else:
-            friends = [[],[]]
-        nav = get_nav_bar(session)
-        return render.login(nav, login_form, friends)
-
-    # Log In
-    def POST(self):
-        # Validate login credential with database query
-        data = web.input()
-        user = model.match_user(data.username, data.password)
-        # If there is a matching user/password in the database the user is logged in
-        if len(user):
-            friends = model.get_users()
-            session.username = data.username
-        else:
-            friends = [[],[]]
-        nav = get_nav_bar(session)
-        return render.login(nav, login_form, friends)
-
-
-class Register:
-
-    # Get the registration form
-    def GET(self):
-        nav = get_nav_bar(session)
-        return render.register(nav, register_form)
-
-    # Register new user in database
-    def POST(self):
-        data = web.input()
-        model.set_user(nav, data.username, data.password)
-        raise web.seeother('/')
-
-
-class Guestbook:
-
-    # Get guestbook entries
-    def GET(self):
-        entries = model.get_guestbook_entries()
-        nav = get_nav_bar(session)
-        return render.guestbook(nav, entries, guestbook_form)
-
-    def POST(self):
-        data = web.input()
-        entry = web.data()
-        print(data)
-        print(entry)
-        model.set_guestbook_entry(data.entry)
-        return web.seeother("/guestbook")
-
-class Logout:
-
-    # Kill session
-    def GET(self):
-        session.kill()
-        session.username = None
-        raise web.seeother('/')
+        session = web.ctx.session
