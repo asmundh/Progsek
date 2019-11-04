@@ -3,6 +3,6 @@ import mysql.connector
 db = mysql.connector.connect(
     user='root', 
     password='root',
-    host='0.0.0.0',
+    host='10.5.0.5',
     database='db'
 )

@@ -1,4 +1,4 @@
-$def with (nav, register_form)
+$def with (nav, project_form)
 
 <head>
     <title>Beelance2</title>
@@ -11,9 +11,9 @@ $def with (nav, register_form)
 
     $:nav
 
-    <h2>Register user!</h2>
+    <h2>Add project!</h2>
     <form method="POST">
-        $:register_form.render()
+        $:project_form.render()
     </form>
 </body>
 

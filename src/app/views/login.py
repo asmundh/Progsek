@@ -27,7 +27,8 @@ class Login():
         # If there is a matching user/password in the database the user is logged in
         if len(user):
             friends = models.login.get_users()
-            session.username = data.username
+            session.username = user[0][1]
+            session.userid = user[0][0]
         else:
             friends = [[],[]]
         nav = get_nav_bar(session)

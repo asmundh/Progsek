@@ -5,6 +5,7 @@ from views.login import Login
 from views.logout import Logout
 from views.register import Register
 from views.admin import Admin
+from views.project import Project
 
 # Define application routes
 urls = (
@@ -13,6 +14,7 @@ urls = (
     '/logout', 'Logout',
     '/register', 'Register',
     '/guestbook', 'Guestbook',
+    '/project', 'Project',
     '/admin', 'Admin',
 )
                               

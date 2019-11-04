@@ -9,6 +9,7 @@ def get_nav_bar(session):
     else:
         result += '    <li><a href="register">Register</a></li>'
         result += '    <li><a href="login">Login</a></li>'
+    result += '    <li><a href="project">Projects</a></li>'
     result += '    <li><a href="guestbook">Guestbook</a></li>'
     result += ' </ul>'
     result += '</nav>'
