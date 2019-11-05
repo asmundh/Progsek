@@ -10,14 +10,19 @@ def get_categories():
 
 def set_project(categoryid, userid, title, project_description, project_status):
     cursor = db.cursor()
-    query = ("INSERT INTO projects values (NULL, \"1\", \"1\", \"sad\", \"desdf\", \"open\")")
-    #("INSERT INTO projects values (NULL, \"" + 
-    #categoryid + "\", \"" + userid + "\", \"" + title + "\", \"" + 
-    #project_description + "\", \"" + project_status + "\")")
-    print(query)
+    query = ("INSERT INTO projects VALUES (NULL, \"" + 
+        categoryid + "\", \"" + userid + "\", \"" + title + "\", \"" + 
+        project_description + "\", \"" + project_status + "\")")
     cursor.execute(query)
+    db.commit()
     cursor.close()
     categories = get_categories()
-    print(categories)
     return categories
-    
+
+def get_projects_by_status_and_category(categoryid, project_status):
+    cursor = db.cursor()
+    query = ("SELECT * FROM projects WHERE project_status = \"" + 
+        project_status + "\" AND categoryid = \"" + categoryid + "\"")
+    cursor.execute(query)
+    projects = cursor.fetchall()
+    return projects

@@ -4,6 +4,7 @@ $def with (nav, login_form, friends)
     <title>Beelance2</title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="static/stylesheet.css">
+    <link rel="shortcut icon" type="image/png" href="static/honeybee.png"/>
 
 </head>
 
@@ -22,7 +23,7 @@ $def with (nav, login_form, friends)
         <h3>Registered friends:</h3>
             <ul>
                 $for user in friends:
-                    <li id="user[0]">$user[1]</li>
+                    <li id="$user[0]">$user[1]</li>
             </ul>
 
 </body>

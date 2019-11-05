@@ -5,6 +5,28 @@ body {
     margin: 0;
 }
 
+.title {
+    margin: auto;
+}
+
+.categories {
+    display: flex; /* or inline-flex */
+    flex-direction: row;
+}
+
+.category {
+    margin: auto;
+}
+
+.projects {
+    display: flex; /* or inline-flex */
+    flex-direction: row;
+}
+
+.projects * {
+    margin: auto;   
+}
+
 h1 {
     margin: auto;
 }

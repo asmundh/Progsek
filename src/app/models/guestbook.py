@@ -12,6 +12,7 @@ def set_guestbook_entry(entry):
     cursor = db.cursor()
     query = ("INSERT INTO guestbook VALUES (NULL, \"" + entry + "\")")
     cursor.execute(query)
+    db.commit()
     cursor.close()
 
     
