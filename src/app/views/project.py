@@ -22,25 +22,22 @@ class Project:
         data = web.input()
         session = web.ctx.session
         nav = get_nav_bar(session)
-        print(data)
 
-        task_count = self.get_task_count(data)
         try:
             if data["Add Task"]:
-                print("tiss") 
-                project_form = self.compose_form(task_count, data, True)
+                project_form = self.compose_form(data, True)
                 return render.project(nav, project_form)
         except Exception as e: 
             try:
                 if data["Remove Task"]:
-                    print("ass")
-                    project_form = self.compose_form(task_count, data, False)
+                    project_form = self.compose_form(data, False)
                     return render.project(nav, project_form)     
                 else:
                     pass
             except Exception as e:
                 try:
                     if data["Create Project"]:
+                        print("Create")
                         pass
                     else:
                         pass
@@ -53,26 +50,35 @@ class Project:
 
     def get_task_count(self, data):
         task_count = 0
-        while True:
+        print(len(data))
+        task_count = int((len(data) - 4) / 3)
+        """while True:
             try:
                 if data["task_title_"+str(task_count)] or data["task_description_"+str(task_count)] or data["task_budget_"+str(task_count)]:
                     task_count += 1
             except Exception as e:
                 pass
-                break
+                break"""
         return task_count
 
-    def compose_form(self, task_count, data, add):
+    def compose_form(self, data, add):
+        task_count = self.get_task_count(data)
+        # A task is either added or removed
+        print("init count", task_count)
+        if not add and task_count >= 1:
+                task_count -= 1
+
+        print("modded", task_count)    
+        
         project_form_elements = get_project_form_elements(data.project_title, data.project_description, data.category_name)
         task_form_elements = ()
         old_task_form_element = ()
-        print(task_count)
+
         for i in range(0, task_count):
-            print("i: ", i)
+            print(i, data)
             old_task_form_element = get_task_form_elements(i, data["task_title_"+str(i)], 
             data["task_description_"+str(i)], data["budget_"+str(i)])
             task_form_elements = (task_form_elements + old_task_form_element)
-            print(len(task_form_elements))
 
         if add:
             new_task_form_elements = get_task_form_elements(task_count)    
