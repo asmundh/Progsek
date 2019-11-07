@@ -78,8 +78,8 @@ CREATE TABLE projects_users (
 
 CREATE TABLE tasks (
   taskid INT UNSIGNED AUTO_INCREMENT,
-  projectid INT NOT NULL,
-  teamid INT UNSIGNED NOT NULL,
+  projectid UNSIGNED INT NOT NULL,
+  teamid INT UNSIGNED,
   title VARCHAR(200) NOT NULL,
   task_description VARCHAR(500),
   budget INT,

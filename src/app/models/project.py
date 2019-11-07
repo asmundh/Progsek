@@ -26,3 +26,11 @@ def get_projects_by_status_and_category(categoryid, project_status):
     cursor.execute(query)
     projects = cursor.fetchall()
     return projects
+
+def set_waiting_task(projectid, title, task_description, budget):
+    cursor = db.cursor()
+    query = ("INSERT INTO tasks (pjojectid, title, task_description, budget) VALUES (\"" +
+    projectid + "\", \"" + title + "\", \"" + title + "\", \"" +
+    task_description + "\", \"" + budget + "\")")
+    cursor.execute(query)
+

@@ -38,7 +38,8 @@ class Project:
                 try:
                     if data["Create Project"]:
                         print("Create")
-                        pass
+                        models.project.set_waiting_task
+                        
                     else:
                         pass
                 except Exception as e:
@@ -50,7 +51,7 @@ class Project:
 
     def get_task_count(self, data):
         task_count = 0
-        print(len(data))
+        # Remove the four other elements from count and divide by the number of variables in one task.
         task_count = int((len(data) - 4) / 3)
         """while True:
             try:
@@ -64,18 +65,14 @@ class Project:
     def compose_form(self, data, add):
         task_count = self.get_task_count(data)
         # A task is either added or removed
-        print("init count", task_count)
         if not add and task_count >= 1:
                 task_count -= 1
-
-        print("modded", task_count)    
         
         project_form_elements = get_project_form_elements(data.project_title, data.project_description, data.category_name)
         task_form_elements = ()
         old_task_form_element = ()
 
         for i in range(0, task_count):
-            print(i, data)
             old_task_form_element = get_task_form_elements(i, data["task_title_"+str(i)], 
             data["task_description_"+str(i)], data["budget_"+str(i)])
             task_form_elements = (task_form_elements + old_task_form_element)
