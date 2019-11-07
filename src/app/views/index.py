@@ -6,7 +6,7 @@ from views.logout import Logout
 from views.register import Register
 from views.admin import Admin
 from views.project import Project
-from models.project import get_categories, get_projects_by_status_and_category
+from views.my_projects import My_projects
 
 # Define application routes
 urls = (
@@ -15,7 +15,8 @@ urls = (
     '/logout', 'Logout',
     '/register', 'Register',
     '/guestbook', 'Guestbook',
-    '/project', 'Project',
+    '/new_project', 'Project',
+    '/my_projects', 'My_projects',
     '/admin', 'Admin',
 )
                               
@@ -46,10 +47,5 @@ class Index:
     
     # Get main page
     def GET(self):
-        data = web.input(categoryid=0)
-        projects=[]
-        if data.categoryid != 0:
-            open_projects = get_projects_by_status_and_category(data.categoryid, "open")
         nav = get_nav_bar(session)
-        categories = get_categories()
-        return render.index(nav, categories, open_projects)
+        return render.index(nav)
