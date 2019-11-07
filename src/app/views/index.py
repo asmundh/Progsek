@@ -49,7 +49,7 @@ class Index:
         data = web.input(categoryid=0)
         projects=[]
         if data.categoryid != 0:
-            projects = get_projects_by_status_and_category(data.categoryid, "open")
+            open_projects = get_projects_by_status_and_category(data.categoryid, "open")
         nav = get_nav_bar(session)
         categories = get_categories()
-        return render.index(nav, categories, projects)
+        return render.index(nav, categories, open_projects)
