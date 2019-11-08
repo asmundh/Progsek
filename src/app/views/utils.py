@@ -10,7 +10,7 @@ def get_nav_bar(session):
         result += '    <li><a href="register">Register</a></li>'
         result += '    <li><a href="login">Login</a></li>'
     result += '    <li><a href="new_project">New</a></li>'
-    result += '    <li><a href="my_projects">Projects</a></li>'
+    result += '    <li><a href="open_projects">Projects</a></li>'
     result += '    <li><a href="guestbook">Guestbook</a></li>'
     result += ' </ul>'
     result += '</nav>'

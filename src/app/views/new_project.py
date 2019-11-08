@@ -6,7 +6,7 @@ from views.utils import get_nav_bar
 # Get html templates
 render = web.template.render('templates/')
 
-class Project:
+class New_project:
 
     # Get the registration form
     def GET(self):
@@ -15,7 +15,7 @@ class Project:
         project_form_elements = get_project_form_elements()
         task_form_elements = get_task_form_elements()
         project_form = get_new_project_form((project_form_elements + task_form_elements))
-        return render.project(nav, project_form)
+        return render.new_project(nav, project_form)
 
     # Register new project in database
     def POST(self):

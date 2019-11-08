@@ -5,8 +5,8 @@ from views.login import Login
 from views.logout import Logout
 from views.register import Register
 from views.admin import Admin
-from views.project import Project
-from views.my_projects import My_projects
+from views.new_project import New_project
+from views.open_projects import Open_projects
 import models.project
 
 # Define application routes
@@ -16,8 +16,8 @@ urls = (
     '/logout', 'Logout',
     '/register', 'Register',
     '/guestbook', 'Guestbook',
-    '/new_project', 'Project',
-    '/my_projects', 'My_projects',
+    '/new_project', 'New_project',
+    '/open_projects', 'Open_projects',
     '/admin', 'Admin',
 )
                               
