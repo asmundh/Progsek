@@ -19,6 +19,14 @@ def set_project(categoryid, userid, title, project_description, project_status):
     categories = get_categories()
     return categories
 
+def get_project_by_id(projectid):
+    cursor = db.cursor()
+    query = ("SELECT * FROM projects WHERE projectid = \"" + 
+        projectid + "\"")
+    cursor.execute(query)
+    project = cursor.fetchall()
+    return project
+
 def get_projects_by_status_and_category(categoryid, project_status):
     cursor = db.cursor()
     query = ("SELECT * FROM projects WHERE project_status = \"" + 

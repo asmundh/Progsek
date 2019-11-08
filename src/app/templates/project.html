@@ -1,4 +1,4 @@
-$def with (nav)
+$def with (nav, project)
 
 <head>
     <title>Beelance2</title>
@@ -11,5 +11,11 @@ $def with (nav)
 <body>
     
     $:nav
+    <h1>Project View</h1>
+
+    $if len(project):
+        <h2>Title: $project[3]</h2>
+        <p>Description: $project[4]</p>
+        <p>Status: $project[5]</p>
 
 </body>

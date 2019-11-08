@@ -12,9 +12,13 @@ class Project:
     def GET(self):
         # Get session
         session = web.ctx.session
-
-         # Get navbar
+        # Get navbar
         nav = get_nav_bar(session)
-        data = web.input()
+
+        data = web.input(projectid=0)
+        if data.projectid:
+            project = models.project.get_project_by_id(data.projectid)
+        else:
+            project = [[]]
         
-        return render.project(nav)
+        return render.project(nav, project[0])

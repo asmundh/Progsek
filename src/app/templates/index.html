@@ -28,7 +28,7 @@ $def with (nav, project_bulk_one, project_bulk_two, projects)
 
     <div class="projects">
         $for project in project_bulk_one:
-            <div class="project"><h4>$project[3]</h4><p>$project[4]</p></div>
+            <div class="project" onclick="location.href='/project?projectid=$project[0]'"><h4>$project[3]</h4><p>$project[4]</p></div>
     </div>
 
     $if projects == 'my':
@@ -37,7 +37,7 @@ $def with (nav, project_bulk_one, project_bulk_two, projects)
 
     <div class="projects">
         $for project in project_bulk_two:
-            <div class="project"><h4>$project[3]</h4><p>$project[4]</p></div>
+            <div class="project" onclick="location.href='/project?projectid=$project[0]'"><h4>$project[3]</h4><p>$project[4]</p></div>
     </div>
 
 </body>
