@@ -27,6 +27,23 @@ def get_projects_by_status_and_category(categoryid, project_status):
     projects = cursor.fetchall()
     return projects
 
+def get_projects_by_status_and_owner(userid, project_status):
+    cursor = db.cursor()
+    query = ("SELECT * FROM projects WHERE project_status = \"" + 
+        project_status + "\" AND userid = \"" + userid + "\"")
+    cursor.execute(query)
+    projects = cursor.fetchall()
+    return projects
+
+def get_projects_by_participant_and_status(userid, project_status):
+    cursor = db.cursor()
+    query = ("SELECT * FROM projects, projects_users WHERE projects.project_status = \"" + 
+        project_status + "\" AND projects_users.userid = \"" + userid + 
+        "\" AND projects_users.projectid = projects.projectid")
+    cursor.execute(query)
+    projects = cursor.fetchall()
+    return projects
+
 def set_waiting_task(projectid, title, task_description, budget):
     cursor = db.cursor()
     query = ("INSERT INTO tasks (pjojectid, title, task_description, budget) VALUES (\"" +
