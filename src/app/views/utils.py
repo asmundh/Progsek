@@ -1,5 +1,10 @@
 
 def get_nav_bar(session):
+    """
+    Generates the page nav bar
+
+        :return: The navigation bar HTML markup
+    """
     result = '<nav>'
     result += ' <ul>'
     result += '    <li><h1 id="title">Beelance2</h1></li>'

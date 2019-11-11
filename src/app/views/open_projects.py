@@ -7,8 +7,12 @@ render = web.template.render('templates/')
 
 class Open_projects:
     
-    # Get projects
     def GET(self):
+        """
+        Get all open projects 
+
+            :return: A page containing all open projects
+        """
         session = web.ctx.session
         data = web.input(categoryid=0)
         open_projects=[]

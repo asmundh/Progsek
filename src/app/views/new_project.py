@@ -37,7 +37,6 @@ class New_project:
             # Add a set of task fields to the form
             if data["Add Task"]:
                 project_form = self.compose_form(data, True)
-                print("add task")
                 return render.new_project(nav, project_form)
         except Exception as e: 
             try:
@@ -49,12 +48,9 @@ class New_project:
                 try:
                     # Post the form data and save the project in the database
                     if data["Create Project"]:
-                        print("Create project")
                         projectid = models.project.set_project(data.category_name, str(session.userid), 
                         data.project_title, data.project_description, "open")
-                        print("id:", projectid)
                         task_count = self.get_task_count(data)
-                        print(task_count)
                         # Save the tasks in the database
                         for i in range(0, task_count):
                             models.project.set_task(str(projectid), (data["task_title_" + str(i)]), 
@@ -64,19 +60,26 @@ class New_project:
                     raise e
 
     def get_task_count(self, data):
-        task_count = 0
-        # Remove the four other elements from count and divide by the number of variables in one task.
+        """
+        Determine the number of tasks created by removing 
+        the four other elements from count and divide by the 
+        number of variables in one task.
+        
+            :param data: The data object from web.input
+            :return: The number of tasks opened by the client
+        """
         task_count = int((len(data) - 4) / 3)
-        """while True:
-            try:
-                if data["task_title_"+str(task_count)] or data["task_description_"+str(task_count)] or data["task_budget_"+str(task_count)]:
-                    task_count += 1
-            except Exception as e:
-                pass
-                break"""
         return task_count
 
     def compose_form(self, data, add):
+        """
+        Compose a new project form by adding or removing a task
+
+            :param data: The data object from web.input
+            :param add: True or False
+            :type add: boolean
+            :return: A complete project form object
+        """
         task_count = self.get_task_count(data)
         # A task is either added or removed
         if not add and task_count >= 1:

@@ -13,7 +13,42 @@ Welcome to beelance2's documentation!
 .. autoclass:: views.index.Index
     :members:
 
+.. autoclass:: views.login.Login
+    :members:
+
+
+.. autoclass:: views.logout.Logout
+    :members:
+
+
+.. autoclass:: views.new_project.New_project
+    :members:
+
+
+.. autoclass:: views.open_projects.Open_projects
+    :members:
+
+
+.. autoclass:: views.project.Project
+    :members:
+
+
+.. autoclass:: views.register.Register
+    :members:
+
 .. automodule:: views.forms
+    :members:
+
+.. automodule:: views.utils
+    :members:
+
+.. automodule:: models.login
+    :members:
+
+.. automodule:: models.project
+    :members:
+
+.. automodule:: models.register
     :members:
 
 Indices and tables

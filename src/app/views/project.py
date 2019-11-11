@@ -8,8 +8,13 @@ render = web.template.render('templates/')
 
 class Project:
 
-    # Get main page
     def GET(self):
+        """
+        Show info about a single project
+
+            :return: Project info page
+        """
+    
         # Get session
         session = web.ctx.session
         # Get navbar

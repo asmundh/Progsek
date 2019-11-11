@@ -9,14 +9,22 @@ render = web.template.render('templates/')
 
 class Register:
 
-    # Get the registration form
     def GET(self):
+        """
+        Get the registration form
+
+            :return: A page with the registration form
+        """
         session = web.ctx.session
         nav = get_nav_bar(session)
         return render.register(nav, register_form)
 
-    # Register new user in database
     def POST(self):
+        """
+        Register new user in database
+
+            :return: Main page
+        """
         data = web.input()
         models.register.set_user(data.username, data.password, 
         data.full_name, data.company, data.phone_number, data.street_address, 
