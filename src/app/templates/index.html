@@ -15,29 +15,31 @@ $def with (nav, project_bulk_one, project_bulk_two, projects)
 
     <img src="static/honeybee.png" alt="Honeybee">
 
-    <h3>What would you like to do today?</h3>
+    $if session.username:
 
-    <div id="user_projects">
-        <div class="user_projects_category" onclick="location.href='/?projects=my'">My Projects</div>
-        <div class="user_projects_category" onclick="location.href='/?projects=customer'">Customer Projects</div>
-        <div class="user_projects_category" onclick="location.href='/?projects=finished'">Finished Projects</div>
-    </div>
+        <h3>What would you like to do today?</h3>
+
+        <div id="user_projects">
+            <div class="user_projects_category" onclick="location.href='/?projects=my'">My Projects</div>
+            <div class="user_projects_category" onclick="location.href='/?projects=customer'">Customer Projects</div>
+            <div class="user_projects_category" onclick="location.href='/?projects=finished'">Finished Projects</div>
+        </div>
     
-    $if projects == 'my':
-        <h3>Your open projects</h3>
+        $if projects == 'my':
+            <h3>Your open projects</h3>
 
-    <div class="projects">
-        $for project in project_bulk_one:
-            <div class="project" onclick="location.href='/project?projectid=$project[0]'"><h4>$project[3]</h4><p>$project[4]</p></div>
-    </div>
+        <div class="projects">
+            $for project in project_bulk_one:
+                <div class="project" onclick="location.href='/project?projectid=$project[0]'"><h4>$project[3]</h4><p>$project[4]</p></div>
+        </div>
 
-    $if projects == 'my':
-        <h3>Projects in  progress</h3>
+        $if projects == 'my':
+            <h3>Projects in  progress</h3>
         
 
-    <div class="projects">
-        $for project in project_bulk_two:
-            <div class="project" onclick="location.href='/project?projectid=$project[0]'"><h4>$project[3]</h4><p>$project[4]</p></div>
-    </div>
+        <div class="projects">
+            $for project in project_bulk_two:
+                <div class="project" onclick="location.href='/project?projectid=$project[0]'"><h4>$project[3]</h4><p>$project[4]</p></div>
+        </div>
 
 </body>
