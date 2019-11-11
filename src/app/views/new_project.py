@@ -8,8 +8,12 @@ render = web.template.render('templates/')
 
 class New_project:
 
-    # Get the registration form
     def GET(self):
+        """
+        Get the project registration form
+            
+            :return: New project page
+        """
         session = web.ctx.session
         nav = get_nav_bar(session)
         project_form_elements = get_project_form_elements()
@@ -17,37 +21,47 @@ class New_project:
         project_form = get_new_project_form((project_form_elements + task_form_elements))
         return render.new_project(nav, project_form)
 
-    # Register new project in database
     def POST(self):
+        """
+        Create a new project
+
+            :return: Redirect to main page
+        """
         data = web.input()
         session = web.ctx.session
         nav = get_nav_bar(session)
 
+        print(data)
+        # Try the three different URL input parameters to determine how to generate the form
         try:
+            # Add a set of task fields to the form
             if data["Add Task"]:
                 project_form = self.compose_form(data, True)
-                return render.project(nav, project_form)
+                print("add task")
+                return render.new_project(nav, project_form)
         except Exception as e: 
             try:
+                # Remove a set of task fields from the form
                 if data["Remove Task"]:
                     project_form = self.compose_form(data, False)
-                    return render.project(nav, project_form)     
-                else:
-                    pass
+                    return render.new_project(nav, project_form)     
             except Exception as e:
                 try:
+                    # Post the form data and save the project in the database
                     if data["Create Project"]:
-                        print("Create")
-                        models.project.set_waiting_task
-                        
-                    else:
-                        pass
+                        print("Create project")
+                        projectid = models.project.set_project(data.category_name, str(session.userid), 
+                        data.project_title, data.project_description, "open")
+                        print("id:", projectid)
+                        task_count = self.get_task_count(data)
+                        print(task_count)
+                        # Save the tasks in the database
+                        for i in range(0, task_count):
+                            models.project.set_task(str(projectid), (data["task_title_" + str(i)]), 
+                            (data["task_description_" + str(i)]), (data["budget_" + str(i)]))
+                        raise web.seeother('/')
                 except Exception as e:
-                    pass
-
-        categories = models.project.set_project(data.category_name, str(session.userid), 
-        data.project_title, data.project_description, "open")
-        raise web.seeother('/')
+                    raise e
 
     def get_task_count(self, data):
         task_count = 0

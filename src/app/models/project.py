@@ -8,16 +8,16 @@ def get_categories():
     cursor.close()
     return categories
 
-def set_project(categoryid, userid, title, project_description, project_status):
+def set_project(categoryid, userid, project_title, project_description, project_status):
     cursor = db.cursor()
     query = ("INSERT INTO projects VALUES (NULL, \"" + 
-        categoryid + "\", \"" + userid + "\", \"" + title + "\", \"" + 
+        categoryid + "\", \"" + userid + "\", \"" + project_title + "\", \"" + 
         project_description + "\", \"" + project_status + "\")")
     cursor.execute(query)
     db.commit()
     cursor.close()
-    categories = get_categories()
-    return categories
+    projectid = get_projects_by_status_and_owner(userid, "open")[-1][0]
+    return projectid
 
 def get_project_by_id(projectid):
     cursor = db.cursor()
@@ -52,10 +52,11 @@ def get_projects_by_participant_and_status(userid, project_status):
     projects = cursor.fetchall()
     return projects
 
-def set_waiting_task(projectid, title, task_description, budget):
+def set_task(projectid, task_title, task_description, budget):
     cursor = db.cursor()
-    query = ("INSERT INTO tasks (pjojectid, title, task_description, budget) VALUES (\"" +
-    projectid + "\", \"" + title + "\", \"" + title + "\", \"" +
-    task_description + "\", \"" + budget + "\")")
+    query = ("INSERT INTO tasks (projectid, title, task_description, budget, task_status) VALUES (\"" +
+    projectid + "\", \"" + task_title + "\", \"" +
+    task_description + "\", \"" + budget + "\", \"waiting for delivery\")")
     cursor.execute(query)
+    db.commit()
 

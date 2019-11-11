@@ -9,9 +9,9 @@ class Index:
     
     def GET(self):
         """    
-        Get main page using the projects input variable to
+        Get main page using the projects URL input variable to
         determine which projects to show.
-
+        
             :return: index page
         """
         session = web.ctx.session

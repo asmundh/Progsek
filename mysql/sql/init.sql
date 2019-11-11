@@ -78,13 +78,13 @@ CREATE TABLE projects_users (
 
 CREATE TABLE tasks (
   taskid INT UNSIGNED AUTO_INCREMENT,
-  projectid UNSIGNED INT NOT NULL,
-  teamid INT UNSIGNED,
+  projectid INT UNSIGNED NOT NULL,
+  teamid INT UNSIGNED NULL,
   title VARCHAR(200) NOT NULL,
   task_description VARCHAR(500),
-  budget INT,
-  task_status VARCHAR(64), -- This should be Waiting for delivery, Delivered and waiting for acceptance, Delivery has been accepted, awaiting payment, Payment for delivery is done or Declined delivery, please revise
-  feedback VARCHAR(500),
+  budget INT NOT NULL,
+  task_status VARCHAR(64) NOT NULL, -- This should be Waiting for delivery, Delivered and waiting for acceptance, Delivery has been accepted, awaiting payment, Payment for delivery is done or Declined delivery, please revise
+  feedback VARCHAR(500) NULL,
   PRIMARY KEY (taskid),
   FOREIGN KEY (teamid) REFERENCES teams(teamid)
 );

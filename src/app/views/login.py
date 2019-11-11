@@ -9,8 +9,12 @@ render = web.template.render('templates/')
 class Login():
 
     def GET(self):
+        """
+        Show the login page
+            
+            :return: The login page showing other users if logged in
+        """
         session = web.ctx.session
-        # Show other registered users if the user is logged in
         if session.username:
             friends = models.login.get_users()
         else:
@@ -18,8 +22,11 @@ class Login():
         nav = get_nav_bar(session)
         return render.login(nav, login_form, friends)
 
-    # Log In
     def POST(self):
+        """
+        Log in to the web application and register the session
+            :return:  The login page showing other users if logged in
+        """
         session = web.ctx.session
         # Validate login credential with database query
         data = web.input()
