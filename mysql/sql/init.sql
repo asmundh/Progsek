@@ -25,7 +25,7 @@ CREATE TABLE guestbook (
 */
 
 CREATE TABLE teams (
-  teamid INT UNSIGNED AUTO_INCREMENT,
+  teamid INT AUTO_INCREMENT,
   team_name VARCHAR(200) NOT NULL,
   write_permission BOOLEAN,
   PRIMARY KEY (teamid)
@@ -79,7 +79,7 @@ CREATE TABLE projects_users (
 CREATE TABLE tasks (
   taskid INT UNSIGNED AUTO_INCREMENT,
   projectid INT UNSIGNED NOT NULL,
-  teamid INT UNSIGNED NULL,
+  teamid INT,
   title VARCHAR(200) NOT NULL,
   task_description VARCHAR(500),
   budget INT NOT NULL,
@@ -87,6 +87,7 @@ CREATE TABLE tasks (
   feedback VARCHAR(500) NULL,
   PRIMARY KEY (taskid),
   FOREIGN KEY (teamid) REFERENCES teams(teamid)
+  FOREIGN KEY (projectid) REFERENCES projects(projectid)
 );
 
 CREATE TABLE task_files (
@@ -114,7 +115,7 @@ CREATE TABLE delivery (
 );
 
 CREATE TABLE task_offer (
-  offerid INT UNSIGNED AUTO_INCREMENT,
+  offerid INT UNSIGNED AUTO_INCREMENT,1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`db`.`tasks`, CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`teamid`) REFERENCES `teams` (`teamid`))
   taskid INT UNSIGNED NOT NULL,
   title VARCHAR(200) NOT NULL,
   price INT,
@@ -134,6 +135,8 @@ insert into users values (NULL, "admin", "password", "Admin Modsen", "ntnu", "12
 insert into guestbook values (NULL, "Hello World");
 
 insert into project_category values (NULL, "Test");
+
+insert into teams values (0, "NO TEAM", FALSE);
 
 /*
 Create default database user

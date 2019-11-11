@@ -119,7 +119,7 @@ def set_task(projectid, task_title, task_description, budget):
         :type budget: str
     """
     cursor = db.cursor()
-    query = ("INSERT INTO tasks (projectid, title, task_description, budget, task_status) VALUES (\"" +
+    query = ("INSERT INTO tasks (teamid, projectid, title, task_description, budget, task_status) VALUES (1, \"" +
     projectid + "\", \"" + task_title + "\", \"" +
     task_description + "\", \"" + budget + "\", \"waiting for delivery\")")
     cursor.execute(query)
