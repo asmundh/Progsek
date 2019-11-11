@@ -7,8 +7,13 @@ render = web.template.render('templates/')
 
 class Index:
     
-    # Get main page
     def GET(self):
+        """    
+        Get main page using the projects input variable to
+        determine which projects to show.
+
+            :return: index page
+        """
         session = web.ctx.session
         nav = get_nav_bar(session)
         data = web.input(projects=None)

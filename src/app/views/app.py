@@ -10,6 +10,7 @@ from views.open_projects import Open_projects
 from views.project import Project
 from views.index import Index
 
+
 # Define application routes
 urls = (
     '/', 'Index',

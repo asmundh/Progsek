@@ -6,7 +6,7 @@ Web Server image: https://github.com/tiangolo/uwsgi-nginx-docker
 webpy framework: http://webpy.org/
 
 
-### prerequisites:
+### Prerequisites:
 docker https://www.docker.com/
 
 ### Build & Run
@@ -19,15 +19,20 @@ $ docker-compose up --build
 
 ### Deploy locally
 
-Install:
+Prerequisites:
 mysql
+python3
 src/app/requirements.txt
 
-Run:
-Launch mysql at port 3306
-Execute mysql queries
+# Run Datatbase:
+Launch mysql at default port (3306)
+$ systemctl start mysqld
+Log in to database
+$ mysql -u <user> -p
+Insert mysql queries
 "CREATE database db;"
 "USE db;"
-Populate mysql by posting mysql/sql/init.sql into mysql
+Then populate databse by posting mysql/sql/init.sql into mysql
 Edit src/app/models/database.py to point at local server
-python3 src/app/main.py
+Run app
+$ python3 src/app/main.py
