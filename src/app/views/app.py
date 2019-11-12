@@ -1,6 +1,5 @@
 import web
 from views.utils import get_nav_bar
-from views.guestbook import Guestbook
 from views.login import Login
 from views.logout import Logout
 from views.register import Register
@@ -17,7 +16,6 @@ urls = (
     '/login', 'Login',
     '/logout', 'Logout',
     '/register', 'Register',
-    '/guestbook', 'Guestbook',
     '/new_project', 'New_project',
     '/open_projects', 'Open_projects',
     '/project', 'Project',
