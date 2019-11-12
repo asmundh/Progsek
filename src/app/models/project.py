@@ -126,3 +126,17 @@ def set_task(projectid, task_title, task_description, budget):
     db.commit()
     cursor.close
 
+def get_tasks_by_project_id(project_id):
+    """
+    Get all tasks belonging to a project
+
+        :param project_id: The id of the project holding the tasks
+        :type project_id: str
+        :return: List of tasks
+    """
+    cursor = db.cursor()
+    query = ("SELECT * FROM tasks WHERE projectid = \"" + project_id + "\"")
+    cursor.execute(query)
+    tasks = cursor.fetchall()
+    cursor.close
+    return tasks

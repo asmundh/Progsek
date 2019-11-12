@@ -23,7 +23,8 @@ class Project:
         data = web.input(projectid=0)
         if data.projectid:
             project = models.project.get_project_by_id(data.projectid)
+            tasks = models.project.get_tasks_by_project_id(data.projectid)
         else:
             project = [[]]
         
-        return render.project(nav, project[0])
+        return render.project(nav, project[0], tasks)

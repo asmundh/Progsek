@@ -1,4 +1,4 @@
-$def with (nav, project)
+$def with (nav, project, tasks)
 
 <head>
     <title>Beelance2</title>
@@ -17,5 +17,10 @@ $def with (nav, project)
         <h2>Title: $project[3]</h2>
         <p>Description: $project[4]</p>
         <p>Status: $project[5]</p>
+
+        <ul>
+            $for task in tasks:
+                <li id="$task[0]">$task</li>
+        </ul>
 
 </body>
