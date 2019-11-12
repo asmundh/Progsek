@@ -20,14 +20,19 @@ $def with (nav, project, tasks)
 
         <ul>
             $for task in tasks:
-                <li id="$task[0]">$task</li>
+                <li id="$task[0]">$task 
+                    <br>                
+                    <form method="POST" enctype="multipart/form-data" action="">
+                        <input type="file" name="myfile" />
+                        <br/>
+                        <input type="hidden" name="taskid" value="$task[0]"/>
+                        <input type="submit" name="submit"/>
+                    </form>
+                </li>
         </ul>
 
-        
-        <form method="POST" enctype="multipart/form-data" action="">
-            <input type="file" name="myfile" />
-            <br/>
-            <input type="submit" />
-        </form>
+        <img src="static/honeybee.png" alt="Honeybee">
+
+
             
 </body>
