@@ -14,12 +14,6 @@ CREATE TABLE users (
   PRIMARY KEY (userid)
 );
 
-CREATE TABLE guestbook (
-  entryid INT UNSIGNED AUTO_INCREMENT, 
-  text VARCHAR(255) NOT NULL,
-  PRIMARY KEY (entryid)
-);
-
 /*
 * Project tables
 */
@@ -131,8 +125,6 @@ CREATE TABLE task_offer (
 */
 
 insert into users values (NULL, "admin", "password", "Admin Modsen", "ntnu", "12345678", "street", "trondheim", "trondheim", "1234", "norway");
-
-insert into guestbook values (NULL, "Hello World");
 
 insert into project_category values (NULL, "Test");
 
