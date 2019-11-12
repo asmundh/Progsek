@@ -25,7 +25,7 @@ CREATE TABLE guestbook (
 */
 
 CREATE TABLE teams (
-  teamid INT AUTO_INCREMENT,
+  teamid INT UNSIGNED AUTO_INCREMENT,
   team_name VARCHAR(200) NOT NULL,
   write_permission BOOLEAN,
   PRIMARY KEY (teamid)
@@ -86,7 +86,7 @@ CREATE TABLE tasks (
   task_status VARCHAR(64) NOT NULL, -- This should be Waiting for delivery, Delivered and waiting for acceptance, Delivery has been accepted, awaiting payment, Payment for delivery is done or Declined delivery, please revise
   feedback VARCHAR(500) NULL,
   PRIMARY KEY (taskid),
-  FOREIGN KEY (teamid) REFERENCES teams(teamid)
+  FOREIGN KEY (teamid) REFERENCES teams(teamid),
   FOREIGN KEY (projectid) REFERENCES projects(projectid)
 );
 
