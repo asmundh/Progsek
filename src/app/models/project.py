@@ -145,7 +145,17 @@ def set_task_file(task_id, filename):
     cursor = db.cursor()
     query = ("INSERT INTO task_files (taskid, filename) VALUES (\"" + 
         task_id + "\", \"" + filename + "\")")
+    print(query)
     cursor.execute(query)
     db.commit()
     cursor.close()
-    
+
+def get_task_files(task_id):
+    cursor = db.cursor()
+    query = ("SELECT filename FROM task_files WHERE taskid = \"" + str(task_id) + "\"")
+    cursor.execute(query)
+    filenames = cursor.fetchall()
+    print(query)
+    print(filenames)
+    cursor.close
+    return filenames
