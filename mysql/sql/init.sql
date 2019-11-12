@@ -109,7 +109,7 @@ CREATE TABLE delivery (
 );
 
 CREATE TABLE task_offer (
-  offerid INT UNSIGNED AUTO_INCREMENT,1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`db`.`tasks`, CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`teamid`) REFERENCES `teams` (`teamid`))
+  offerid INT UNSIGNED AUTO_INCREMENT,
   taskid INT UNSIGNED NOT NULL,
   title VARCHAR(200) NOT NULL,
   price INT,
