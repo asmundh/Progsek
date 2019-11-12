@@ -120,8 +120,8 @@ def set_task(projectid, task_title, task_description, budget):
     """
     cursor = db.cursor()
     query = ("INSERT INTO tasks (teamid, projectid, title, task_description, budget, task_status) VALUES (1, \"" +
-    projectid + "\", \"" + task_title + "\", \"" +
-    task_description + "\", \"" + budget + "\", \"waiting for delivery\")")
+        projectid + "\", \"" + task_title + "\", \"" +
+        task_description + "\", \"" + budget + "\", \"waiting for delivery\")")
     cursor.execute(query)
     db.commit()
     cursor.close
@@ -140,3 +140,12 @@ def get_tasks_by_project_id(project_id):
     tasks = cursor.fetchall()
     cursor.close
     return tasks
+
+def set_task_file(task_id, filename):
+    cursor = db.cursor()
+    query = ("INSERT INTO task_files (taskid, filename) VALUES (\"" + 
+        task_id + "\", \"" + filename + "\")")
+    cursor.execute(query)
+    db.commit()
+    cursor.close()
+    
