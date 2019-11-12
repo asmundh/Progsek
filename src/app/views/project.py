@@ -30,7 +30,7 @@ class Project:
         else:
             project = [[]]
             tasks = [[]]
-        
+        render = web.template.render('templates/', globals={'get_task_files':models.project.get_task_files})
         return render.project(nav, project[0], tasks)
 
     def POST(self):
@@ -59,7 +59,7 @@ class Project:
                 sleep(0.5)
             open(path + '/' + fn, 'wb').write(fileitem.file.read())
             message = 'The file "' + fn + '" was uploaded successfully'
-            
+            models.project.set_task_file(data.taskid, (path + "/" + fn))
         else:
             message = 'No file was uploaded'
         
