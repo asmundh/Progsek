@@ -12,6 +12,15 @@ def get_users():
     cursor.close()
     return users
 
+def get_user_id_by_name(username):
+    cursor = db.cursor()
+    query = ("SELECT userid from users WHERE username =\"" + username + "\"")
+    cursor.execute(query)
+    userid = cursor.fetchall()
+    cursor.close()
+    return userid
+
+
 def match_user(username, password):
     """
     Check if user credentials are correct, return if exists
