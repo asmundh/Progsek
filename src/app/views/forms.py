@@ -80,10 +80,10 @@ def get_new_project_form(elements):
         :return: The ready to use project form
     """
     return form.Form(*elements, 
-    form.Button("submit", type="submit", description="Add User", value="add_user"),
-    form.Button("submit", type="submit", description="Add Task", value="add_task"),
-    form.Button("submit", type="submit", description="Remove Task ", value="remove_task"),
-    form.Button("submit", type="submit", description="Create Project", value="create_project")
+    form.Button("Add User", type="submit", description="Add User", value="add_user"),
+    form.Button("Add Task", type="submit", description="Add Task", value="add_task"),
+    form.Button("Remove Task", type="submit", description="Remove Task ", value="remove_task"),
+    form.Button("Create Project", type="submit", description="Create Project", value="create_project")
     )
 
 # Define the guestbook form
