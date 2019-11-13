@@ -14,12 +14,6 @@ CREATE TABLE users (
   PRIMARY KEY (userid)
 );
 
-CREATE TABLE guestbook (
-  entryid INT UNSIGNED AUTO_INCREMENT, 
-  text VARCHAR(255) NOT NULL,
-  PRIMARY KEY (entryid)
-);
-
 /*
 * Project tables
 */
@@ -115,7 +109,7 @@ CREATE TABLE delivery (
 );
 
 CREATE TABLE task_offer (
-  offerid INT UNSIGNED AUTO_INCREMENT,1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`db`.`tasks`, CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`teamid`) REFERENCES `teams` (`teamid`))
+  offerid INT UNSIGNED AUTO_INCREMENT,
   taskid INT UNSIGNED NOT NULL,
   title VARCHAR(200) NOT NULL,
   price INT,
@@ -131,8 +125,6 @@ CREATE TABLE task_offer (
 */
 
 insert into users values (NULL, "admin", "password", "Admin Modsen", "ntnu", "12345678", "street", "trondheim", "trondheim", "1234", "norway");
-
-insert into guestbook values (NULL, "Hello World");
 
 insert into project_category values (NULL, "Test");
 
