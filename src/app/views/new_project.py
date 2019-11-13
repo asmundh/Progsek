@@ -47,47 +47,49 @@ class New_project:
                     project_form = self.compose_form(data, "remove_task")
                     return render.new_project(nav, project_form)     
             except Exception as e:
-
                 try:
-                    # Post the form data and save the project in the database
-                    if data["Create Project"]:
-                        projectid = models.project.set_project(data.category_name, str(session.userid), 
-                        data.project_title, data.project_description, "open")
-                        task_count = self.get_task_count(data)
-                        user_count = self.get_user_count(data)
-                        # Save the tasks in the database
-                        for i in range(0, task_count):
-                            models.project.set_task(str(projectid), (data["task_title_" + str(i)]), 
-                            (data["task_description_" + str(i)]), (data["budget_" + str(i)]))
-                        for i in range(0, user_count):
-                            userid = models.login.get_user_id_by_name(data["user_name_"+str(i)])
-                            read, write, modify = "FALSE"
-                            try:
-                                if data["read_permission_"str(i)]:
-                                    read = "TRUE"
-                                except Exception as e:
-                                    try:
-                                        if data["write_permission_"str(i)]:
-                                            write = "TRUE"
-                                    except Exception as e:
-                                        try:
-                                            if data["modify_permission_"str(i)]:
-                                                modify = "TRUE"        
-                            models.project.set_project_user(str(projectid), str(userid), )
-                        raise web.seeother('/')
-                        
+                    if data["Add User"]:
+                        project_form = self.compose_form(data, "add_user")
+                        return render.new_project(nav, project_form)     
                 except Exception as e:
                     try:
-                        if data["Add User"]:
-                            project_form = self.compose_form(data, "add_user")
-                            return render.new_project(nav, project_form)     
+                        if data["Remove User"]:
+                            project_form = self.compose_form(data, "remove_user")
+                            return render.new_project(nav, project_form)    
                     except Exception as e:
                         try:
-                            if data["Remove User"]:
-                                project_form = self.compose_form(data, "remove_user")
-                                return render.new_project(nav, project_form)    
+                            # Post the form data and save the project in the database
+                            if data["Create Project"]:
+                                projectid = models.project.set_project(data.category_name, str(session.userid), 
+                                data.project_title, data.project_description, "open")
+                                task_count = self.get_task_count(data)
+                                user_count = self.get_user_count(data)
+                                # Save the tasks in the database
+                                for i in range(0, task_count):
+                                    models.project.set_task(str(projectid), (data["task_title_" + str(i)]), 
+                                    (data["task_description_" + str(i)]), (data["budget_" + str(i)]))
+                                for i in range(0, user_count):
+                                    userid = models.login.get_user_id_by_name(data["user_name_"+str(i)])
+                                    read, write, modify = "FALSE", "FALSE", "FALSE"
+                                    try:
+                                        if data["read_permission_"+str(i)]:
+                                            read = "TRUE"
+                                    except Exception as e:
+                                        try:
+                                            if data["write_permission_"+str(i)]:
+                                                write = "TRUE"
+                                        except Exception as e:
+                                            try:
+                                                if data["modify_permission_"+str(i)]:
+                                                    modify = "TRUE"
+                                            except Exception as e:
+                                                # This error will be raised if no permission is set
+                                                raise e
+                                    models.project.set_projects_user(str(projectid), str(userid), read, write, modify)
+                                raise web.seeother('/')
                         except Exception as e:
-                            raise e        
+                            raise e     
+                    
                         
     def get_task_count(self, data):
         """

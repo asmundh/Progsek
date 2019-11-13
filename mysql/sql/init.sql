@@ -65,7 +65,7 @@ CREATE TABLE projects (
   FOREIGN KEY (userid) REFERENCES users(userid)
 );
 
-CREATE TABLE project_users (
+CREATE TABLE projects_users (
   projectid INT UNSIGNED NOT NULL,
   userid INT UNSIGNED NOT NULL,
   read_permission BOOLEAN,

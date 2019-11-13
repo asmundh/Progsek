@@ -160,12 +160,12 @@ def get_task_files(taskid):
     cursor.close
     return filenames
 
-def set_project_user(projectid, userid, read_permission="TRUE", 
+def set_projects_user(projectid, userid, read_permission="TRUE", 
         write_permission="NULL", modify_permission="NULL"):
     cursor = db.cursor()
-    query = ("INSERT INTO project_users VALUES (\"" + project_id + "\", \"" + 
-        userid + "\", \"" + read_permission + "\", \"" + 
-        write_permission + "\", \"" + modify_permission + "\"")
+    query = ("INSERT INTO projects_users VALUES (\"" + projectid + "\", \"" + 
+        userid + "\", " + read_permission + ", " + 
+        write_permission + ", " + modify_permission + ")")
     cursor.execute(query)
-    df.commit()
+    db.commit()
     cursor.close()
