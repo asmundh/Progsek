@@ -64,6 +64,14 @@ def get_project_form_elements(project_title="", project_description="", category
     )
     return project_form_elements
 
+def get_user_form_elements(user_name, read_permission, write_permission, modify_permission):
+    user_form_elements = (
+        form.Textbox("username", description="User", value=user_name),
+        form.Checkbox("read_permission", description="Read Permission", checked=True),
+        form.Checkbox("write_permission", description="Write Permission", checked=False),
+        form.Checkbox("modify_permission", description="Modify Permission", checked=False)
+    )
+
 def get_new_project_form(elements):
     """
     Combine a project form element and task elements to make a complete project form
@@ -72,6 +80,7 @@ def get_new_project_form(elements):
         :return: The ready to use project form
     """
     return form.Form(*elements, 
+    form.Button("Add User", type="submit", description="Add User", value="add_user"),
     form.Button("Add Task", type="submit", description="Add Task", value="add_task"),
     form.Button("Remove Task", type="submit", description="Remove Task ", value="remove_task"),
     form.Button("Create Project", type="submit", description="Create Project", value="create_project")

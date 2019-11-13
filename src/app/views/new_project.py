@@ -36,13 +36,13 @@ class New_project:
         try:
             # Add a set of task fields to the form
             if data["Add Task"]:
-                project_form = self.compose_form(data, True)
+                project_form = self.compose_form(data, "add_task")
                 return render.new_project(nav, project_form)
         except Exception as e: 
             try:
                 # Remove a set of task fields from the form
                 if data["Remove Task"]:
-                    project_form = self.compose_form(data, False)
+                    project_form = self.compose_form(data, "remove_task")
                     return render.new_project(nav, project_form)     
             except Exception as e:
                 try:
@@ -71,7 +71,7 @@ class New_project:
         task_count = int((len(data) - 4) / 3)
         return task_count
 
-    def compose_form(self, data, add):
+    def compose_form(self, data, operation):
         """
         Compose a new project form by adding or removing a task
 
@@ -82,7 +82,7 @@ class New_project:
         """
         task_count = self.get_task_count(data)
         # A task is either added or removed
-        if not add and task_count >= 1:
+        if operation == "remove_task" and task_count >= 1:
                 task_count -= 1
         
         project_form_elements = get_project_form_elements(data.project_title, data.project_description, data.category_name)
@@ -94,10 +94,11 @@ class New_project:
             data["task_description_"+str(i)], data["budget_"+str(i)])
             task_form_elements = (task_form_elements + old_task_form_element)
 
-        if add:
+        if operation == "add_task":
             new_task_form_elements = get_task_form_elements(task_count)    
             project_form = get_new_project_form((project_form_elements + task_form_elements + new_task_form_elements))
-        else:
-            project_form = get_new_project_form((project_form_elements + task_form_elements))
+            return project_form
+
+        project_form = get_new_project_form((project_form_elements + task_form_elements))
         return project_form
         

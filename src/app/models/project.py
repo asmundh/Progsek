@@ -119,14 +119,14 @@ def set_task(projectid, task_title, task_description, budget):
         :type budget: str
     """
     cursor = db.cursor()
-    query = ("INSERT INTO tasks (teamid, projectid, title, task_description, budget, task_status) VALUES (1, \"" +
+    query = ("INSERT INTO tasks (projectid, title, task_description, budget, task_status) VALUES (\"" +
         projectid + "\", \"" + task_title + "\", \"" +
         task_description + "\", \"" + budget + "\", \"waiting for delivery\")")
     cursor.execute(query)
     db.commit()
     cursor.close
 
-def get_tasks_by_project_id(project_id):
+def get_tasks_by_project_id(projectid):
     """
     Get all tasks belonging to a project
 
@@ -135,27 +135,37 @@ def get_tasks_by_project_id(project_id):
         :return: List of tasks
     """
     cursor = db.cursor()
-    query = ("SELECT * FROM tasks WHERE projectid = \"" + project_id + "\"")
+    query = ("SELECT * FROM tasks WHERE projectid = \"" + projectid + "\"")
     cursor.execute(query)
     tasks = cursor.fetchall()
     cursor.close
     return tasks
 
-def set_task_file(task_id, filename):
+def set_task_file(taskid, filename):
     cursor = db.cursor()
     query = ("INSERT INTO task_files (taskid, filename) VALUES (\"" + 
-        task_id + "\", \"" + filename + "\")")
+        taskid + "\", \"" + filename + "\")")
     print(query)
     cursor.execute(query)
     db.commit()
     cursor.close()
 
-def get_task_files(task_id):
+def get_task_files(taskid):
     cursor = db.cursor()
-    query = ("SELECT filename FROM task_files WHERE taskid = \"" + str(task_id) + "\"")
+    query = ("SELECT filename FROM task_files WHERE taskid = \"" + str(taskid) + "\"")
     cursor.execute(query)
     filenames = cursor.fetchall()
     print(query)
     print(filenames)
     cursor.close
     return filenames
+
+def set_project_users(projectid, userid, read_permission="TRUE", 
+        write_permission="NULL", modify_permission="NULL"):
+    cursor = db.cursor()
+    query = ("INSERT INTO project_users VALUES (\"" + project_id + "\", \"" + 
+        userid + "\", \"" + read_permission + "\", \"" + 
+        write_permission + "\", \"" + modify_permission + "\"")
+    cursor.execute(query)
+    df.commit()
+    cursor.close()
