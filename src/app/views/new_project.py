@@ -65,8 +65,13 @@ class New_project:
                             project_form = self.compose_form(data, "add_user")
                             return render.new_project(nav, project_form)     
                     except Exception as e:
-                        raise e
-
+                        try:
+                            if data["Remove User"]:
+                                project_form = self.compose_form(data, "remove_user")
+                                return render.new_project(nav, project_form)    
+                        except Exception as e:
+                            raise e        
+                        
     def get_task_count(self, data):
         """
         Determine the number of tasks created by removing 
@@ -109,7 +114,7 @@ class New_project:
         task_count = self.get_task_count(data)
         user_count = self.get_user_count(data)
         print(user_count)
-        if operation == "remove_task" and task_count >= 1:
+        if operation == "remove_task" and task_count > 1:
             task_count -= 1
 
         if operation == "remove_user" and user_count >=1:
@@ -159,6 +164,6 @@ class New_project:
             project_form = get_new_project_form((project_form_elements + task_form_elements + user_form_elements + new_user_form_elements))
             return project_form
 
-        project_form = get_new_project_form((project_form_elements + task_form_elements))
+        project_form = get_new_project_form((project_form_elements + task_form_elements + user_form_elements))
         return project_form
         

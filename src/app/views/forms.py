@@ -82,6 +82,7 @@ def get_new_project_form(elements):
     """
     return form.Form(*elements, 
     form.Button("Add User", type="submit", description="Add User", value="add_user"),
+    form.Button("Remove User", type="submit", description="Remove User", value="remove_user"),
     form.Button("Add Task", type="submit", description="Add Task", value="add_task"),
     form.Button("Remove Task", type="submit", description="Remove Task ", value="remove_task"),
     form.Button("Create Project", type="submit", description="Create Project", value="create_project")
