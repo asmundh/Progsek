@@ -64,13 +64,14 @@ def get_project_form_elements(project_title="", project_description="", category
     )
     return project_form_elements
 
-def get_user_form_elements(user_name, read_permission, write_permission, modify_permission):
+def get_user_form_elements(identifier=0, user_name="", read_permission=True, write_permission=False, modify_permission=False):
     user_form_elements = (
-        form.Textbox("username", description="User", value=user_name),
-        form.Checkbox("read_permission", description="Read Permission", checked=True),
-        form.Checkbox("write_permission", description="Write Permission", checked=False),
-        form.Checkbox("modify_permission", description="Modify Permission", checked=False)
+        form.Textbox("user_name_" + str(identifier), description="User", value=user_name),
+        form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission, value=read_permission),
+        form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission, value=write_permission),
+        form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=modify_permission, value=modify_permission)
     )
+    return user_form_elements
 
 def get_new_project_form(elements):
     """

@@ -1,5 +1,5 @@
 import web
-from views.forms import get_task_form_elements, get_new_project_form, get_project_form_elements
+from views.forms import get_task_form_elements, get_new_project_form, get_project_form_elements, get_user_form_elements
 import models.project
 from views.utils import get_nav_bar
 
@@ -18,7 +18,8 @@ class New_project:
         nav = get_nav_bar(session)
         project_form_elements = get_project_form_elements()
         task_form_elements = get_task_form_elements()
-        project_form = get_new_project_form((project_form_elements + task_form_elements))
+        user_form_elements = get_user_form_elements()
+        project_form = get_new_project_form((project_form_elements + task_form_elements + user_form_elements))
         return render.new_project(nav, project_form)
 
     def POST(self):
@@ -48,6 +49,7 @@ class New_project:
                 try:
                     # Post the form data and save the project in the database
                     if data["Create Project"]:
+                        print("hei")
                         projectid = models.project.set_project(data.category_name, str(session.userid), 
                         data.project_title, data.project_description, "open")
                         task_count = self.get_task_count(data)
@@ -55,9 +57,15 @@ class New_project:
                         for i in range(0, task_count):
                             models.project.set_task(str(projectid), (data["task_title_" + str(i)]), 
                             (data["task_description_" + str(i)]), (data["budget_" + str(i)]))
+                        print("HIHI")
                         raise web.seeother('/')
                 except Exception as e:
-                    raise e
+                    try:
+                        if data["Add User"]:
+                            project_form = self.compose_form(data, "add_user")
+                            return render.new_project(nav, project_form)     
+                    except Exception as e:
+                        raise e
 
     def get_task_count(self, data):
         """
@@ -68,8 +76,26 @@ class New_project:
             :param data: The data object from web.input
             :return: The number of tasks opened by the client
         """
-        task_count = int((len(data) - 4) / 3)
+        #task_count = int((len(data) - 4) / 3)
+
+        task_count = 0
+        while True:
+            try:
+                data["task_title_"+str(task_count)]
+                task_count += 1
+            except:
+                break
         return task_count
+
+    def get_user_count(self, data):
+        user_count = 0
+        while True:
+            try:
+                data["user_name_"+str(user_count)]
+                user_count += 1
+            except:
+                break
+        return user_count
 
     def compose_form(self, data, operation):
         """
@@ -81,22 +107,56 @@ class New_project:
             :return: A complete project form object
         """
         task_count = self.get_task_count(data)
-        # A task is either added or removed
+        user_count = self.get_user_count(data)
+        print(user_count)
         if operation == "remove_task" and task_count >= 1:
-                task_count -= 1
+            task_count -= 1
+
+        if operation == "remove_user" and user_count >=1:
+            user_count -= 1
         
         project_form_elements = get_project_form_elements(data.project_title, data.project_description, data.category_name)
         task_form_elements = ()
-        old_task_form_element = ()
+        user_form_elements = ()
 
         for i in range(0, task_count):
             old_task_form_element = get_task_form_elements(i, data["task_title_"+str(i)], 
             data["task_description_"+str(i)], data["budget_"+str(i)])
             task_form_elements = (task_form_elements + old_task_form_element)
 
+        for i in range(0, user_count):
+            try:
+                old_user_form_element = get_user_form_elements(i, data["user_name_"+str(i)],
+                data["read_permission_"+str(i)], data["write_permission_"+str(i)], data["modify_permission_"+str(i)])
+                user_form_elements = (user_form_elements + old_user_form_element)
+            except Exception as e:
+                try:
+                    old_user_form_element = get_user_form_elements(i, data["user_name_"+str(i)],
+                    data["read_permission_"+str(i)], data["write_permission_"+str(i)])
+                    user_form_elements = (user_form_elements + old_user_form_element)
+                    pass
+                except Exception as e:
+                    try:
+                        old_user_form_element = get_user_form_elements(i, data["user_name_"+str(i)],
+                        data["read_permission_"+str(i)])
+                        user_form_elements = (user_form_elements + old_user_form_element)
+                        pass
+                    except Exception as e:
+                        try:
+                            old_user_form_element = get_user_form_elements(i, data["user_name_"+str(i)])
+                            user_form_elements = (user_form_elements + old_user_form_element)
+                            pass
+                        except Exception as e:
+                            raise e
+
         if operation == "add_task":
             new_task_form_elements = get_task_form_elements(task_count)    
-            project_form = get_new_project_form((project_form_elements + task_form_elements + new_task_form_elements))
+            project_form = get_new_project_form((project_form_elements + task_form_elements + new_task_form_elements + user_form_elements))
+            return project_form
+
+        if operation == "add_user":
+            new_user_form_elements = get_user_form_elements(user_count)
+            project_form = get_new_project_form((project_form_elements + task_form_elements + user_form_elements + new_user_form_elements))
             return project_form
 
         project_form = get_new_project_form((project_form_elements + task_form_elements))
