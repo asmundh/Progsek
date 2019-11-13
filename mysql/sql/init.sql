@@ -128,7 +128,6 @@ insert into users values (NULL, "admin", "password", "Admin Modsen", "ntnu", "12
 
 insert into project_category values (NULL, "Test");
 
-insert into teams values (0, "NO TEAM", FALSE);
 
 /*
 Create default database user
