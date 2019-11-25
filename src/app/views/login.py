@@ -44,7 +44,7 @@ class Login():
             if self.sign_username(username) == sign:
                 print("HASH MATCH")
         except Exception as e:
-            raise e
+            pass
 
         if session.username:
             friends = models.login.get_users()
@@ -72,12 +72,6 @@ class Login():
             print('remember me')
             remember = self.rememberme()
             web.setcookie('remember', remember , 12000000)
-            print("equal at start?", remember == b'gANdcQAoWCAAAAAxN2UxZWJmOGJiODhkNzdmZWNjM2E5MmYxMTFkMjU4OHEBWAUAAABhZG1pbnECZS4=')
-            cookies = web.cookies()
-            print("equal at start?", cookies.remember == b'gANdcQAoWCAAAAAxN2UxZWJmOGJiODhkNzdmZWNjM2E5MmYxMTFkMjU4OHEBWAUAAABhZG1pbnECZS4=')
-            print(remember)
-            print(cookies.remember)
-            print(DeepDiff(remember, cookies.remember, 'ascii'))
         else:
             friends = [[],[]]
         nav = get_nav_bar(session)
