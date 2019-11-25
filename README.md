@@ -14,25 +14,47 @@ $ docker-compose up --build
 
 ### Prune/Recreate
 If you need a fresh rebuild in case of startup issues use this command (WARNING this will remove all your docker images)
+
 $ docker system prune -a
+
 $ docker-compose up --build
 
-### Deploy locally
+# Deploy locally
 
 Prerequisites:
+
 mysql
+
 python3
+
 src/app/requirements.txt
 
-# Run Datatbase:
+### Run Datatbase:
 Launch mysql at default port (3306)
+
 $ systemctl start mysqld
+
 Log in to database
-$ mysql -u <user> -p
+
+$ sudo mysql -u root
+
 Insert mysql queries
+
 "CREATE database db;"
+
 "USE db;"
-Then populate databse by posting mysql/sql/init.sql into mysql
+
+"SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');"
+
+Then populate databse by posting mysql/sql/init.sql into 
+mysql
+
 Edit src/app/models/database.py to point at local server
+
+
+
 Run app
+
+$ cd src/app/
+
 $ python3 src/app/main.py
