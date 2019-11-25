@@ -53,7 +53,7 @@ Edit src/app/models/database.py to point at local server
 
 
 
-Run app
+###Run app
 
 $ cd src/app/
 
