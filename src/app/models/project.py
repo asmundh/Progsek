@@ -36,7 +36,9 @@ def set_project(categoryid, userid, project_title, project_description, project_
     cursor.execute(query)
     db.commit()
     cursor.close()
-    projectid = get_projects_by_status_and_owner(userid, "open")[-1][0]
+    users_projects = get_projects_by_owner(userid) 
+    print("Project", users_projects)
+    projectid = users_projects[-1][0]
     return projectid
 
 def get_project_by_id(projectid):
@@ -66,6 +68,13 @@ def get_projects_by_status_and_category(categoryid, project_status):
     cursor = db.cursor()
     query = ("SELECT * FROM projects WHERE project_status = \"" + 
         project_status + "\" AND categoryid = \"" + categoryid + "\"")
+    cursor.execute(query)
+    projects = cursor.fetchall()
+    return projects
+
+def get_projects_by_owner(userid):
+    cursor = db.cursor()
+    query = ("SELECT * FROM projects WHERE userid = \"" + userid + "\"")
     cursor.execute(query)
     projects = cursor.fetchall()
     return projects
