@@ -89,6 +89,11 @@ def get_new_project_form(elements):
     form.Button("Create Project", type="submit", description="Create Project", value="create_project")
     )
 
+
+apply_form = form.Form(
+    form.Button("Apply", type="submit", description="Apply", value="apply")
+)
+
 # Define the guestbook form
 guestbook_form = form.Form(
     form.Textbox("entry", description="Entry"),

@@ -31,7 +31,7 @@ class Login():
             # Fetch the remember cookie and convert from string to bytes
             remember_hash = bytes(cookies.remember[2:][:-1], 'ascii')
             # Decode the hash
-            encode = base64.b64decode(remember_hash)
+            decode = base64.b64decode(remember_hash)
             # Load the decoded hash to receive the host signature and the username
             username, sign = pickle.loads(encode)
         except AttributeError as e:

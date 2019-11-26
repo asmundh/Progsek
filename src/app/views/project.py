@@ -27,7 +27,6 @@ class Project:
         if data.projectid:
             project = models.project.get_project_by_id(data.projectid)
             tasks = models.project.get_tasks_by_project_id(data.projectid)
-            # Serialize the object to make the data more read
         else:
             project = [[]]
             tasks = [[]]

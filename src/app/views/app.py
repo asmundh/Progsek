@@ -9,7 +9,7 @@ from views.new_project import New_project
 from views.open_projects import Open_projects
 from views.project import Project
 from views.index import Index
-#from views.apply import Apply
+from views.apply import Apply
 
 # Define application routes
 urls = (
