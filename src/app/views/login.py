@@ -33,7 +33,7 @@ class Login():
             # Decode the hash
             decode = base64.b64decode(remember_hash)
             # Load the decoded hash to receive the host signature and the username
-            username, sign = pickle.loads(encode)
+            username, sign = pickle.loads(decode)
         except AttributeError as e:
             # The user did not have the stored remember me cookie
             pass

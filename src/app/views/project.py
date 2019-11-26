@@ -30,8 +30,8 @@ class Project:
         else:
             project = [[]]
             tasks = [[]]
-        render = web.template.render('templates/', globals={'get_task_files':models.project.get_task_files})
-        return render.project(nav, project[0], tasks)
+        render = web.template.render('templates/', globals={'get_task_files':models.project.get_task_files, 'session':session})
+        return render.project(nav, project, tasks)
 
     def POST(self):
         data = web.input(myfile={})

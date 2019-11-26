@@ -34,6 +34,9 @@ $def with (nav, project, tasks)
                 </li>
         </ul>
 
+    $if project[5] == "open" and session.userid != project[2]:
+        <div id="apply" onclick="location.href='/apply?projectid=$project[0]'" name="Apply" description="apply">Apply for this project</div>
+
 
             
 </body>

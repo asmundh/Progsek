@@ -60,17 +60,16 @@ class New_project:
                         try:
                             # Post the form data and save the project in the database
                             if data["Create Project"]:
-                                task_count = self.get_task_count(data)
-                                user_count = self.get_user_count(data)
+                                task_count = get_task_count(data)
+                                user_count = get_user_count(data)
 
                                 # Get the "real" user_count, if there is only one field and no users assigned the project is open
+                                status = "open"
                                 if user_count > 0:
                                     if len(data.user_name_0):
                                         status = "in progress"
-                                    else:
-                                        status = "open"
-                                else:
-                                    status = "open"
+                                    
+                                # Save the project to the database
                                 projectid = models.project.set_project(data.category_name, str(session.userid), 
                                 data.project_title, data.project_description, status)
                                 
@@ -100,37 +99,6 @@ class New_project:
                                     raise web.seeother('/')
                         except Exception as e:
                             raise e     
-                    
-                        
-    def get_task_count(self, data):
-        """
-        Determine the number of tasks created by removing 
-        the four other elements from count and divide by the 
-        number of variables in one task.
-        
-            :param data: The data object from web.input
-            :return: The number of tasks opened by the client
-        """
-        #task_count = int((len(data) - 4) / 3)
-
-        task_count = 0
-        while True:
-            try:
-                data["task_title_"+str(task_count)]
-                task_count += 1
-            except:
-                break
-        return task_count
-
-    def get_user_count(self, data):
-        user_count = 0
-        while True:
-            try:
-                data["user_name_"+str(user_count)]
-                user_count += 1
-            except:
-                break
-        return user_count
 
     def compose_form(self, data, operation):
         """
@@ -141,8 +109,8 @@ class New_project:
             :type add: boolean
             :return: A complete project form object
         """
-        task_count = self.get_task_count(data)
-        user_count = self.get_user_count(data)
+        task_count = get_task_count(data)
+        user_count = get_user_count(data)
         print(user_count)
         if operation == "remove_task" and task_count > 1:
             task_count -= 1
@@ -197,3 +165,31 @@ class New_project:
         project_form = get_new_project_form((project_form_elements + task_form_elements + user_form_elements))
         return project_form
         
+                        
+def get_task_count(data):
+    """
+    Determine the number of tasks created by removing 
+    the four other elements from count and divide by the 
+    number of variables in one task.
+     
+        :param data: The data object from web.input
+        :return: The number of tasks opened by the client
+    """
+    task_count = 0
+    while True:
+        try:
+            data["task_title_"+str(task_count)]
+            task_count += 1
+        except:
+            break
+    return task_count
+
+def get_user_count(data):
+    user_count = 0
+    while True:
+        try:
+            data["user_name_"+str(user_count)]
+            user_count += 1
+        except:
+            break
+    return user_count

@@ -20,7 +20,7 @@ $def with (nav, categories, open_projects)
 
     <div class="projects">
         $for project in open_projects:
-            <div class="project" onclick="location.href='/apply?projectid=$project[0]'"><h4>$project[3]</h4><p>$project[4]</p></div>
+            <div class="project" onclick="location.href='/project?projectid=$project[0]'"><h4>$project[3]</h4><p>$project[4]</p></div>
     </div>
 
     <img src="static/honeybee.png" alt="Honeybee">

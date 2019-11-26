@@ -52,7 +52,7 @@ def get_project_by_id(projectid):
         projectid + "\"")
     cursor.execute(query)
     project = cursor.fetchall()
-    return project
+    return project[0]
 
 def get_projects_by_status_and_category(categoryid, project_status):
     """

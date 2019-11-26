@@ -14,7 +14,7 @@ class Logout:
         """
         session = web.ctx.session
         session.username = None
-        session.id = None
+        session.userid = None
         web.setcookie('remember', '', 0)
         session.kill()        
         raise web.seeother('/')

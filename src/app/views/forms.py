@@ -1,5 +1,6 @@
 from web import form
 from models.project import get_categories 
+from models.login import get_users
 
 # Define the login form 
 login_form = form.Form(
@@ -23,9 +24,6 @@ register_form = form.Form(
     form.Password("password", description="Password"),
     form.Button("Register", type="submit", description="Register"),
 )
-
-# Get categories
-categories = get_categories()
 
 def get_task_form_elements(identifier=0, task_title="", task_description="", budget=""):
     """
@@ -58,6 +56,7 @@ def get_project_form_elements(project_title="", project_description="", category
         :type category_name: str
         :return: A set of project form elements    
     """
+    categories = get_categories()
     project_form_elements = (
     form.Textbox("project_title", description="Title", value=project_title),
     form.Textarea("project_description", description="Description", value=project_description),
@@ -66,9 +65,9 @@ def get_project_form_elements(project_title="", project_description="", category
     return project_form_elements
 
 def get_user_form_elements(identifier=0, user_name="", read_permission=True, write_permission=False, modify_permission=False):
+    users = get_users()
     user_form_elements = (
-        form.Textbox("user_name_" + str(identifier), description="User", value=user_name),
-        form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission, value=read_permission),
+        form.Textbox("user_name_" + str(identifier), description="User", value=user_name),        form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission, value=read_permission),
         form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission, value=write_permission),
         form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=modify_permission, value=modify_permission)
     )
@@ -89,14 +88,27 @@ def get_new_project_form(elements):
     form.Button("Create Project", type="submit", description="Create Project", value="create_project")
     )
 
+def get_apply_form(elements):
+    try:
+        apply_form = form.Form(*elements,
+            form.Button("Add User", type="submit", description="Add User", value="add_user"),
+            form.Button("Remove User", type="submit", description="Remove User", value="remove_user"),
+            form.Button("Apply", type="submit", description="Apply", value="apply")
+        )
+    except TypeError as e:
+        apply_form = form.Form(elements,
+            form.Button("Add User", type="submit", description="Add User", value="add_user"),
+            form.Button("Remove User", type="submit", description="Remove User", value="remove_user"),
+            form.Button("Apply", type="submit", description="Apply", value="apply")
+        )
+    return apply_form
 
-apply_form = form.Form(
-    form.Button("Apply", type="submit", description="Apply", value="apply")
-)
+def get_user_dropdown(identifier=0):
+    users = get_users()
+    return form.Dropdown("user_name_" + str(identifier), description="User", args=users)
 
 # Define the guestbook form
 guestbook_form = form.Form(
     form.Textbox("entry", description="Entry"),
-
 )
 
