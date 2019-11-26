@@ -37,7 +37,6 @@ def set_project(categoryid, userid, project_title, project_description, project_
     db.commit()
     cursor.close()
     users_projects = get_projects_by_owner(userid) 
-    print("Project", users_projects)
     projectid = users_projects[-1][0]
     return projectid
 
