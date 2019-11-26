@@ -10,12 +10,10 @@ from deepdiff import DeepDiff
 render = web.template.render('templates/')
 
 
-
 class Login():
 
     # Get the server secret to perform signatures
     secret = web.config.get('session_parameters')['secret_key']
-
 
     def GET(self):
         """
@@ -24,34 +22,34 @@ class Login():
             :return: The login page showing other users if logged in
         """
         session = web.ctx.session
-
+        username = ""
+        sign = ""
         # If the user selected 'remember me' they log in automatically
         try:
-            print("secret" ,self.secret)
+            # Fetch the users cookies if it exists
             cookies = web.cookies()
-            print("cookie", cookies)
+            # Fetch the remember cookie and convert from string to bytes
             remember_hash = bytes(cookies.remember[2:][:-1], 'ascii')
-            print("remember_hash")
-            print(remember_hash)
-            print(remember_hash == b'gANdcQAoWCAAAAAxN2UxZWJmOGJiODhkNzdmZWNjM2E5MmYxMTFkMjU4OHEBWAUAAABhZG1pbnECZS4=')
-
+            # Decode the hash
             encode = base64.b64decode(remember_hash)
-            print("dencode", encode)
-
+            # Load the decoded hash to receive the host signature and the username
             username, sign = pickle.loads(encode)
-
-
-            if self.sign_username(username) == sign:
-                print("HASH MATCH")
-        except Exception as e:
+        except AttributeError as e:
+            # The user did not have the stored remember me cookie
             pass
 
+        # If the users signed cookie matches the host signature then log in
+        if self.sign_username(username) == sign:
+            userid = models.login.get_user_id_by_name(username)
+            session.username = username
+            session.userid = userid
+
+        # Show a list of registered users when login in
         if session.username:
             friends = models.login.get_users()
         else:
             friends = [[],[]]
         nav = get_nav_bar(session)
-
 
         return render.login(nav, login_form, friends)
 
@@ -69,40 +67,31 @@ class Login():
             friends = models.login.get_users()
             session.username = user[0][1]
             session.userid = user[0][0]
-            print('remember me')
-            remember = self.rememberme()
-            web.setcookie('remember', remember , 12000000)
+            if data.remember:
+                remember = self.rememberme()
+                web.setcookie('remember', remember , 12000000)
         else:
             friends = [[],[]]
         nav = get_nav_bar(session)
         return render.login(nav, login_form, friends)
 
     def rememberme(self):
+        """
+        Encode a base64 object consisting of the username signed with the
+        host secret key and the username. Can be reassembled with the
+        hosts secret key to validate user.
+            :return: base64 object consisting of signed username and username
+        """
         session = web.ctx.session
-        creds = [ session.username, self.sign() ]
-        print(creds)
-        print("save", base64.b64encode(pickle.dumps(creds)))
+        creds = [ session.username, self.sign_username(session.username) ]
         return base64.b64encode(pickle.dumps(creds))
-
-    def sign(self):
-        session = web.ctx.session
-        return self.sign_username(session.username)
 
     @classmethod
     def sign_username(self, username):
+        """
+        Sign the current users name with the hosts secret key
+            :return: The users signed name
+        """
         secret = base64.b64decode(self.secret)
-        print(secret)
-        print(username)
         return hmac.HMAC(secret, username.encode('ascii')).hexdigest()
  
-    @classmethod
-    def valid_rememberme(self, cookie):
-        userame, sign = pickle.load(StringIO(base64.b64decode(cookie)))
-        if self.sign_username(user) == sign:
-            return True
-        return False
-        
-    @classmethod
-    def from_rememberme(self, cookie):
-        user, sign= pickle.load(StringIO(base64.b64decode(cookie)))
-        return user

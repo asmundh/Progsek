@@ -13,7 +13,8 @@ class Logout:
             :return: Redirect to main page
         """
         session = web.ctx.session
-        session.kill()
         session.username = None
         session.id = None
+        web.setcookie('remember', '', 0)
+        session.kill()        
         raise web.seeother('/')

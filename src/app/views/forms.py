@@ -5,6 +5,7 @@ from models.project import get_categories
 login_form = form.Form(
     form.Textbox("username", description="Username"),
     form.Password("password", description="Password"),
+    form.Checkbox("remember", description= "Remember me", checked=True, value=False),
     form.Button("Log In", type="submit", description="Login"),
 )
 
