@@ -98,14 +98,13 @@ def get_apply_form(elements):
     except TypeError as e:
         apply_form = form.Form(elements,
             form.Button("Add User", type="submit", description="Add User", value="add_user"),
-            form.Button("Remove User", type="submit", description="Remove User", value="remove_user"),
             form.Button("Apply", type="submit", description="Apply", value="apply")
         )
     return apply_form
 
 def get_user_dropdown(identifier=0):
     users = get_users()
-    return form.Dropdown("user_name_" + str(identifier), description="User", args=users)
+    return form.Dropdown("user_id_" + str(identifier), description="User", args=users)
 
 # Define the guestbook form
 guestbook_form = form.Form(

@@ -1,0 +1,30 @@
+$def with (nav, apply_form, project, applicants)
+
+<head>
+        <title>Beelance2</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="static/stylesheet.css">
+        <link rel="shortcut icon" type="image/png" href="static/honeybee.png"/>
+</head>
+    
+<body>
+    
+    $:nav
+
+    <h1>Apply for this project</h1>
+
+    $if project[5] == "open" and session.userid != project[2]:
+        <h2>Title: $project[3]</h2>
+        <p>Description: $project[4]</p>
+        <p>Status: $project[5]</p>
+        
+        
+        <form method="POST">
+            <p>Users to apply:</p>
+            $for i, user in enumerate(applicants):
+                <div>$user[1]<input name="$user[0]" type ="submit"  value="X"></input></div>
+                <input hidden="hidden" name="user_name_$i" value="$applicants[i]"/>
+            $:apply_form.render()
+        </form> 
+            
+</body>
