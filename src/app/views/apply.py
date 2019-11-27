@@ -45,44 +45,55 @@ class Apply:
             try:
                 if data["Add User"]:
                     #project_form = self.compose_form(data, "add_user")
-                    applicants = self.compose_form(data, "add_user")
+                    applicants = self.get_applicants(data, "add_user")
                     return render.apply(nav, apply_form, project, applicants)     
             except Exception as e:
-                raise
                 try:
                     if data["Remove User"]:
                         #project_form = self.compose_form(data, "remove_user")
+                        applicants = self.get_applicants(data, "remove_user")
                         return render.apply(nav, apply_form, project, applicants)    
                 except Exception as e:
                     try:
                         if data["Apply"]:
-                            models.project.set_projects_user(str(projectid), str(session.userid), read, write, modify)
+                            applicants = self.get_applicants(data, "")
+                            for applicant in applicants:
+                                print("Add", applicant, data.projectid)
+                                models.project.set_projects_user(data.projectid, str(applicant[0]), "TRUE", "TRUE", "FALSE")
                             raise web.seeother(('/project?projectid=' + data.projectid))
                     except Exception as e:
                         raise
 
-    def compose_form(self, data, operation):
+    def get_applicants(self, data, operation):
         print(operation)
         print(data)
+        user_count = get_user_count(data)
+        print("count", user_count)
+        applicants = []
+        for i in range (0, user_count):
+            print("Raw applicant", data["user_name_"+str(i)])
+            applicant = data["user_name_"+str(i)][1:][:-1].split(",")
+            applicants.append([ int(applicant[0]), applicant[1][2:][:-1] ])
+
         if operation == "remove_user":
-            pass
-        if operation == "add_user":
-            user_count = get_user_count(data)
-            print("count", user_count)
-            applicants = []
+            print("remove")
+            user_to_remove = data["Remove User"][1:][:-1].split(",")
+            user_to_remove = [int(user_to_remove[0]), user_to_remove[1][2:][:-1]]
             for i in range (0, user_count):
-                print("Raw applicant", data["user_name_"+str(i)])
-                applicant = data["user_name_"+str(i)][1:][:-1].split(",")
-                print(applicant)
-                applicants.append([ int(applicant[0]), applicant[1][2:][:-1] ])
+                print(user_to_remove, applicants[i])
+                if user_to_remove == applicants[i]:
+                    applicants.pop(i)
+                    break
+
+        elif operation == "add_user":
 
             user_id_to_add = data.user_id_0
             user_name_to_add = get_user_name_by_id(user_id_to_add)
             new_applicant = [ int(user_id_to_add), user_name_to_add ]
             if new_applicant not in applicants:
                 applicants.append(new_applicant)
-            print(applicants)
+        print(applicants)
 
-            return applicants
+        return applicants
             
 
