@@ -44,18 +44,27 @@ class Project:
         data = web.input(myfile={}, deliver=None, accepted=None, declined=None)
 
         fileitem = data['myfile']
+        
 
         permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
         tasks = models.project.get_tasks_by_project_id(data.projectid)
 
         print(data)
+        task_waiting = False
+        task_delivered = False
+        for task in tasks:
+            print("TASK", task)
+            print("taskid", data.taskid, "equal", task[0])
+            if task[0] == int(data.taskid):  
+                print("ASDASADSSD", task[6])  
+                if(task[6] == "waiting for delivery" or task[6] == "declined"):
+                    task_waiting = True
+                if(task[6] == 'accepted'):
+                    task_delivered = True
+        print(task_waiting, task_delivered)
         # Test if the file was uploaded
         if fileitem.filename:
-            task_waiting = False
-            for task in tasks:
-                if task[0] == data.taskid and (task[6] == "waiting for delivery" or task[6] == "declined"):
-                    task_waiting = True
-            if not permissions[1] and task_waiting:
+            if not permissions[1] or not task_waiting:
                 print("Permission denied")
                 raise web.seeother(('/project?projectid=' + data.projectid))
 
@@ -79,15 +88,19 @@ class Project:
             open(path + '/' + fn, 'wb').write(fileitem.file.read())
             message = 'The file "' + fn + '" was uploaded successfully'
             models.project.set_task_file(data.taskid, (path + "/" + fn))
-        elif data.deliver:
+        elif data.deliver and not task_delivered:
             models.project.update_task_status(data.taskid, "delivered")
             print(data.taskid)
             all_tasks_accepted = True
+            print("================================================")
+            print("================================================")
+
             for task in tasks:
+                print("task", task)
                 if task[6] != "accepted":
                     all_tasks_accepted = False
             if all_tasks_accepted:
-                models.project.update_project_status("finished")
+                models.project.update_project_status(str(data.projectid), "finished")
         elif data.accepted:
             print("accept")
             models.project.update_task_status(data.taskid, "accepted")

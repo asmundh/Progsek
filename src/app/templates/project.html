@@ -39,7 +39,7 @@ $def with (nav, project, tasks, permissions)
                             $if permissions[2]:
                                 <button type="submit" name="deliver" value="1">Deliver</button>
                             $if session.userid == project[2] and task[6] == "delivered":
-                                    <button type="submit" name="acceped" value="1">Accept Delivery</button>
+                                    <button type="submit" name="accepted" value="1">Accept Delivery</button>
                                     <button type="submit" name="declined" value="1">Decline Delivery</button>
                         </form>
                 </li>
