@@ -50,6 +50,7 @@ class Project:
         tasks = models.project.get_tasks_by_project_id(data.projectid)
 
         print(data)
+        all_tasks_accepted = True
         task_waiting = False
         task_delivered = False
         for task in tasks:
@@ -61,6 +62,7 @@ class Project:
                     task_waiting = True
                 if(task[6] == 'accepted'):
                     task_delivered = True
+                    
         print(task_waiting, task_delivered)
         # Test if the file was uploaded
         if fileitem.filename:
@@ -90,20 +92,22 @@ class Project:
             models.project.set_task_file(data.taskid, (path + "/" + fn))
         elif data.deliver and not task_delivered:
             models.project.update_task_status(data.taskid, "delivered")
+        elif data.accepted:
+            print("accept")
+            models.project.update_task_status(data.taskid, "accepted")
             print(data.taskid)
             all_tasks_accepted = True
             print("================================================")
             print("================================================")
-
+    
+            tasks = models.project.get_tasks_by_project_id(data.projectid)
             for task in tasks:
                 print("task", task)
                 if task[6] != "accepted":
                     all_tasks_accepted = False
             if all_tasks_accepted:
                 models.project.update_project_status(str(data.projectid), "finished")
-        elif data.accepted:
-            print("accept")
-            models.project.update_task_status(data.taskid, "accepted")
+
         elif data.declined:
             models.project.update_task_status(data.taskid, "declined")
         else:
