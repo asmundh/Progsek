@@ -45,9 +45,11 @@ class Project:
         fileitem = data['myfile']
 
         permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
+        tasks = models.project.get_tasks_by_project_id(data.projectid)
+
         print(data.deliver)
         # Test if the file was uploaded
-        if fileitem.filename:
+        if fileitem.filename and tasks[int(data.taskid) == "waiting for delivery"]:
             if not permissions[1]:
                 print("Permission denied")
                 raise web.seeother(('/project?projectid=' + data.projectid))

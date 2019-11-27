@@ -32,7 +32,8 @@ $def with (nav, project, tasks, permissions)
                             <input type="file" name="myfile" />
                             <br/>
                             <input type="hidden" name="taskid" value="$task[0]"/>
-                            <input type="submit" name="submit"/>
+                            $if task[6] == "waiting for delivery":
+                                <input type="submit" name="submit"/>
 
                             $if permissions[2]:
                                 <button type="submit" name="deliver" value="1">Deliver</button>
