@@ -9,7 +9,16 @@ webpy framework: http://webpy.org/
 ### Prerequisites:
 docker https://www.docker.com/
 
+On linux docker is started with
+
+$ sudo systemctl start docker
+
+To run docker-compose without sudo the user must be added to the usergroup:
+
+https://docs.docker.com/install/linux/linux-postinstall/
+
 ### Build & Run
+
 $ docker-compose up --build
 
 ### Prune/Recreate

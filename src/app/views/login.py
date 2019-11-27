@@ -2,9 +2,7 @@ import web
 from views.forms import login_form
 import models.login
 from views.utils import get_nav_bar
-import os, hmac, base64, pickle, hashlib
-from io import StringIO
-from deepdiff import DeepDiff
+import os, hmac, base64, pickle
 
 # Get html templates
 render = web.template.render('templates/')
