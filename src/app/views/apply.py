@@ -60,7 +60,8 @@ class Apply:
                             for applicant in applicants:
                                 print("Add", applicant, data.projectid)
                                 models.project.set_projects_user(data.projectid, str(applicant[0]), "TRUE", "TRUE", "FALSE")
-                            raise web.seeother(('/project?projectid=' + data.projectid))
+                                models.project.update_project_status(data.projectid, "in progress")
+                            raise web.seeother(('/project?projectid=' + str(data.projectid)))
                     except Exception as e:
                         raise
 

@@ -52,7 +52,17 @@ def get_project_by_id(projectid):
         projectid + "\"")
     cursor.execute(query)
     project = cursor.fetchall()
+    cursor.close()
     return project[0]
+
+def update_project_status(projectid, status):
+    cursor = db.cursor()
+    query = ("UPDATE projects SET project_status = \"" + status + 
+        "\" WHERE projectid = \"" + projectid + "\"")
+    print(query)
+    cursor.execute(query)
+    db.commit()
+    cursor.close()
 
 def get_projects_by_status_and_category(categoryid, project_status):
     """
@@ -69,6 +79,7 @@ def get_projects_by_status_and_category(categoryid, project_status):
         project_status + "\" AND categoryid = \"" + categoryid + "\"")
     cursor.execute(query)
     projects = cursor.fetchall()
+    cursor.close()
     return projects
 
 def get_projects_by_owner(userid):

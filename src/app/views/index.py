@@ -23,6 +23,7 @@ class Index:
             project_bulk_one = models.project.get_projects_by_status_and_owner(str(session.userid), "open")
             project_bulk_two = models.project.get_projects_by_status_and_owner(str(session.userid), "in progress")
         elif data.projects == 'customer':
+            # TODO: Can customer projects be open?
             project_bulk_one = models.project.get_projects_by_participant_and_status(str(session.userid), "open")
             project_bulk_two = models.project.get_projects_by_participant_and_status(str(session.userid), "in progress")
         elif data.projects == 'finished':
