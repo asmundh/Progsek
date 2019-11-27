@@ -55,8 +55,7 @@ Insert mysql queries
 
 "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');"
 
-Then populate databse by posting mysql/sql/init.sql into 
-mysql
+Then populate databse by posting mysql/sql/init.sql into mysql
 
 Edit src/app/models/database.py to point at local server
 
