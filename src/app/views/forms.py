@@ -67,9 +67,10 @@ def get_project_form_elements(project_title="", project_description="", category
 def get_user_form_elements(identifier=0, user_name="", read_permission=True, write_permission=False, modify_permission=False):
     users = get_users()
     user_form_elements = (
-        form.Textbox("user_name_" + str(identifier), description="User", value=user_name),        form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission, value=read_permission),
-        form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission, value=write_permission),
-        form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=modify_permission, value=modify_permission)
+        form.Textbox("user_name_" + str(identifier), description="User", value=user_name),        
+        form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission),
+        form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission),
+        form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=modify_permission)
     )
     return user_form_elements
 

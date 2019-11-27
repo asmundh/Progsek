@@ -50,7 +50,7 @@ class Project:
 
         print(data)
         # Test if the file was uploaded
-        if fileitem.filename and tasks[int(data.taskid) == "waiting for delivery" or tasks[int(data.taskid) == "declined"]:
+        if fileitem.filename and tasks[int(data.taskid)] == "waiting for delivery" or tasks[int(data.taskid)] == "declined":
             if not permissions[1]:
                 print("Permission denied")
                 raise web.seeother(('/project?projectid=' + data.projectid))
@@ -78,6 +78,12 @@ class Project:
         elif data.deliver:
             models.project.update_task_status(data.taskid, "delivered")
             print(data.taskid)
+            all_tasks_accepted = True
+            for task in tasks:
+                if task[6] != "accepted":
+                    all_tasks_accepted = False
+            if all_tasks_accepted:
+                models.project.update_project_status("finished")
         elif data.accepted:
             print("accept")
             models.project.update_task_status(data.taskid, "accepted")

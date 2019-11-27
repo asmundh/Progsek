@@ -22,6 +22,8 @@ $def with (nav, project, tasks, permissions)
             $for task in tasks:
                 <li id="$task[0]">$task 
                     <br>
+                    $permissions
+                    <br>
                     $if project[5] != "open" or session.userid == project[2]:
                     
                         $for filename in get_task_files(task[0]):

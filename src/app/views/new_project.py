@@ -82,19 +82,25 @@ class New_project:
                                         userid = models.login.get_user_id_by_name(data["user_name_"+str(i)])
                                         read, write, modify = "FALSE", "FALSE", "FALSE"
                                         try:
-                                            if data["read_permission_"+str(i)]:
-                                                read = "TRUE"
+                                            data["read_permission_"+str(i)]
+                                            read = "TRUE"
                                         except Exception as e:
-                                            try:
-                                                if data["write_permission_"+str(i)]:
-                                                    write = "TRUE"
-                                            except Exception as e:
-                                                try:
-                                                    if data["modify_permission_"+str(i)]:
-                                                        modify = "TRUE"
-                                                except Exception as e:
-                                                    # This error will be raised if no permission is set
-                                                    raise e
+                                            read = "FALSE"
+                                            pass
+                                        try:
+                                            data["write_permission_"+str(i)]
+                                            write = "TRUE"
+                                        except Exception as e:
+                                            write = "FALSE"
+                                            pass
+                                        try:
+                                            data["modify_permission_"+str(i)]
+                                            modify = "TRUE"
+                                        except Exception as e:
+                                            # This error will be raised if no permission is set
+                                            modify = "FALSE"
+                                            pass
+                                        print(read, write, modify)
                                         models.project.set_projects_user(str(projectid), str(userid), read, write, modify)
                                     raise web.seeother('/')
                         except Exception as e:
@@ -128,6 +134,7 @@ class New_project:
             task_form_elements = (task_form_elements + old_task_form_element)
 
         for i in range(0, user_count):
+
             try:
                 old_user_form_element = get_user_form_elements(i, data["user_name_"+str(i)],
                 data["read_permission_"+str(i)], data["write_permission_"+str(i)], data["modify_permission_"+str(i)])
