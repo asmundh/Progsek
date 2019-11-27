@@ -51,7 +51,11 @@ class Project:
         print(data)
         # Test if the file was uploaded
         if fileitem.filename:
-            if not permissions[1]:
+            task_waiting = False
+            for task in tasks:
+                if task[0] == data.taskid and (task[6] == "waiting for delivery" or task[6] == "declined"):
+                    task_waiting = True
+            if not permissions[1] and task_waiting:
                 print("Permission denied")
                 raise web.seeother(('/project?projectid=' + data.projectid))
 
