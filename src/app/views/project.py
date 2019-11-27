@@ -37,19 +37,20 @@ class Project:
         return render.project(nav, project, tasks,permissions)
 
     def POST(self):
+        print("HELLO")
         # Get session
         session = web.ctx.session
 
-        data = web.input(myfile={}, deliver=None)
+        data = web.input(myfile={}, deliver=None, accepted=None, declined=None)
 
         fileitem = data['myfile']
 
         permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
         tasks = models.project.get_tasks_by_project_id(data.projectid)
 
-        print(data.deliver)
+        print(data)
         # Test if the file was uploaded
-        if fileitem.filename and tasks[int(data.taskid) == "waiting for delivery"]:
+        if fileitem.filename and tasks[int(data.taskid) == "waiting for delivery" or tasks[int(data.taskid) == "declined"]:
             if not permissions[1]:
                 print("Permission denied")
                 raise web.seeother(('/project?projectid=' + data.projectid))
@@ -57,7 +58,7 @@ class Project:
             data = web.input(projectid=0)
 
             fn = fileitem.filename
-            print(data)
+            print("DATA", data)
             # Create the project directory if it doesnt exist
             path = 'static/project' + data.projectid
             if not os.path.isdir(path):
@@ -77,6 +78,11 @@ class Project:
         elif data.deliver:
             models.project.update_task_status(data.taskid, "delivered")
             print(data.taskid)
+        elif data.accepted:
+            print("accept")
+            models.project.update_task_status(data.taskid, "accepted")
+        elif data.declined:
+            models.project.update_task_status(data.taskid, "declined")
         else:
             message = 'No file was uploaded'
         

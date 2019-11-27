@@ -32,11 +32,14 @@ $def with (nav, project, tasks, permissions)
                             <input type="file" name="myfile" />
                             <br/>
                             <input type="hidden" name="taskid" value="$task[0]"/>
-                            $if task[6] == "waiting for delivery":
-                                <input type="submit" name="submit"/>
-
-                            $if permissions[2]:
-                                <button type="submit" name="deliver" value="1">Deliver</button>
+                            $if session.userid != project[2]:
+                                $if task[6] == "waiting for delivery" or task[6] == "declined":
+                                    <input type="submit" name="submit"/>
+                                $if permissions[2]:
+                                    <button type="submit" name="deliver" value="1">Deliver</button>
+                            $if session.userid == project[2] and task[6] == "delivered":
+                                    <button type="submit" name="acceped" value="1">Accept Delivery</button>
+                                    <button type="submit" name="declined" value="1">Decline Delivery</button>
                         </form>
                 </li>
         </ul>
