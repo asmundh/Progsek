@@ -1,4 +1,4 @@
-$def with (nav, project, tasks)
+$def with (nav, project, tasks, permissions)
 
 <head>
     <title>Beelance2</title>
@@ -33,6 +33,9 @@ $def with (nav, project, tasks)
                             <br/>
                             <input type="hidden" name="taskid" value="$task[0]"/>
                             <input type="submit" name="submit"/>
+
+                            $if permissions[2]:
+                                <button type="submit" name="deliver" value="1">Deliver</button>
                         </form>
                 </li>
         </ul>

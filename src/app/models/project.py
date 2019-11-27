@@ -64,6 +64,18 @@ def update_project_status(projectid, status):
     db.commit()
     cursor.close()
 
+def get_user_permissions(userid, projectid):
+    cursor = db.cursor()
+    query = ("SELECT read_permission, write_permission, modify_permission \
+        FROM projects_users WHERE projectid = \"" + projectid + 
+        "\" AND userid = \"" + userid + "\"")
+    cursor.execute(query)
+    permissions = cursor.fetchall()
+    cursor.close()
+    if len(permissions):
+        return permissions[0]
+    return [0,0,0]
+
 def get_projects_by_status_and_category(categoryid, project_status):
     """
     Retrieve all projects from a category with a specific status
@@ -144,6 +156,14 @@ def set_task(projectid, task_title, task_description, budget):
     cursor.execute(query)
     db.commit()
     cursor.close
+
+def update_task_status(taskid, status):
+    cursor = db.cursor()
+    query = ("UPDATE tasks SET task_status = \"" + status + 
+        "\" WHERE taskid = \"" + taskid + "\"")
+    cursor.execute(query)
+    db.commit()
+    cursor.close()
 
 def get_tasks_by_project_id(projectid):
     """

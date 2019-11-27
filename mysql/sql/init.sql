@@ -77,7 +77,7 @@ CREATE TABLE tasks (
   title VARCHAR(200) NOT NULL,
   task_description VARCHAR(500),
   budget INT NOT NULL,
-  task_status VARCHAR(64) NOT NULL, -- This should be Waiting for delivery, Delivered and waiting for acceptance, Delivery has been accepted, awaiting payment, Payment for delivery is done or Declined delivery, please revise
+  task_status VARCHAR(64) NOT NULL, -- This should be Waiting for delivery, delivered, accepted and declined delivery
   feedback VARCHAR(500) NULL,
   PRIMARY KEY (taskid),
   FOREIGN KEY (teamid) REFERENCES teams(teamid),
