@@ -6,7 +6,6 @@ CREATE TABLE users (
   full_name VARCHAR(200) NOT NULL,
   company VARCHAR(50),
   email VARCHAR(50) NOT NULL,
-  phone_number VARCHAR(50),
   street_address VARCHAR(50),
   city VARCHAR(50),
   state VARCHAR(50),

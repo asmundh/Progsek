@@ -20,7 +20,6 @@ register_form = form.Form(
     form.Textbox("full_name", description="Full name"),
     form.Textbox("company", description="Company"),
     form.Textbox("email", vemail, description="Email Address"),
-    form.Textbox("phone_number", description="Phone Number"),
     form.Textbox("street_address", description="Street address"),
     form.Textbox("city", description="City"),
     form.Textbox("state", description="State"),

@@ -8,7 +8,7 @@ def set_user(username, password, full_name, company, email, phone_number,
         :param password: The password
         :param full_name: The users full name
         :param company: The company the user represents
-        :param phone_number: The phone number of the user
+        :param email: The users email address
         :param street_address: The street address of the user
         :param city: The city where the user lives
         :param state: The state where the user lives
@@ -18,7 +18,7 @@ def set_user(username, password, full_name, company, email, phone_number,
         :type password: str
         :type full_name: str
         :type company: str
-        :type phone_number: str
+        :type email: str
         :type street_address: str
         :type city: str
         :type state: str
@@ -28,8 +28,8 @@ def set_user(username, password, full_name, company, email, phone_number,
     cursor = db.cursor()
     query = ("INSERT INTO users VALUES (NULL, \"" + username + "\", \"" + 
         password + "\", \"" + full_name + "\" , \"" + company + "\", \"" + 
-        email + "\", \"" + phone_number + "\", \"" + street_address + "\", \"" + 
-        city + "\", \"" + state  + "\", \"" + postal_code + "\", \"" + country + "\")")
+        email + "\", \"" + street_address + "\", \"" + city + "\", \"" + 
+        state  + "\", \"" + postal_code + "\", \"" + country + "\")")
     cursor.execute(query)
     db.commit()
     cursor.close()

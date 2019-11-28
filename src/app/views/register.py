@@ -37,7 +37,7 @@ class Register:
             return render.register(nav, r, "All fields must be valid.")
 
         models.register.set_user(data.username, hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest(), 
-        data.full_name, data.email, data.company, data.phone_number, data.street_address, 
+        data.full_name, data.company, data.phone_number, data.street_address, 
         data.city, data.state, data.postal_code, data.country)
         message += "User registered!"
         
