@@ -40,9 +40,10 @@ class Login():
         # Validate login credential with database query
         password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
         user = models.login.match_user(data.username, password_hash)
-
+        
         # If there is a matching user/password in the database the user is logged in
-        self.login(user[1], user[0], data.remember)
+        if user:
+            self.login(user[1], user[0], data.remember)
               
         return render.login(nav, login_form)
 

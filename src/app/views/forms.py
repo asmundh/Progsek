@@ -1,6 +1,7 @@
 from web import form
 from models.project import get_categories 
-from models.login import get_users
+from models.login import get_users, get_user_id_by_name
+
 
 # Define the login form 
 login_form = form.Form(
@@ -10,20 +11,26 @@ login_form = form.Form(
     form.Button("Log In", type="submit", description="Login"),
 )
 
+vemail = form.regexp(r".*@.*", "- Must be a valid email address")
+vpass = form.regexp(r".{6,100}$", '- Must be atleast 6 characters long')
+num = form.regexp(r"^[1-9]+$", "- Must be a number")
 # Define the register form 
 register_form = form.Form(
     form.Textbox("username", description="Username"),
     form.Textbox("full_name", description="Full name"),
     form.Textbox("company", description="Company"),
-    form.Textbox("email", description="Email Address"),
+    form.Textbox("email", vemail, description="Email Address"),
     form.Textbox("phone_number", description="Phone Number"),
     form.Textbox("street_address", description="Street address"),
     form.Textbox("city", description="City"),
     form.Textbox("state", description="State"),
-    form.Textbox("postal_code", description="Postal code"),
+    form.Textbox("postal_code", num, description="Postal code"),
     form.Textbox("country", description="Country"),
-    form.Password("password", description="Password"),
+    form.Password("password", vpass, description="Password"),
     form.Button("Register", type="submit", description="Register"),
+    validators = [
+        form.Validator("User already exists", lambda i: models.login.get_user_id_by_name(i.username) == None)
+    ]
 )
 
 def get_task_form_elements(identifier=0, task_title="", task_description="", budget=""):
@@ -40,9 +47,9 @@ def get_task_form_elements(identifier=0, task_title="", task_description="", bud
         :return: A set of task form elements
     """
     task_form_elements = (
-        form.Textbox("task_title_" + str(identifier), description="Title", value=task_title),
-        form.Textarea("task_description_" + str(identifier), description="Description", value=task_description),
-        form.Textbox("budget_" + str(identifier), description="Budget", value=str(budget))
+        form.Textbox("task_title_" + str(identifier), description="Task title", value=task_title),
+        form.Textarea("task_description_" + str(identifier), description="Task description", value=task_description),
+        form.Textbox("budget_" + str(identifier), description="Task budget", value=str(budget))
     )
     return task_form_elements
 
@@ -61,7 +68,7 @@ def get_project_form_elements(project_title="", project_description="", category
     project_form_elements = (
     form.Textbox("project_title", description="Title", value=project_title),
     form.Textarea("project_description", description="Description", value=project_description),
-    form.Dropdown("category_name", description="Category Name", args=categories)
+    form.Dropdown("category_name", description="Category", args=categories)
     )
     return project_form_elements
 

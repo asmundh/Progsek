@@ -48,6 +48,9 @@ def match_user(username, password):
     query = ("SELECT userid, username from users where username = \"" + username + 
             "\" and password = \"" + password + "\"")
     cursor.execute(query)
-    user = cursor.fetchall()[0]
+    try:
+        user = cursor.fetchall()[0]
+    except:
+        user = None
     cursor.close()
     return user
