@@ -36,10 +36,14 @@ class Register:
         if not r.validates():
             return render.register(nav, r, "All fields must be valid.")
 
-        models.register.set_user(data.username, hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest(), 
-        data.full_name, data.company, data.phone_number, data.street_address, 
-        data.city, data.state, data.postal_code, data.country)
-        message += "User registered!"
+        # Check if user exists
+        if models.login.get_user_id_by_name(data.username):
+            return render.register(nav, r, "Invalid user, already exists.")
+
+        models.register.set_user(data.username, 
+            hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest(), 
+            data.full_name, data.company, data.email, data.street_address, 
+            data.city, data.state, data.postal_code, data.country)
         
-        return render.register(nav, register_form, message)
+        return render.register(nav, register_form, "User registered!")
 

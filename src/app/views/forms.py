@@ -26,10 +26,7 @@ register_form = form.Form(
     form.Textbox("postal_code", num, description="Postal code"),
     form.Textbox("country", description="Country"),
     form.Password("password", vpass, description="Password"),
-    form.Button("Register", type="submit", description="Register"),
-    validators = [
-        form.Validator("User already exists", lambda i: models.login.get_user_id_by_name(i.username) == None)
-    ]
+    form.Button("Register", type="submit", description="Register")
 )
 
 def get_task_form_elements(identifier=0, task_title="", task_description="", budget=""):
