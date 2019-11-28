@@ -29,7 +29,9 @@ class New_project:
 
             :return: Redirect to main page
         """
-        data = web.input()
+        data = web.input(add_user=None, remove_user=None, 
+            add_task=None, remove_task = None, create_project=None)
+            
         session = web.ctx.session
         nav = get_nav_bar(session)
 

@@ -79,7 +79,7 @@ CREATE TABLE tasks (
   projectid INT UNSIGNED NOT NULL,
   /*teamid INT UNSIGNED,*/
   title VARCHAR(200) NOT NULL,
-  task_description VARCHAR(500),
+  task_description VARCHAR(500) NOT NULL,
   budget INT NOT NULL,
   task_status VARCHAR(64) NOT NULL, -- This should be Waiting for delivery, delivered, accepted and declined delivery
   feedback VARCHAR(500) NULL,

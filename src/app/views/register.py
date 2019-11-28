@@ -32,8 +32,8 @@ class Register:
         nav = get_nav_bar(session)
         data = web.input()
 
-        r = register_form()
-        if not r.validates():
+        f = register_form()
+        if not f.validates():
             return render.register(nav, r, "All fields must be valid.")
 
         # Check if user exists

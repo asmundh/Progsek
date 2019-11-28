@@ -13,17 +13,18 @@ login_form = form.Form(
 
 vemail = form.regexp(r".*@.*", "- Must be a valid email address")
 vpass = form.regexp(r".{6,100}$", '- Must be atleast 6 characters long')
-num = form.regexp(r"^[1-9]+$", "- Must be a number")
+number = form.regexp(r"^[1-9]+$", "- Must be a number")
+not_empty = form.regexp(r".+", "- This field is required")
 # Define the register form 
 register_form = form.Form(
-    form.Textbox("username", description="Username"),
-    form.Textbox("full_name", description="Full name"),
+    form.Textbox("username", not_empty, description="Username"),
+    form.Textbox("full_name", not_empty, description="Full name"),
     form.Textbox("company", description="Company"),
     form.Textbox("email", vemail, description="Email Address"),
     form.Textbox("street_address", description="Street address"),
     form.Textbox("city", description="City"),
     form.Textbox("state", description="State"),
-    form.Textbox("postal_code", num, description="Postal code"),
+    form.Textbox("postal_code", number, description="Postal code"),
     form.Textbox("country", description="Country"),
     form.Password("password", vpass, description="Password"),
     form.Button("Register", type="submit", description="Register")
@@ -43,9 +44,9 @@ def get_task_form_elements(identifier=0, task_title="", task_description="", bud
         :return: A set of task form elements
     """
     task_form_elements = (
-        form.Textbox("task_title_" + str(identifier), description="Task title", value=task_title),
-        form.Textarea("task_description_" + str(identifier), description="Task description", value=task_description),
-        form.Textbox("budget_" + str(identifier), description="Task budget", value=str(budget))
+        form.Textbox("task_title_" + str(identifier), not_empty, description="Task title", value=task_title),
+        form.Textarea("task_description_" + str(identifier), not_empty,description="Task description", value=task_description),
+        form.Textbox("budget_" + str(identifier), number, description="Task budget", value=str(budget))
     )
     return task_form_elements
 
@@ -62,8 +63,8 @@ def get_project_form_elements(project_title="", project_description="", category
     """
     categories = get_categories()
     project_form_elements = (
-    form.Textbox("project_title", description="Title", value=project_title),
-    form.Textarea("project_description", description="Description", value=project_description),
+    form.Textbox("project_title", not_empty, description="Title", value=project_title),
+    form.Textarea("project_description", not_empty, description="Description", value=project_description),
     form.Dropdown("category_name", description="Category", args=categories)
     )
     return project_form_elements
@@ -71,7 +72,7 @@ def get_project_form_elements(project_title="", project_description="", category
 def get_user_form_elements(identifier=0, user_name="", read_permission=True, write_permission=False, modify_permission=False):
     users = get_users()
     user_form_elements = (
-        form.Textbox("user_name_" + str(identifier), description="User", value=user_name),        
+        form.Textbox("user_name_" + str(identifier), not_empty, description="User", value=user_name),        
         form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission),
         form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission),
         form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=modify_permission)
