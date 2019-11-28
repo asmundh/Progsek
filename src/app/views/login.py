@@ -23,6 +23,7 @@ class Login():
         session = web.ctx.session
         username = ""
         sign = ""
+        
         # If the user selected 'remember me' they log in automatically
         try:
             # Fetch the users cookies if it exists

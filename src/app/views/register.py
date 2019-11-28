@@ -24,33 +24,33 @@ class Register:
 
     def POST(self):
         """
-        Register new user in database
+        Handle input data and register new user in database
 
             :return: Main page
         """
         session = web.ctx.session
-
         nav = get_nav_bar(session)
-
         data = web.input()
-        
         message = ""
 
+        # Check if user exists
         if models.login.get_user_id_by_name(data.username):
             message += "Invalid user, already exists. "
 
+        # Check if email is valid
         if not re.match(r"[^@]+@[^@]+\.[^@]+", data.email):
             message += "Invalid email address. "
 
+        # Check if password is valid
         if not len(data.password) > 5:
             message += "Invalid password, must be atleast 6 characters long. "
 
+        # Register user if input is valid
         if len(message) == 0:
             models.register.set_user(data.username, hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest(), 
             data.full_name, data.email, data.company, data.phone_number, data.street_address, 
             data.city, data.state, data.postal_code, data.country)
             message += "User Registered. "
-
         
         return render.register(nav, register_form, message)
 
