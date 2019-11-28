@@ -27,7 +27,10 @@ def get_user_name_by_id(userid):
     cursor = db.cursor()
     query = ("SELECT username from users WHERE userid =\"" + userid + "\"")
     cursor.execute(query)
-    username = cursor.fetchall()[0][0]
+    try:
+        username = cursor.fetchall()[0][0]
+    except:
+        username = None
     cursor.close()
     return username
 
@@ -45,6 +48,6 @@ def match_user(username, password):
     query = ("SELECT userid, username from users where username = \"" + username + 
             "\" and password = \"" + password + "\"")
     cursor.execute(query)
-    user = cursor.fetchall()
+    user = cursor.fetchall()[0]
     cursor.close()
     return user

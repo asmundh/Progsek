@@ -21,9 +21,48 @@ class Login():
             :return: The login page showing other users if logged in
         """
         session = web.ctx.session
+        nav = get_nav_bar(session)
+
+        # Log the user in if the rememberme cookie is set and valid
+        self.check_rememberme()
+
+        return render.login(nav, login_form)
+
+    def POST(self):
+        """
+        Log in to the web application and register the session
+            :return:  The login page showing other users if logged in
+        """
+        session = web.ctx.session
+        nav = get_nav_bar(session)
+        data = web.input(username="", password="", remember=False)
+
+        # Validate login credential with database query
+        password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
+        user = models.login.match_user(data.username, password_hash)
+
+        # If there is a matching user/password in the database the user is logged in
+        self.login(user[1], user[0], data.remember)
+              
+        return render.login(nav, login_form)
+
+    def login(self, username, userid, remember):
+        """
+        Log in to the application
+        """
+        session = web.ctx.session
+        session.username = username
+        session.userid = userid
+        if remember:
+            rememberme = self.rememberme()
+            web.setcookie('remember', rememberme , 12000000)
+
+    def check_rememberme(self):
+        """
+        Validate the rememberme cookie and log in
+        """
         username = ""
         sign = ""
-        
         # If the user selected 'remember me' they log in automatically
         try:
             # Fetch the users cookies if it exists
@@ -41,40 +80,7 @@ class Login():
         # If the users signed cookie matches the host signature then log in
         if self.sign_username(username) == sign:
             userid = models.login.get_user_id_by_name(username)
-            session.username = username
-            session.userid = userid
-
-        # Show a list of registered users when login in
-        if session.username:
-            friends = models.login.get_users()
-        else:
-            friends = [[],[]]
-        nav = get_nav_bar(session)
-
-        return render.login(nav, login_form, friends)
-
-    def POST(self):
-        """
-        Log in to the web application and register the session
-            :return:  The login page showing other users if logged in
-        """
-        session = web.ctx.session
-        friends = [[],[]]
-        # Validate login credential with database query
-        data = web.input(username="", password="")
-        password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
-        print("hash", password_hash)
-        user = models.login.match_user(data.username, password_hash)
-        # If there is a matching user/password in the database the user is logged in
-        if len(user):
-            friends = models.login.get_users()
-            session.username = user[0][1]
-            session.userid = user[0][0]
-            if data.remember:
-                remember = self.rememberme()
-                web.setcookie('remember', remember , 12000000)
-        nav = get_nav_bar(session)
-        return render.login(nav, login_form, friends)
+            self.login(username, userid, False)
 
     def rememberme(self):
         """
