@@ -3,6 +3,7 @@ from views.forms import login_form
 import models.login
 from views.utils import get_nav_bar
 import os, hmac, base64, pickle
+import hashlib
 
 # Get html templates
 render = web.template.render('templates/')
@@ -57,9 +58,12 @@ class Login():
             :return:  The login page showing other users if logged in
         """
         session = web.ctx.session
+        friends = [[],[]]
         # Validate login credential with database query
-        data = web.input()
-        user = models.login.match_user(data.username, data.password)
+        data = web.input(username="", password="")
+        password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
+        print("hash", password_hash)
+        user = models.login.match_user(data.username, password_hash)
         # If there is a matching user/password in the database the user is logged in
         if len(user):
             friends = models.login.get_users()
@@ -68,8 +72,6 @@ class Login():
             if data.remember:
                 remember = self.rememberme()
                 web.setcookie('remember', remember , 12000000)
-        else:
-            friends = [[],[]]
         nav = get_nav_bar(session)
         return render.login(nav, login_form, friends)
 

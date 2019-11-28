@@ -2,6 +2,7 @@ import web
 from views.forms import register_form
 import models.register
 from views.utils import get_nav_bar
+import hashlib
 
 # Get html templates
 render = web.template.render('templates/')
@@ -26,7 +27,7 @@ class Register:
             :return: Main page
         """
         data = web.input()
-        models.register.set_user(data.username, data.password, 
+        models.register.set_user(data.username, hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest(), 
         data.full_name, data.company, data.phone_number, data.street_address, 
         data.city, data.state, data.postal_code, data.country)
         raise web.seeother('/')
