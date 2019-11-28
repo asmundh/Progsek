@@ -1,4 +1,4 @@
-$def with (nav, register_form)
+$def with (nav, register_form, message)
 
 <head>
     <title>Beelance2</title>
@@ -16,6 +16,8 @@ $def with (nav, register_form)
     <form method="POST">
         $:register_form.render()
     </form>
+
+    <p>$message</p>
 </body>
 
 <footer></footer>

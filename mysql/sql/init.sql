@@ -5,6 +5,7 @@ CREATE TABLE users (
   password VARCHAR(45) NOT NULL,
   full_name VARCHAR(200) NOT NULL,
   company VARCHAR(50),
+  email VARCHAR(50) NOT NULL,
   phone_number VARCHAR(50),
   street_address VARCHAR(50),
   city VARCHAR(50),
@@ -18,13 +19,16 @@ CREATE TABLE users (
 * Project tables
 */
 
+/*
 CREATE TABLE teams (
   teamid INT UNSIGNED AUTO_INCREMENT,
   team_name VARCHAR(200) NOT NULL,
   write_permission BOOLEAN,
   PRIMARY KEY (teamid)
 );
+*/
 
+/*
 CREATE TABLE teams_users (
   teamid INT UNSIGNED NOT NULL,
   userid INT UNSIGNED NOT NULL,
@@ -32,6 +36,7 @@ CREATE TABLE teams_users (
   FOREIGN KEY (teamid) REFERENCES teams(teamid),
   FOREIGN KEY (userid) REFERENCES users(userid)  
 );
+*/
 
 CREATE TABLE project_category (
   categoryid INT UNSIGNED AUTO_INCREMENT,
@@ -73,14 +78,14 @@ CREATE TABLE projects_users (
 CREATE TABLE tasks (
   taskid INT UNSIGNED AUTO_INCREMENT,
   projectid INT UNSIGNED NOT NULL,
-  teamid INT UNSIGNED,
+  /*teamid INT UNSIGNED,*/
   title VARCHAR(200) NOT NULL,
   task_description VARCHAR(500),
   budget INT NOT NULL,
   task_status VARCHAR(64) NOT NULL, -- This should be Waiting for delivery, delivered, accepted and declined delivery
   feedback VARCHAR(500) NULL,
   PRIMARY KEY (taskid),
-  FOREIGN KEY (teamid) REFERENCES teams(teamid),
+  /*FOREIGN KEY (teamid) REFERENCES teams(teamid),*/
   FOREIGN KEY (projectid) REFERENCES projects(projectid)
 );
 
@@ -92,6 +97,7 @@ CREATE TABLE task_files (
   FOREIGN KEY (taskid) REFERENCES tasks(taskid)
 );
 
+/*
 CREATE TABLE delivery (
   deliveryid INT UNSIGNED AUTO_INCREMENT,
   taskid INT UNSIGNED NOT NULL,
@@ -106,8 +112,9 @@ CREATE TABLE delivery (
   PRIMARY KEY (deliveryid),
   FOREIGN KEY (taskid) REFERENCES tasks(taskid),
   FOREIGN KEY (userid) REFERENCES users(userid)
-);
+);*/
 
+/*
 CREATE TABLE task_offer (
   offerid INT UNSIGNED AUTO_INCREMENT,
   taskid INT UNSIGNED NOT NULL,
@@ -118,15 +125,15 @@ CREATE TABLE task_offer (
   feedback VARCHAR(500),
   PRIMARY KEY (offerid),
   FOREIGN KEY (taskid) REFERENCES tasks(taskid)
-);
+);*/
 
 /*
 * Initial data
 */
 
-insert into users values (NULL, "admin", "password", "Admin Modsen", "ntnu", "12345678", "street", "trondheim", "trondheim", "1234", "norway");
+insert into users values (NULL, "admin", "password", "Admin Modsen", "ntnu", 'mail@ntnu.no',"12345678", "street", "trondheim", "trondheim", "1234", "norway");
 
-insert into project_category values (NULL, "Test");
+insert into project_category values (NULL, "Test Category");
 
 
 /*

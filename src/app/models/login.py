@@ -16,7 +16,10 @@ def get_user_id_by_name(username):
     cursor = db.cursor()
     query = ("SELECT userid from users WHERE username =\"" + username + "\"")
     cursor.execute(query)
-    userid = cursor.fetchall()[0][0]
+    try:
+        userid = cursor.fetchall()[0][0]
+    except:
+        userid = None
     cursor.close()
     return userid
 

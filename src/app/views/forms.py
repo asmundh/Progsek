@@ -15,6 +15,7 @@ register_form = form.Form(
     form.Textbox("username", description="Username"),
     form.Textbox("full_name", description="Full name"),
     form.Textbox("company", description="Company"),
+    form.Textbox("email", description="Email Address"),
     form.Textbox("phone_number", description="Phone Number"),
     form.Textbox("street_address", description="Street address"),
     form.Textbox("city", description="City"),
@@ -96,6 +97,7 @@ def get_apply_form(elements):
             form.Button("Remove User", type="submit", description="Remove User", value="remove_user"),
             form.Button("Apply", type="submit", description="Apply", value="apply")
         )
+    # Exception will occur if the form only contains one element
     except TypeError as e:
         apply_form = form.Form(elements,
             form.Button("Add User", type="submit", description="Add User", value="add_user"),
@@ -106,9 +108,3 @@ def get_apply_form(elements):
 def get_user_dropdown(identifier=0):
     users = get_users()
     return form.Dropdown("user_id_" + str(identifier), description="User", args=users)
-
-# Define the guestbook form
-guestbook_form = form.Form(
-    form.Textbox("entry", description="Entry"),
-)
-

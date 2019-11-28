@@ -1,6 +1,6 @@
 from models.database import db
 
-def set_user(username, password, full_name, company, phone_number, 
+def set_user(username, password, full_name, company, email, phone_number, 
         street_address, city, state, postal_code, country):
     """
     Register a new user in the database
@@ -28,8 +28,8 @@ def set_user(username, password, full_name, company, phone_number,
     cursor = db.cursor()
     query = ("INSERT INTO users VALUES (NULL, \"" + username + "\", \"" + 
         password + "\", \"" + full_name + "\" , \"" + company + "\", \"" + 
-        phone_number + "\", \"" + street_address + "\", \"" + city + "\", \"" +
-        state  + "\", \"" + postal_code + "\", \"" + country + "\")")
+        email + "\", \"" + phone_number + "\", \"" + street_address + "\", \"" + 
+        city + "\", \"" + state  + "\", \"" + postal_code + "\", \"" + country + "\")")
     cursor.execute(query)
     db.commit()
     cursor.close()
