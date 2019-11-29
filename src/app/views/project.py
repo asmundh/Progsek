@@ -26,6 +26,7 @@ class Project:
         data = web.input(projectid=0)
 
         permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
+        categories = models.project.get_categories()
 
         if data.projectid:
             project = models.project.get_project_by_id(data.projectid)
@@ -34,7 +35,7 @@ class Project:
             project = [[]]
             tasks = [[]]
         render = web.template.render('templates/', globals={'get_task_files':models.project.get_task_files, 'session':session})
-        return render.project(nav, project_form, project, tasks,permissions)
+        return render.project(nav, project_form, project, tasks,permissions, categories)
 
     def POST(self):
         # Get session
@@ -43,6 +44,7 @@ class Project:
         data = web.input(myfile={}, deliver=None, accepted=None, declined=None, projectid=0)
         fileitem = data['myfile']
         permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
+        categories = models.project.get_categories()
         tasks = models.project.get_tasks_by_project_id(data.projectid)
 
         # Determine status of the targeted task

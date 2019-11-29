@@ -1,4 +1,4 @@
-$def with (nav, project_form, project, tasks, permissions)
+$def with (nav, project_form, project, tasks, permissions, categories)
 
 <head>
     <title>Beelance2</title>
@@ -11,25 +11,29 @@ $def with (nav, project_form, project, tasks, permissions)
 <body>
     
     $:nav
-    <h1>Project View</h1>
 
     $if len(project):
-        <h2>Title: $project[3]</h2>
-        <p>Description: $project[4]</p>
-        <p>Status: $project[5]</p>
+        <h1>Project: $project[3]</h1>
+
+        $if project[5] == "open" and session.userid != project[2]:
+            <div id="apply" onclick="location.href='/apply?projectid=$project[0]'" name="Apply" description="apply">Apply for this project</div>
+
+        <div id="project_meta">
+            <p>Status: $project[5]</p>
+            <p>Category: $categories[project[1]-1][1]</p>
+            <p>Description: $project[4]</p>
+        </div>
 
         <ul>
             $for task in tasks:
-                <li id="$task[0]">$task 
-                    <br>
-                    $permissions
-                    <br>
+                <li id="$task[0]">
+                    <h3>Task: $task[2]</h3>
+                    <p>Description: $task[3]</p>
+                    <p>Budget: $task[4]</p>
                     $if project[5] != "open":
-
                         $for filename in get_task_files(task[0]):
                             <a href="$filename[0]" download>$filename[0].split("/")[-1]</a>
                             <br>
-                        
                         <form method="POST" enctype="multipart/form-data" action="">
                             $project_form.taskid.set_value(task[0])
                             $:project_form.taskid.render()
@@ -44,8 +48,5 @@ $def with (nav, project_form, project, tasks, permissions)
                         </form>
                 </li>
         </ul>
-
-    $if project[5] == "open" and session.userid != project[2]:
-        <div id="apply" onclick="location.href='/apply?projectid=$project[0]'" name="Apply" description="apply">Apply for this project</div>
-            
+  
 </body>

@@ -22,6 +22,7 @@ body {
 
 .projects div {
     border: 1px solid gray;
+    cursor: pointer;
 }
 
 .categories {
@@ -90,6 +91,25 @@ nav ul {
     cursor: pointer;
     margin: 2px;
 }
+
 .user_projects_category:hover {
     background-color: lightskyblue;
+}
+
+#apply {
+    border: 1px solid gray;
+    padding: 5px;
+    background-color: lightslategray;
+    cursor: pointer;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#apply:hover {
+    background-color: lightskyblue;
+}
+
+#project_meta {
+    margin: auto;
 }
