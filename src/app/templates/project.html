@@ -39,10 +39,10 @@ $def with (nav, project_form, project, tasks, permissions)
                             $:project_form.taskid.render()
                             $:project_form.submit.render()
                             $if permissions[2]:
-                                <button type="submit" name="deliver" value="1">Deliver</button>
+                                $:project_form.deliver.render()
                             $if session.userid == project[2] and task[6] == "delivered":
-                                    <button type="submit" name="accepted" value="1">Accept Delivery</button>
-                                    <button type="submit" name="declined" value="1">Decline Delivery</button>
+                            $:project_form.accepted.render()
+                            $:project_form.declined.render()
                         </form>
                 </li>
         </ul>
