@@ -23,15 +23,10 @@ $def with (nav, apply_form, get_apply_permission_form, project, applicants)
             <p>Users to apply:</p>
             $applicants
             $:apply_form.render()
-
             $for i, user in enumerate(applicants):
-                
-                <div>$user[1]<Button name="remove_user" type ="submit" value="$applicants[i]">X</Button></div>
-                <input hidden="hidden" name="user_name_$i" value="$applicants[i]"/>
-
                 $ apply_permissions_form = get_apply_permissions_form(i, userid=user)
+                $user
                 $:apply_permissions_form.render()
-            
         </form> 
             
 </body>
