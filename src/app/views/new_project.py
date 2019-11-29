@@ -28,17 +28,15 @@ class New_project:
         Create a new project
 
             :return: Redirect to main page
-        """
-        data = web.input(add_user=None, remove_user=None, 
-            add_task=None, remove_task = None, create_project=None)
-            
+        """            
         session = web.ctx.session
         nav = get_nav_bar(session)
 
-        print(data)
         # Try the different URL input parameters to determine how to generate the form
-        
-       # Add a set of task fields to the form
+        data = web.input(add_user=None, remove_user=None, 
+            add_task=None, remove_task = None, create_project=None)
+
+        # Add a set of task fields to the form
         if data.add_task:
             project_form = self.compose_form(data, "add_task")
             return render.new_project(nav, project_form, "") 
@@ -86,36 +84,31 @@ class New_project:
                 (data["task_description_" + str(i)]), (data["budget_" + str(i)]))
                                 
             # Save the users in the database
-            if len(data.user_name_0):
-                                    
-
-                for i in range(0, user_count):
-                        if len(data["user_name_"+str(i)]):
-                            userid = models.login.get_user_id_by_name(data["user_name_"+str(i)])
-                            read, write, modify = "FALSE", "FALSE", "FALSE"
-                            try:
-                                data["read_permission_"+str(i)]
-                                read = "TRUE"
-                            except Exception as e:
-                                read = "FALSE"
-                                pass
-                            try:
-                                data["write_permission_"+str(i)]
-                                write = "TRUE"
-                            except Exception as e:
-                                write = "FALSE"
-                                pass
-                            try:
-                                data["modify_permission_"+str(i)]
-                                modify = "TRUE"
-                            except Exception as e:
-                                # This error will be raised if no permission is set
-                                modify = "FALSE"
-                                pass
-                            print(read, write, modify)
-                            models.project.set_projects_user(str(projectid), str(userid), read, write, modify)
+            for i in range(0, user_count):
+                    if len(data["user_name_"+str(i)]):
+                        userid = models.login.get_user_id_by_name(data["user_name_"+str(i)])
+                        read, write, modify = "FALSE", "FALSE", "FALSE"
+                        try:
+                            data["read_permission_"+str(i)]
+                            read = "TRUE"
+                        except Exception as e:
+                            read = "FALSE"
+                            pass
+                        try:
+                            data["write_permission_"+str(i)]
+                            write = "TRUE"
+                        except Exception as e:
+                            write = "FALSE"
+                            pass
+                        try:
+                            data["modify_permission_"+str(i)]
+                            modify = "TRUE"
+                        except Exception as e:
+                            # This error will be raised if no permission is set
+                            modify = "FALSE"
+                            raise e
                         
-
+                        models.project.set_projects_user(str(projectid), str(userid), read, write, modify)
                         
             raise web.seeother('/?projects=my')
                         
