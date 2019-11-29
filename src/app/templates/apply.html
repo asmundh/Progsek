@@ -24,9 +24,11 @@ $def with (nav, apply_form, get_apply_permission_form, project, applicants)
             $applicants
             $:apply_form.render()
             $for i, user in enumerate(applicants):
-                $ apply_permissions_form = get_apply_permissions_form(i, userid=user)
-                $user[1]
-                $:apply_permissions_form.render()
+                <div>
+                    $ apply_permissions_form = get_apply_permissions_form(i, userid=user)
+                    $user[1]
+                    $:apply_permissions_form.render()
+                </div>
         </form> 
             
 </body>
