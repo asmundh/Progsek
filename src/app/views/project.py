@@ -5,7 +5,6 @@ from views.forms import project_form
 import os
 from time import sleep
 
-
 # Get html templates
 render = web.template.render('templates/')
 
@@ -38,63 +37,53 @@ class Project:
         return render.project(nav, project_form, project, tasks,permissions)
 
     def POST(self):
-        print("HELLO")
         # Get session
         session = web.ctx.session
 
-        data = web.input(myfile={}, deliver=None, accepted=None, declined=None)
+        data = web.input(myfile={}, deliver=None, accepted=None, declined=None, projectid=0)
         fileitem = data['myfile']
         permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
         tasks = models.project.get_tasks_by_project_id(data.projectid)
-        print(data)
-        # Determine task status
+
+        # Determine status of the targeted task
         all_tasks_accepted = True
         task_waiting = False
         task_delivered = False
         for task in tasks:
-            print("TASK", task)
-            print("taskid", data.taskid, "equal", task[0])
             if task[0] == int(data.taskid):  
-                print("ASDASADSSD", task[6])  
                 if(task[5] == "waiting for delivery" or task[5] == "declined"):
                     task_waiting = True
                 if(task[5] == 'accepted'):
                     task_delivered = True
-                    
-        print(task_waiting, task_delivered)
-        print(permissions)
-        print(not permissions[1], not task_waiting)
 
+        # Deliver task
         if data.deliver and not task_delivered:
             models.project.update_task_status(data.taskid, "delivered")
+        
+        # Accept task delivery
         elif data.accepted:
-            print("accept")
             models.project.update_task_status(data.taskid, "accepted")
-            print(data.taskid)
+
+            # If all tasks are accepted then update project status to finished
             all_tasks_accepted = True
-            print("================================================")
-            print("================================================")
-    
             tasks = models.project.get_tasks_by_project_id(data.projectid)
             for task in tasks:
-                print("task", task)
                 if task[5] != "accepted":
                     all_tasks_accepted = False
             if all_tasks_accepted:
                 models.project.update_project_status(str(data.projectid), "finished")
 
+        # Decline task delivery
         elif data.declined:
             models.project.update_task_status(data.taskid, "declined")
-        # Test if the file was inserted
+
+        # Upload file
         elif fileitem.filename:
+            # Check if user has write permission
             if not permissions[1] or not task_waiting:
-                print("Permission denied")
                 raise web.seeother(('/project?projectid=' + data.projectid))
 
-            data = web.input(projectid=0)
-
             fn = fileitem.filename
-            print("DATA", data)
             # Create the project directory if it doesnt exist
             path = 'static/project' + data.projectid
             if not os.path.isdir(path):
@@ -102,18 +91,12 @@ class Project:
                 os.popen(command)
                 sleep(0.2)
             path = path + '/task' + data.taskid
-            print(path)
             if not os.path.isdir(path):
-                print(data.taskid)
                 command = 'mkdir ' + path
                 os.popen(command)
                 sleep(0.2)
             open(path + '/' + fn, 'wb').write(fileitem.file.read())
-            message = 'The file "' + fn + '" was uploaded successfully'
             models.project.set_task_file(data.taskid, (path + "/" + fn))
-        else:
-            message = 'No file was uploaded'
         
-
         raise web.seeother(('/project?projectid=' + data.projectid))
 
