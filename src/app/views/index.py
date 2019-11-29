@@ -17,6 +17,7 @@ class Index:
         session = web.ctx.session
         nav = get_nav_bar(session)
         data = web.input(projects=None)
+        categories = models.project.get_categories()
         project_bulk_one = []
         project_bulk_two = []
         if data.projects == 'my':
@@ -30,4 +31,4 @@ class Index:
             project_bulk_one = models.project.get_projects_by_status_and_owner(str(session.userid), "finished")
             project_bulk_two = models.project.get_projects_by_participant_and_status(str(session.userid), "finished")
 
-        return render.index(nav, project_bulk_one, project_bulk_two, data.projects)
+        return render.index(nav, project_bulk_one, project_bulk_two, data.projects, categories)
