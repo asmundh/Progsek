@@ -1,4 +1,4 @@
-$def with (nav, apply_form, get_apply_permission_form, project, applicants)
+$def with (nav, apply_form, get_apply_permission_form, project, applicants, permissions)
 
 <head>
         <title>Beelance2</title>
@@ -20,13 +20,14 @@ $def with (nav, apply_form, get_apply_permission_form, project, applicants)
         
         
         <form method="POST">
-            <p>Users to apply:</p>
-            $applicants
+            <h4>Add Users</h4>
             $:apply_form.render()
-            $for i, user in enumerate(applicants):
+            <p>Users to apply:</p>
+
+            $for i in range(0, len(applicants)):
                 <div>
-                    $ apply_permissions_form = get_apply_permissions_form(i, userid=user)
-                    $user[1]
+                    $ apply_permissions_form = get_apply_permissions_form(i, permissions[i][0], permissions[i][1], permissions[i][2], applicants[i])
+                    $applicants[i][1]
                     $:apply_permissions_form.render()
                 </div>
         </form> 

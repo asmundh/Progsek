@@ -107,11 +107,9 @@ class New_project:
                             data["modify_permission_"+str(i)]
                             modify = "TRUE"
                         except Exception as e:
-                            # This error will be raised if no permission is set
                             modify = "FALSE"
-                        
+                            pass                        
                         models.project.set_projects_user(str(projectid), str(userid), read, write, modify)
-                        
             raise web.seeother('/?projects=my')
                         
     def compose_form(self, data, operation):
@@ -144,7 +142,7 @@ class New_project:
         # Recreate user form fields
         user_form_elements = ()
         for i in range(0, user_count):
-            read, write, modify = "FALSE", "FALSE", "FALSE"
+            read, write, modify = False, False, False
             try:
                 data["read_permission_"+str(i)]
                 read = True
@@ -161,7 +159,6 @@ class New_project:
                 data["modify_permission_"+str(i)]
                 modify = True
             except Exception as e:
-                # This error will be raised if no permission is set
                 modify = False
                 pass
             old_user_form_element = get_user_form_elements(i, data["user_name_"+str(i)], read, write, modify)

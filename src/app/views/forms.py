@@ -109,7 +109,7 @@ def get_apply_form(elements):
     except TypeError as e:
         apply_form = form.Form(elements,
             form.Button("add_user", type="submit", description="Add User", value="add_user", html="Add User"),
-            form.Button("apply", type="submit", description="Apply", value="apply", html="apply")
+            form.Button("apply", type="submit", description="Apply", value="apply", html="Apply")
         )
     return apply_form
 
@@ -117,12 +117,12 @@ def get_user_dropdown():
     users = get_users()
     return form.Dropdown("user_to_add", description="User", args=users)
 
-def get_apply_permissions_form(identifier=0, read_permission=True, write_permission=False, modify_permission=False, userid=None):
+def get_apply_permissions_form(identifier=0, read_permission="TRUE", write_permission="FALSE", modify_permission="FALSE", userid=None):
     user_permissions = form.Form(
         form.Button("remove_user", type="submit", description="User to remove", value=userid, html="X"),
         form.Hidden("user_"+str(identifier), description="User to apply for project", value=userid),
-        form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission, value=True),
-        form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission, value=True),
-        form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=modify_permission, value=True)
+        form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=(read_permission=="TRUE"), value=True),
+        form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=(write_permission=="TRUE"), value=True),
+        form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=(modify_permission=="TRUE"), value=True)
     )    
     return user_permissions
