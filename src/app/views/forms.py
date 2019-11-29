@@ -32,6 +32,16 @@ register_form = form.Form(
     form.Button("Register", type="submit", description="Register")
 )
 
+# Define the project view form
+project_form = form.Form(
+    form.Input("myfile", type="file"),
+    form.Hidden("taskid"),
+    form.Button("submit", type="submit", html="Upload"),
+    form.Button("deliver", type="submit", value=True)
+    form.Button("accepted", type="submit", value=True)
+    form.Button("declined", type="submit", value=True)
+)
+
 def get_task_form_elements(identifier=0, task_title="", task_description="", budget=""):
     """
     Generate a set of task form elements
