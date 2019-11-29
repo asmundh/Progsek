@@ -86,13 +86,15 @@ def get_new_project_form(elements):
         :param elemets: All the project and task form elements
         :return: The ready to use project form
     """
-    return form.Form(*elements, 
+    return form.Form(*elements)
+
+project_buttons =  form.Form(
     form.Button("add_user", type="submit", description="Add User", value="add_user", html="Add User"),
     form.Button("remove_user", type="submit", description="Remove User", value="remove_user", html="Remove User"),
     form.Button("add_task", type="submit", description="Add Task", value="add_task", html="Add Task"),
     form.Button("remove_task", type="submit", description="Remove Task ", value="remove_task", html="Remove Task"),
     form.Button("create_project", type="submit", description="Create Project", value="create_project", html="Create Project")
-    )
+)
 
 def get_apply_form(elements):
     try:

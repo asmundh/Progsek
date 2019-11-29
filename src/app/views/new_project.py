@@ -1,5 +1,5 @@
 import web
-from views.forms import get_task_form_elements, get_new_project_form, get_project_form_elements, get_user_form_elements
+from views.forms import get_task_form_elements, get_new_project_form, get_project_form_elements, get_user_form_elements, project_buttons
 import models.project
 import models.login
 from views.utils import get_nav_bar
@@ -21,7 +21,7 @@ class New_project:
         task_form_elements = get_task_form_elements()
         user_form_elements = get_user_form_elements()
         project_form = get_new_project_form((project_form_elements + task_form_elements + user_form_elements))
-        return render.new_project(nav, project_form, "")
+        return render.new_project(nav, project_form, project_buttons,  "")
 
     def POST(self):
         """
@@ -39,27 +39,27 @@ class New_project:
         # Add a set of task fields to the form
         if data.add_task:
             project_form = self.compose_form(data, "add_task")
-            return render.new_project(nav, project_form, "") 
+            return render.new_project(nav, project_form, project_buttons,  "") 
         
         # Remove a set of task fields from the form
         if data.remove_task:
             project_form = self.compose_form(data, "remove_task")
-            return render.new_project(nav, project_form, "")     
+            return render.new_project(nav, project_form, project_buttons,  "")     
         
         if data.add_user:
             project_form = self.compose_form(data, "add_user")
-            return render.new_project(nav, project_form, "")     
+            return render.new_project(nav, project_form, project_buttons,  "")     
         
         if data.remove_user:
             project_form = self.compose_form(data, "remove_user")
-            return render.new_project(nav, project_form, "")    
+            return render.new_project(nav, project_form, project_buttons,  "")    
             
         # Post the form data and save the project in the database
         if data.create_project:
                             
             project_form = self.compose_form(data, None)
             if not project_form.validates():
-                return render.new_project(nav, project_form, "")    
+                return render.new_project(nav, project_form, project_buttons,  "")    
 
             task_count = get_task_count(data)
             user_count = get_user_count(data)
@@ -72,7 +72,7 @@ class New_project:
             # Validate the input user names
             for i in range(0, user_count):
                 if len(data["user_name_"+str(i)]) and not models.login.get_user_id_by_name(data["user_name_"+str(i)]):    
-                    return render.register(nav, project_form, "Invalid user: " + data["user_name_"+str(i)])
+                    return render.register(nav, project_form, project_buttons,  "Invalid user: " + data["user_name_"+str(i)])
 
             # Save the project to the database
             projectid = models.project.set_project(data.category_name, str(session.userid), 
