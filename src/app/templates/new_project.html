@@ -18,7 +18,7 @@ $def with (nav, project_form, project_buttons, messasge)
             $:project_form.render()
         </div>
 
-        <div>
+        <div id="project_buttons">
             <div>
                 $:project_buttons.add_task.render()
                 $:project_buttons.remove_task.render()
@@ -27,8 +27,10 @@ $def with (nav, project_form, project_buttons, messasge)
                 $:project_buttons.add_user.render()
                 $:project_buttons.remove_user.render()
             </div>
+            <div>
+                $:project_buttons.create_project.render()
+            </div>
         </div>
-        $:project_buttons.create_project.render()
     </form>
 
     <p>$messasge</p>

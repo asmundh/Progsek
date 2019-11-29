@@ -96,7 +96,7 @@ nav ul {
     background-color: lightskyblue;
 }
 
-#apply {
+#apply_button {
     border: 1px solid gray;
     padding: 5px;
     background-color: lightslategray;
@@ -106,7 +106,7 @@ nav ul {
     margin-bottom: 5px;
 }
 
-#apply:hover {
+#apply_button:hover {
     background-color: lightskyblue;
 }
 
@@ -120,4 +120,17 @@ div {
 
 form {
     margin: auto;
+}
+
+.applicant{
+    border: 1px solid gray;
+    padding: 5px;
+}
+
+#project_buttons div {
+    margin-left: 180px;
+}
+
+button {
+    margin: 5px;
 }

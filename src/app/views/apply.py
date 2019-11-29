@@ -2,7 +2,7 @@ import web
 import models.project
 from models.login import get_user_name_by_id
 from views.utils import get_nav_bar, get_element_count
-from views.forms import get_apply_form, get_user_dropdown, get_apply_permissions_form
+from views.forms import get_apply_form, get_apply_permissions_form
 
 # Get html templates
 render = web.template.render('templates/')
@@ -26,8 +26,7 @@ class Apply:
             tasks = [[]]
 
         # Assemble form and set the user in context as an applicant with all permissions
-        user_dropdown = get_user_dropdown()
-        apply_form = get_apply_form(user_dropdown)
+        apply_form = get_apply_form()
         apply_permissions_form = get_apply_permissions_form()
         applicants = [[session.userid, session.username]]
         permissions = [["TRUE", "TRUE", "TRUE"]]
@@ -45,8 +44,7 @@ class Apply:
 
         # Assemble form
         applicants = [session.username]
-        user_dropdown = get_user_dropdown()
-        apply_form = get_apply_form(user_dropdown)
+        apply_form = get_apply_form()
         apply_permission_form = get_apply_permissions_form()
         
         # Prepare globals

@@ -12,11 +12,11 @@ $def with (nav, project_form, project, tasks, permissions, categories)
     
     $:nav
 
-    $if len(project) and permissions[0]:
+    $if len(project) and (permissions[0] or project[5] == "open") and session.username:
         <h1>Project: $project[3]</h1>
 
-        $if project[5] == "open" and session.userid != project[2]:
-            <div id="apply" onclick="location.href='/apply?projectid=$project[0]'" name="Apply" description="apply">Apply for this project</div>
+        $if session.userid != project[2] and project[5] == "open":
+            <div id="apply_button" onclick="location.href='/apply?projectid=$project[0]'" name="Apply" description="apply">Apply for this project</div>
 
         <div id="project_meta">
             <p>Status: $project[5]</p>

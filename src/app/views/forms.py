@@ -99,23 +99,14 @@ project_buttons =  form.Form(
     form.Button("create_project", type="submit", description="Create Project", value="create_project", html="Create Project")
 )
 
-def get_apply_form(elements):
-    try:
-        apply_form = form.Form(*elements,
-            form.Button("add_user", type="submit", description="Add User", value="add_user", html="Add User"),
-            form.Button("apply", type="submit", description="Apply", value="apply", html="apply")
-        )
-    # Exception will occur if the form only contains one element
-    except TypeError as e:
-        apply_form = form.Form(elements,
-            form.Button("add_user", type="submit", description="Add User", value="add_user", html="Add User"),
-            form.Button("apply", type="submit", description="Apply", value="apply", html="Apply")
-        )
-    return apply_form
-
-def get_user_dropdown():
+def get_apply_form():
     users = get_users()
-    return form.Dropdown("user_to_add", description="User", args=users)
+    apply_form = form.Form(
+        form.Dropdown("user_to_add", description="User", args=users),
+        form.Button("add_user", type="submit", description="Add User", value="add_user", html="Add User"),
+        form.Button("apply", type="submit", description="Apply", value="apply", html="Apply")
+    )
+    return apply_form
 
 def get_apply_permissions_form(identifier=0, read_permission="TRUE", write_permission="FALSE", modify_permission="FALSE", userid=None):
     user_permissions = form.Form(
