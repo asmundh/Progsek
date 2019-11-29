@@ -22,7 +22,7 @@ $def with (nav, apply_form, project, applicants)
         <form method="POST">
             <p>Users to apply:</p>
             $for i, user in enumerate(applicants):
-                <div>$user[1]<Button name="Remove User" type ="submit" value="$applicants[i]">X</Button></div>
+                <div>$user[1]<Button name="remove_user" type ="submit" value="$applicants[i]">X</Button></div>
                 <input hidden="hidden" name="user_name_$i" value="$applicants[i]"/>
             $:apply_form.render()
         </form> 

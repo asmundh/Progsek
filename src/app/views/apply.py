@@ -19,19 +19,17 @@ class Apply:
         data = web.input(projectid=0)
         if data.projectid:
             project = models.project.get_project_by_id(data.projectid)
-            #tasks = models.project.get_tasks_by_project_id(data.projectid)
         else:
             project = [[]]
             tasks = [[]]
-        #render = web.template.render('templates/', globals={'get_task_files':models.project.get_task_files, 'session':session})
-        #render_project = render.project(nav, project[0], tasks)
+
         user_dropdown = get_user_dropdown()
         apply_form = get_apply_form(user_dropdown)
         applicants = [[session.userid, session.username]]
         return render.apply(nav, apply_form, project, applicants)
 
     def POST(self):
-        data = web.input(projectid=0)
+        data = web.input(projectid=0, add_user=None, remove_user=None, apply=None)
         session = web.ctx.session
         nav = get_nav_bar(session)
         applicants = [session.username]
@@ -41,29 +39,22 @@ class Apply:
         print(data)
         if data.projectid:
             project = models.project.get_project_by_id(data.projectid)
-            try:
-                if data["Add User"]:
-                    #project_form = self.compose_form(data, "add_user")
-                    applicants = self.get_applicants(data, "add_user")
-                    return render.apply(nav, apply_form, project, applicants)     
-            except Exception as e:
-                try:
-                    if data["Remove User"]:
-                        #project_form = self.compose_form(data, "remove_user")
+
+            if data.add_user:
+                applicants = self.get_applicants(data, "add_user")
+                return render.apply(nav, apply_form, project, applicants)     
+
+            elif data.remove_user:
                         applicants = self.get_applicants(data, "remove_user")
                         return render.apply(nav, apply_form, project, applicants)    
-                except Exception as e:
-                    try:
-                        if data["Apply"]:
-                            applicants = self.get_applicants(data, "")
-                            for applicant in applicants:
-                                print("Add", applicant, data.projectid)
-                                models.project.set_projects_user(data.projectid, str(applicant[0]), "TRUE", "TRUE", "FALSE")
-                                models.project.update_project_status(data.projectid, "in progress")
-                            raise web.seeother(('/project?projectid=' + str(data.projectid)))
-                    except Exception as e:
-                        raise
-
+ 
+            elif data.apply:
+                applicants = self.get_applicants(data, "")
+                for applicant in applicants:
+                    models.project.set_projects_user(data.projectid, str(applicant[0]), "TRUE", "TRUE", "FALSE")
+                    models.project.update_project_status(data.projectid, "in progress")
+                    raise web.seeother(('/project?projectid=' + str(data.projectid)))
+                    
     def get_applicants(self, data, operation):
         print(operation)
         print(data)
@@ -77,7 +68,7 @@ class Apply:
 
         if operation == "remove_user":
             print("remove")
-            user_to_remove = data["Remove User"][1:][:-1].split(",")
+            user_to_remove = data.remove_user[1:][:-1].split(",")
             user_to_remove = [int(user_to_remove[0]), user_to_remove[1][2:][:-1]]
             for i in range (0, user_count):
                 print(user_to_remove, applicants[i])

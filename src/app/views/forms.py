@@ -102,18 +102,20 @@ project_buttons =  form.Form(
 def get_apply_form(elements):
     try:
         apply_form = form.Form(*elements,
-            form.Button("Add User", type="submit", description="Add User", value="add_user"),
-            form.Button("Remove User", type="submit", description="Remove User", value="remove_user"),
-            form.Button("Apply", type="submit", description="Apply", value="apply")
+            form.Button("add_user", type="submit", description="Add User", value="add_user", html="Add User"),
+            form.Button("apply", type="submit", description="Apply", value="apply", html="apply")
         )
     # Exception will occur if the form only contains one element
     except TypeError as e:
         apply_form = form.Form(elements,
-            form.Button("Add User", type="submit", description="Add User", value="add_user"),
-            form.Button("Apply", type="submit", description="Apply", value="apply")
+            form.Button("add_user", type="submit", description="Add User", value="add_user", html="Add User"),
+            form.Button("apply", type="submit", description="Apply", value="apply", html="apply")
         )
     return apply_form
 
 def get_user_dropdown(identifier=0):
     users = get_users()
+    #form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission, value=True),
+    #form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission, value=True),
+    #form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=modify_permission, value=True)
     return form.Dropdown("user_id_" + str(identifier), description="User", args=users)
