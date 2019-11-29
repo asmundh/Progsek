@@ -33,7 +33,7 @@ class Register:
         data = web.input()
 
         register = register_form()
-        if not f.validates():
+        if not register.validates():
             return render.register(nav, register, "All fields must be valid.")
 
         # Check if user exists

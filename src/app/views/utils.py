@@ -19,3 +19,22 @@ def get_nav_bar(session):
     result += ' </ul>'
     result += '</nav>'
     return result
+
+                        
+def get_element_count(data, element):
+    """
+    Determine the number of tasks created by removing 
+    the four other elements from count and divide by the 
+    number of variables in one task.
+     
+        :param data: The data object from web.input
+        :return: The number of tasks opened by the client
+    """
+    task_count = 0
+    while True:
+        try:
+            data[element+str(task_count)]
+            task_count += 1
+        except:
+            break
+    return task_count

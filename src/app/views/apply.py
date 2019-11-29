@@ -1,9 +1,8 @@
 import web
 import models.project
 from models.login import get_user_name_by_id
-from views.utils import get_nav_bar
+from views.utils import get_nav_bar, get_element_count
 from views.forms import get_apply_form, get_user_dropdown
-from views.new_project import get_user_count
 
 # Get html templates
 render = web.template.render('templates/')
@@ -68,7 +67,7 @@ class Apply:
     def get_applicants(self, data, operation):
         print(operation)
         print(data)
-        user_count = get_user_count(data)
+        user_count = get_element_count(data, "user_name_")
         print("count", user_count)
         applicants = []
         for i in range (0, user_count):

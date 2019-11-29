@@ -3,6 +3,12 @@ from models.project import get_categories
 from models.login import get_users, get_user_id_by_name
 
 
+# Regex for input validation
+vemail = form.regexp(r".*@.*", "- Must be a valid email address")
+vpass = form.regexp(r".{6,100}$", '- Must be atleast 6 characters long')
+number = form.regexp(r"^[1-9]+$", "- Must be a number")
+not_empty = form.regexp(r".+", "- This field is required")
+
 # Define the login form 
 login_form = form.Form(
     form.Textbox("username", description="Username"),
@@ -11,10 +17,6 @@ login_form = form.Form(
     form.Button("Log In", type="submit", description="Login"),
 )
 
-vemail = form.regexp(r".*@.*", "- Must be a valid email address")
-vpass = form.regexp(r".{6,100}$", '- Must be atleast 6 characters long')
-number = form.regexp(r"^[1-9]+$", "- Must be a number")
-not_empty = form.regexp(r".+", "- This field is required")
 # Define the register form 
 register_form = form.Form(
     form.Textbox("username", not_empty, description="Username"),
@@ -70,24 +72,15 @@ def get_project_form_elements(project_title="", project_description="", category
     return project_form_elements
 
 def get_user_form_elements(identifier=0, user_name="", read_permission=True, write_permission=False, modify_permission=False):
-    users = get_users()
     user_form_elements = (
         form.Textbox("user_name_" + str(identifier), description="User", value=user_name),        
-        form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission),
-        form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission),
-        form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=modify_permission)
+        form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission, value=True),
+        form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission, value=True),
+        form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=modify_permission, value=True)
     )
     return user_form_elements
 
-def get_new_project_form(elements):
-    """
-    Combine a project form element and task elements to make a complete project form
-
-        :param elemets: All the project and task form elements
-        :return: The ready to use project form
-    """
-    return form.Form(*elements)
-
+# Define buttons to modify the project form or create a project
 project_buttons =  form.Form(
     form.Button("add_user", type="submit", description="Add User", value="add_user", html="Add User"),
     form.Button("remove_user", type="submit", description="Remove User", value="remove_user", html="Remove User"),
