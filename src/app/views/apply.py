@@ -10,7 +10,9 @@ render = web.template.render('templates/')
 class Apply:
 
     def GET(self):
-        print("GET")
+        """
+        Get the apply view where users can sign up for a project
+        """
         # Get session
         session = web.ctx.session
         # Get navbar
@@ -23,6 +25,7 @@ class Apply:
             project = [[]]
             tasks = [[]]
 
+        # Assemble form and set the user in context as an applicant with all permissions
         user_dropdown = get_user_dropdown()
         apply_form = get_apply_form(user_dropdown)
         apply_permissions_form = get_apply_permissions_form()
@@ -33,15 +36,20 @@ class Apply:
         return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions)
 
     def POST(self):
+        """
+        Post an application to the view, adding selected users to a project
+        """
         data = web.input(projectid=0, add_user=None, remove_user=None, apply=None)
         session = web.ctx.session
         nav = get_nav_bar(session)
+
+        # Assemble form
         applicants = [session.username]
         user_dropdown = get_user_dropdown()
         apply_form = get_apply_form(user_dropdown)
         apply_permission_form = get_apply_permissions_form()
-        print("POST")
-        print(data)
+        
+        # Prepare globals
         render = web.template.render('templates/', globals={"get_apply_permissions_form":get_apply_permissions_form, 'session':session})
         if data.projectid:
             project = models.project.get_project_by_id(data.projectid)
@@ -53,6 +61,8 @@ class Apply:
             elif data.remove_user:
                         applicants, permissions = self.get_applicants(data, "remove_user")
                         return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions)     
+            
+            # Set users as working on project and set project status in progress
             elif data.apply:
                 applicants, permissions = self.get_applicants(data, "")
                 for applicant, permission in zip(applicants, permissions):
@@ -61,12 +71,17 @@ class Apply:
                 raise web.seeother(('/project?projectid=' + str(data.projectid)))
                     
     def get_applicants(self, data, operation):
-        print(operation)
-        print(data)
+        """
+        Get applicants and corresponding permissions from the input data with and operation
+        :param data: Input data
+        :param operation: Either empty, add_user or remove_user
+        :type data: Storage
+        :type operation: str
+        """
         user_count = get_element_count(data, "user_")
-        print("count", user_count)
         applicants = []
         permissions = []
+        # Create the lists of current applying users and their permissions
         for i in range (0, user_count):
             print("Raw applicant", data["user_"+str(i)])
             applicant = data["user_"+str(i)][1:][:-1].split(",")
@@ -94,11 +109,9 @@ class Apply:
             permissions.append([read, write, modify])
 
         if operation == "remove_user":
-            print("remove")
             user_to_remove = data.remove_user[1:][:-1].split(",")
             user_to_remove = [int(user_to_remove[0]), user_to_remove[1][2:][:-1]]
             for i in range (0, user_count):
-                print(user_to_remove, applicants[i])
                 if user_to_remove == applicants[i]:
                     applicants.pop(i)
                     permissions.pop(i)
@@ -111,7 +124,6 @@ class Apply:
             if new_applicant not in applicants:
                 applicants.append(new_applicant)
                 permissions.append(["TRUE", "FALSE", "FALSE"])
-        print(applicants)
 
         return applicants, permissions
             
