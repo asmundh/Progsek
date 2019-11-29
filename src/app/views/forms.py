@@ -72,7 +72,7 @@ def get_project_form_elements(project_title="", project_description="", category
 def get_user_form_elements(identifier=0, user_name="", read_permission=True, write_permission=False, modify_permission=False):
     users = get_users()
     user_form_elements = (
-        form.Textbox("user_name_" + str(identifier), not_empty, description="User", value=user_name),        
+        form.Textbox("user_name_" + str(identifier), description="User", value=user_name),        
         form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission),
         form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission),
         form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=modify_permission)
@@ -87,11 +87,11 @@ def get_new_project_form(elements):
         :return: The ready to use project form
     """
     return form.Form(*elements, 
-    form.Button("Add User", type="submit", description="Add User", value="add_user"),
-    form.Button("Remove User", type="submit", description="Remove User", value="remove_user"),
-    form.Button("Add Task", type="submit", description="Add Task", value="add_task"),
-    form.Button("Remove Task", type="submit", description="Remove Task ", value="remove_task"),
-    form.Button("Create Project", type="submit", description="Create Project", value="create_project")
+    form.Button("add_user", type="submit", description="Add User", value="add_user", html="Add User"),
+    form.Button("remove_user", type="submit", description="Remove User", value="remove_user", html="Remove User"),
+    form.Button("add_task", type="submit", description="Add Task", value="add_task", html="Add Task"),
+    form.Button("remove_task", type="submit", description="Remove Task ", value="remove_task", html="Remove Task"),
+    form.Button("create_project", type="submit", description="Create Project", value="create_project", html="Create Project")
     )
 
 def get_apply_form(elements):

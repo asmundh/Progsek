@@ -1,4 +1,4 @@
-$def with (nav, project_form)
+$def with (nav, project_form, messasge)
 
 <head>
     <title>Beelance2</title>
@@ -16,6 +16,8 @@ $def with (nav, project_form)
     <form method="POST">
         $:project_form.render()
     </form>
+
+    <p>$messasge</p>
 </body>
 
 <footer></footer>

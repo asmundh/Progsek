@@ -32,13 +32,13 @@ class Register:
         nav = get_nav_bar(session)
         data = web.input()
 
-        f = register_form()
+        register = register_form()
         if not f.validates():
-            return render.register(nav, r, "All fields must be valid.")
+            return render.register(nav, register, "All fields must be valid.")
 
         # Check if user exists
         if models.login.get_user_id_by_name(data.username):
-            return render.register(nav, r, "Invalid user, already exists.")
+            return render.register(nav, register, "Invalid user, already exists.")
 
         models.register.set_user(data.username, 
             hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest(), 
