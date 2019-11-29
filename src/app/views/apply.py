@@ -2,7 +2,7 @@ import web
 import models.project
 from models.login import get_user_name_by_id
 from views.utils import get_nav_bar, get_element_count
-from views.forms import get_apply_form, get_user_dropdown
+from views.forms import get_apply_form, get_user_dropdown, get_apply_permissions_form
 
 # Get html templates
 render = web.template.render('templates/')
@@ -25,8 +25,11 @@ class Apply:
 
         user_dropdown = get_user_dropdown()
         apply_form = get_apply_form(user_dropdown)
+        apply_permissions_form = get_apply_permissions_form()
         applicants = [[session.userid, session.username]]
-        return render.apply(nav, apply_form, project, applicants)
+        render = web.template.render('templates/', globals={"get_apply_permissions_form":get_apply_permissions_form, 'session':session})
+
+        return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants)
 
     def POST(self):
         data = web.input(projectid=0, add_user=None, remove_user=None, apply=None)
@@ -35,19 +38,20 @@ class Apply:
         applicants = [session.username]
         user_dropdown = get_user_dropdown()
         apply_form = get_apply_form(user_dropdown)
+        apply_permission_form = get_apply_permissions_form()
         print("POST")
         print(data)
+        render = web.template.render('templates/', globals={"get_apply_permissions_form":get_apply_permissions_form, 'session':session})
         if data.projectid:
             project = models.project.get_project_by_id(data.projectid)
 
             if data.add_user:
                 applicants = self.get_applicants(data, "add_user")
-                return render.apply(nav, apply_form, project, applicants)     
+                return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants)     
 
             elif data.remove_user:
                         applicants = self.get_applicants(data, "remove_user")
-                        return render.apply(nav, apply_form, project, applicants)    
- 
+                        return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants)     
             elif data.apply:
                 applicants = self.get_applicants(data, "")
                 for applicant in applicants:
@@ -58,12 +62,12 @@ class Apply:
     def get_applicants(self, data, operation):
         print(operation)
         print(data)
-        user_count = get_element_count(data, "user_name_")
+        user_count = get_element_count(data, "user_")
         print("count", user_count)
         applicants = []
         for i in range (0, user_count):
-            print("Raw applicant", data["user_name_"+str(i)])
-            applicant = data["user_name_"+str(i)][1:][:-1].split(",")
+            print("Raw applicant", data["user_"+str(i)])
+            applicant = data["user_"+str(i)][1:][:-1].split(",")
             applicants.append([ int(applicant[0]), applicant[1][2:][:-1] ])
 
         if operation == "remove_user":
@@ -78,7 +82,7 @@ class Apply:
 
         elif operation == "add_user":
 
-            user_id_to_add = data.user_id_0
+            user_id_to_add = data.user_to_add
             user_name_to_add = get_user_name_by_id(user_id_to_add)
             new_applicant = [ int(user_id_to_add), user_name_to_add ]
             if new_applicant not in applicants:
