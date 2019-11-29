@@ -1,9 +1,10 @@
 import web
 import models.project
 from views.utils import get_nav_bar
-import cgi, os
-import cgitb; cgitb.enable()
+from views.forms import project_form
+import os
 from time import sleep
+
 
 # Get html templates
 render = web.template.render('templates/')
@@ -34,7 +35,7 @@ class Project:
             project = [[]]
             tasks = [[]]
         render = web.template.render('templates/', globals={'get_task_files':models.project.get_task_files, 'session':session})
-        return render.project(nav, project, tasks,permissions)
+        return render.project(nav, project_form, project, tasks,permissions)
 
     def POST(self):
         print("HELLO")
@@ -58,12 +59,14 @@ class Project:
             print("taskid", data.taskid, "equal", task[0])
             if task[0] == int(data.taskid):  
                 print("ASDASADSSD", task[6])  
-                if(task[6] == "waiting for delivery" or task[6] == "declined"):
+                if(task[5] == "waiting for delivery" or task[5] == "declined"):
                     task_waiting = True
-                if(task[6] == 'accepted'):
+                if(task[5] == 'accepted'):
                     task_delivered = True
                     
         print(task_waiting, task_delivered)
+        print(permissions)
+        print(not permissions[1], not task_waiting)
         # Test if the file was uploaded
         if fileitem.filename:
             if not permissions[1] or not task_waiting:
@@ -79,14 +82,14 @@ class Project:
             if not os.path.isdir(path):
                 command = 'mkdir ' + path
                 os.popen(command)
-                sleep(0.5)
+                sleep(0.2)
             path = path + '/task' + data.taskid
             print(path)
             if not os.path.isdir(path):
                 print(data.taskid)
                 command = 'mkdir ' + path
                 os.popen(command)
-                sleep(0.5)
+                sleep(0.2)
             open(path + '/' + fn, 'wb').write(fileitem.file.read())
             message = 'The file "' + fn + '" was uploaded successfully'
             models.project.set_task_file(data.taskid, (path + "/" + fn))
@@ -103,7 +106,7 @@ class Project:
             tasks = models.project.get_tasks_by_project_id(data.projectid)
             for task in tasks:
                 print("task", task)
-                if task[6] != "accepted":
+                if task[5] != "accepted":
                     all_tasks_accepted = False
             if all_tasks_accepted:
                 models.project.update_project_status(str(data.projectid), "finished")

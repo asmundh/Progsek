@@ -1,4 +1,4 @@
-$def with (nav, project, tasks, permissions)
+$def with (nav, project_form, project, tasks, permissions)
 
 <head>
     <title>Beelance2</title>
@@ -24,18 +24,20 @@ $def with (nav, project, tasks, permissions)
                     <br>
                     $permissions
                     <br>
-                    $if project[5] != "open" or session.userid == project[2]:
+                    $if project[5] != "open":
                     
+
+
                         $for filename in get_task_files(task[0]):
                             <a href="$filename[0]" download>$filename[0].split("/")[-1]</a>
                             <br>
                         
                         <form method="POST" enctype="multipart/form-data" action="">
-                            <input type="file" name="myfile" />
+                            $:project_form.myfile.render()
                             <br/>
-                            <input type="hidden" name="taskid" value="$task[0]"/>
-                            $if task[6] == "waiting for delivery" or task[6] == "declined":
-                                    <input type="submit" name="submit"/>
+                            $project_form.taskid.set_value(task[0])
+                            $:project_form.taskid.render()
+                            $:project_form.submit.render()
                             $if permissions[2]:
                                 <button type="submit" name="deliver" value="1">Deliver</button>
                             $if session.userid == project[2] and task[6] == "delivered":

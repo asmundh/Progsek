@@ -37,9 +37,9 @@ project_form = form.Form(
     form.Input("myfile", type="file"),
     form.Hidden("taskid"),
     form.Button("submit", type="submit", html="Upload"),
-    form.Button("deliver", type="submit", value=True)
-    form.Button("accepted", type="submit", value=True)
-    form.Button("declined", type="submit", value=True)
+    form.Button("deliver", type="submit", value=True, html="Deliver"),
+    form.Button("accepted", type="submit", value=True, html="Accept Delivery"),
+    form.Button("declined", type="submit", value=True, html="Decline Delivery")
 )
 
 def get_task_form_elements(identifier=0, task_title="", task_description="", budget=""):
