@@ -82,6 +82,20 @@ def get_project_form_elements(project_title="", project_description="", category
     return project_form_elements
 
 def get_user_form_elements(identifier=0, user_name="", read_permission=True, write_permission=False, modify_permission=False):
+    """
+    Get the user form elements used to set users in project upon creation
+        :param identifier: The id of this element
+        :param user_name: The current user
+        :param read_permission: Permit user to read
+        :param write_permission: Permit user to write
+        :param modify_permission: Permit user to modify
+        :type identifier: int
+        :type user_name: str
+        :type read_permission: bool
+        :type write_permission: bool
+        :type modify_permission: bool
+        :return: The form elements to add users to a project
+    """
     user_form_elements = (
         form.Textbox("user_name_" + str(identifier), description="User", value=user_name),        
         form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission, value=True),
@@ -100,6 +114,10 @@ project_buttons =  form.Form(
 )
 
 def get_apply_form():
+    """
+    Get the form used to add users to an application and apply
+        :return: A form object
+    """
     users = get_users()
     apply_form = form.Form(
         form.Dropdown("user_to_add", description="User", args=users),
@@ -109,6 +127,20 @@ def get_apply_form():
     return apply_form
 
 def get_apply_permissions_form(identifier=0, read_permission="TRUE", write_permission="FALSE", modify_permission="FALSE", userid=None):
+    """
+    Get the form used to set permissions for each applicant
+            :param identifier: The id of this element
+            :param user_name: The current user
+            :param read_permission: Permit user to read
+            :param write_permission: Permit user to write
+            :param modify_permission: Permit user to modify
+            :type identifier: int
+            :type user_name: str
+            :type read_permission: bool
+            :type write_permission: bool
+            :type modify_permission: bool
+            :return: A form object
+    """
     user_permissions = form.Form(
         form.Button("remove_user", type="submit", description="User to remove", value=userid, html="X"),
         form.Hidden("user_"+str(identifier), description="User to apply for project", value=userid),

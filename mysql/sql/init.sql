@@ -132,7 +132,9 @@ CREATE TABLE task_offer (
 
 insert into users values (NULL, "admin", "password", "Admin Modsen", "ntnu", 'mail@ntnu.no',"12345678", "street", "trondheim", "trondheim", "1234", "norway");
 
-insert into project_category values (NULL, "Test Category");
+insert into project_category values (NULL, "Gardening");
+insert into project_category values (NULL, "Programming");
+insert into project_category values (NULL, "Grocery shopping");
 
 
 /*

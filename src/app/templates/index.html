@@ -27,6 +27,10 @@ $def with (nav, project_bulk_one, project_bulk_two, projects, categories)
     
         $if projects == 'my':
             <h3>Your open projects</h3>
+        $elif projects == 'customer':
+            <h3>Customer projects in progress</h3>
+        $elif projects == 'finished':
+            <h3>My finished projects</h3>
 
         <div class="projects">
             $for project in project_bulk_one:
@@ -35,6 +39,8 @@ $def with (nav, project_bulk_one, project_bulk_two, projects, categories)
 
         $if projects == 'my':
             <h3>Projects in  progress</h3>
+        $elif projects == 'finished':
+            <h3>Finished customer projects</h3>
 
         <div class="projects">
             $for project in project_bulk_two:
