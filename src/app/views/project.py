@@ -43,14 +43,11 @@ class Project:
         session = web.ctx.session
 
         data = web.input(myfile={}, deliver=None, accepted=None, declined=None)
-
         fileitem = data['myfile']
-        
-
         permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
         tasks = models.project.get_tasks_by_project_id(data.projectid)
-
         print(data)
+        # Determine task status
         all_tasks_accepted = True
         task_waiting = False
         task_delivered = False
@@ -67,8 +64,29 @@ class Project:
         print(task_waiting, task_delivered)
         print(permissions)
         print(not permissions[1], not task_waiting)
-        # Test if the file was uploaded
-        if fileitem.filename:
+
+        if data.deliver and not task_delivered:
+            models.project.update_task_status(data.taskid, "delivered")
+        elif data.accepted:
+            print("accept")
+            models.project.update_task_status(data.taskid, "accepted")
+            print(data.taskid)
+            all_tasks_accepted = True
+            print("================================================")
+            print("================================================")
+    
+            tasks = models.project.get_tasks_by_project_id(data.projectid)
+            for task in tasks:
+                print("task", task)
+                if task[5] != "accepted":
+                    all_tasks_accepted = False
+            if all_tasks_accepted:
+                models.project.update_project_status(str(data.projectid), "finished")
+
+        elif data.declined:
+            models.project.update_task_status(data.taskid, "declined")
+        # Test if the file was inserted
+        elif fileitem.filename:
             if not permissions[1] or not task_waiting:
                 print("Permission denied")
                 raise web.seeother(('/project?projectid=' + data.projectid))
@@ -93,26 +111,6 @@ class Project:
             open(path + '/' + fn, 'wb').write(fileitem.file.read())
             message = 'The file "' + fn + '" was uploaded successfully'
             models.project.set_task_file(data.taskid, (path + "/" + fn))
-        elif data.deliver and not task_delivered:
-            models.project.update_task_status(data.taskid, "delivered")
-        elif data.accepted:
-            print("accept")
-            models.project.update_task_status(data.taskid, "accepted")
-            print(data.taskid)
-            all_tasks_accepted = True
-            print("================================================")
-            print("================================================")
-    
-            tasks = models.project.get_tasks_by_project_id(data.projectid)
-            for task in tasks:
-                print("task", task)
-                if task[5] != "accepted":
-                    all_tasks_accepted = False
-            if all_tasks_accepted:
-                models.project.update_project_status(str(data.projectid), "finished")
-
-        elif data.declined:
-            models.project.update_task_status(data.taskid, "declined")
         else:
             message = 'No file was uploaded'
         
