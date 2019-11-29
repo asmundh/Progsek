@@ -25,7 +25,11 @@ class Project:
 
         data = web.input(projectid=0)
 
-        permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
+        try:
+            permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
+        except:
+            permissions = [0,0,0]
+
         categories = models.project.get_categories()
 
         if data.projectid:
