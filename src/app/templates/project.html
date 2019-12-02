@@ -12,7 +12,7 @@ $def with (nav, project_form, project, tasks, permissions, categories)
     
     $:nav
 
-    $if len(project) and (permissions[0] or project[5] == "open") and session.username:
+    $if len(project) and (permissions[0] or project[5] == "open" or session.userid == project[2]) and session.username:
         <h1>Project: $project[3]</h1>
 
         $if session.userid != project[2] and project[5] == "open":

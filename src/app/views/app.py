@@ -30,15 +30,15 @@ app = web.application(urls, globals())
 # Get html templates
 render = web.template.render('templates/')
 
+# Set session timeout
+web.config.session_parameters['timeout'] = None
+
 # Workaround to use sessions with reloader (debugger) http://webpy.org/cookbook/session_with_reloader
 if web.config.get('_session') is None:
     session = web.session.Session(app, web.session.DiskStore("sessions"), initializer={"username": None})
     web.config._session = session
 else:
     session = web.config._session
-
-# Set session timeout
-web.config.session_parameters['timeout'] = 12345678910
 
 # Add session to global variables
 render._add_global(session, 'session')
