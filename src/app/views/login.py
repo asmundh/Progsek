@@ -26,7 +26,7 @@ class Login():
         # Log the user in if the rememberme cookie is set and valid
         self.check_rememberme()
 
-        return render.login(nav, login_form)
+        return render.login(nav, login_form, "")
 
     def POST(self):
         """
@@ -44,8 +44,9 @@ class Login():
         # If there is a matching user/password in the database the user is logged in
         if user:
             self.login(user[1], user[0], data.remember)
-              
-        return render.login(nav, login_form)
+            raise web.seeother("/")
+        else:
+            return render.login(nav, login_form, "- User authentication failed")
 
     def login(self, username, userid, remember):
         """

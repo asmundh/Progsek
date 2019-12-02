@@ -15,7 +15,8 @@ body {
 }
 
 .projects * {
-    margin: auto;   
+    margin: auto;
+    padding: 2px;   
     min-width: 100px;
     margin-top: 5px;
 }
@@ -78,13 +79,13 @@ nav ul {
     text-decoration: none;
 }
 
-#user_projects {
+#user_projects, .categories {
     display: flex; /* or inline-flex */
     flex-direction: row;
     margin: auto;
 }
 
-.user_projects_category {
+.user_projects_category, .category {
     border: 1px solid gray;
     padding: 5px;
     background-color: lightslategray;
@@ -92,7 +93,7 @@ nav ul {
     margin: 2px;
 }
 
-.user_projects_category:hover {
+.user_projects_category:hover, .category:hover {
     background-color: lightskyblue;
 }
 
@@ -133,4 +134,13 @@ form {
 
 button {
     margin: 5px;
+}
+
+#dashboard {
+    display: flex;
+    flex-direction: column;
+}
+
+#dashboard * {
+    margin-bottom: 5px;
 }

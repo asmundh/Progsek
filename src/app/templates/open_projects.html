@@ -13,6 +13,7 @@ $def with (nav, categories, open_projects)
     
     <h1 class="title">Open Projects:</h1>
     
+
     <div class="categories">
         $for category in categories:
             <div class="category" onclick="location.href='/open_projects?categoryid=$category[0]'">$category[1]</div>

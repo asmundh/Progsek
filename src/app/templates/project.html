@@ -26,6 +26,7 @@ $def with (nav, project_form, project, tasks, permissions, categories)
 
         <ul>
             $for task in tasks:
+                <hr>
                 <li id="$task[0]">
                     <h3>Task: $task[2]</h3>
                     <p>Description: $task[3]</p>

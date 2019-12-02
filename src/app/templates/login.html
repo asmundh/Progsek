@@ -1,4 +1,4 @@
-$def with (nav, login_form)
+$def with (nav, login_form, message)
 
 <head>
     <title>Beelance2</title>
@@ -20,5 +20,9 @@ $def with (nav, login_form)
 
     $else:
         <h1>Logged in as $session.username</h1>
+    
+    <p>$:message</p>
+
+    <img src="static/honeybee.png" alt="Honeybee">
 
 </body>
