@@ -37,6 +37,9 @@ if web.config.get('_session') is None:
 else:
     session = web.config._session
 
+# Set session timeout
+web.config.session_parameters['timeout'] = 12345678910
+
 # Add session to global variables
 render._add_global(session, 'session')
 

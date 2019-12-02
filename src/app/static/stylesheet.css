@@ -1,8 +1,9 @@
 body {
     background-color: lightblue;
-    display: flex; /* or inline-flex */
+    display: inline-flex; /* or inline-flex */
     flex-direction: column;
     margin: 0;
+    width: 100%;
 }
 
 .title {
@@ -44,6 +45,7 @@ img {
 }
 
 nav {
+    display: ;
     margin-bottom: 10px;
 }
 
