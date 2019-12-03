@@ -143,4 +143,8 @@ Create default database user
 
 CREATE USER 'root'@'10.5.0.6' IDENTIFIED BY 'root';
 GRANT ALL PRIVILEGES ON db.* TO 'root'@'10.5.0.6';
-/*GRANT ALL PRIVILEGES ON db.* TO 'root'@'localhost';*/
+
+/*
+Can be used to connect local webserver to the database
+GRANT ALL PRIVILEGES ON db.* TO 'root'@'localhost';
+*/
