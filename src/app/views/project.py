@@ -44,12 +44,37 @@ class Project:
     def POST(self):
         # Get session
         session = web.ctx.session
-
         data = web.input(myfile={}, deliver=None, accepted=None, declined=None, projectid=0)
         fileitem = data['myfile']
+                
         permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
         categories = models.project.get_categories()
         tasks = models.project.get_tasks_by_project_id(data.projectid)
+
+        # Upload file (if present)
+        try:
+            if fileitem.filename:
+                # Check if user has write permission
+                if not permissions[1]:
+                    raise web.seeother(('/project?projectid=' + data.projectid))
+
+                fn = fileitem.filename
+                # Create the project directory if it doesnt exist
+                path = 'static/project' + data.projectid
+                if not os.path.isdir(path):
+                    command = 'mkdir ' + path
+                    os.popen(command)
+                    sleep(0.2)
+                path = path + '/task' + data.taskid
+                if not os.path.isdir(path):
+                    command = 'mkdir ' + path
+                    os.popen(command)
+                    sleep(0.2)
+                open(path + '/' + fn, 'wb').write(fileitem.file.read())
+                models.project.set_task_file(data.taskid, (path + "/" + fn))
+        except:
+            # Throws exception if no file present
+            pass
 
         # Determine status of the targeted task
         all_tasks_accepted = True
@@ -82,27 +107,6 @@ class Project:
         # Decline task delivery
         elif data.declined:
             models.project.update_task_status(data.taskid, "declined")
-
-        # Upload file
-        elif fileitem.filename:
-            # Check if user has write permission
-            if not permissions[1] or not task_waiting:
-                raise web.seeother(('/project?projectid=' + data.projectid))
-
-            fn = fileitem.filename
-            # Create the project directory if it doesnt exist
-            path = 'static/project' + data.projectid
-            if not os.path.isdir(path):
-                command = 'mkdir ' + path
-                os.popen(command)
-                sleep(0.2)
-            path = path + '/task' + data.taskid
-            if not os.path.isdir(path):
-                command = 'mkdir ' + path
-                os.popen(command)
-                sleep(0.2)
-            open(path + '/' + fn, 'wb').write(fileitem.file.read())
-            models.project.set_task_file(data.taskid, (path + "/" + fn))
         
         raise web.seeother(('/project?projectid=' + data.projectid))
 
