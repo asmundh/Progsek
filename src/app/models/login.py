@@ -5,6 +5,7 @@ def get_users():
     Retreive all registrered users from the database
         :return: users
     """
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT userid, username from users")
     cursor.execute(query)
@@ -13,6 +14,7 @@ def get_users():
     return users
 
 def get_user_id_by_name(username):
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT userid from users WHERE username =\"" + username + "\"")
     cursor.execute(query)
@@ -24,6 +26,7 @@ def get_user_id_by_name(username):
     return userid
 
 def get_user_name_by_id(userid):
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT username from users WHERE userid =\"" + userid + "\"")
     cursor.execute(query)
@@ -44,6 +47,7 @@ def match_user(username, password):
         :type password: str
         :return: user
     """
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT userid, username from users where username = \"" + username + 
             "\" and password = \"" + password + "\"")

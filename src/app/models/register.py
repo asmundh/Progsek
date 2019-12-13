@@ -25,6 +25,7 @@ def set_user(username, password, full_name, company, email,
         :type postal_code: str
         :type country: str
     """
+    db.connect()
     cursor = db.cursor()
     query = ("INSERT INTO users VALUES (NULL, \"" + username + "\", \"" + 
         password + "\", \"" + full_name + "\" , \"" + company + "\", \"" + 

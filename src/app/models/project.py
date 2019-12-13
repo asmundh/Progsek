@@ -6,6 +6,7 @@ def get_categories():
 
         :return: List of categories
     """
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT * FROM project_category")
     cursor.execute(query)
@@ -29,6 +30,7 @@ def set_project(categoryid, userid, project_title, project_description, project_
         :type project_status: str
         :return: The id of the new project
     """
+    db.connect()
     cursor = db.cursor()
     query = ("INSERT INTO projects VALUES (NULL, \"" + 
         categoryid + "\", \"" + userid + "\", \"" + project_title + "\", \"" + 
@@ -47,6 +49,7 @@ def get_project_by_id(projectid):
         :type projectid: str
         :return: The selected project
     """
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT * FROM projects WHERE projectid = \"" + 
         projectid + "\"")
@@ -56,6 +59,7 @@ def get_project_by_id(projectid):
     return project[0]
 
 def update_project_status(projectid, status):
+    db.connect()
     cursor = db.cursor()
     query = ("UPDATE projects SET project_status = \"" + status + 
         "\" WHERE projectid = \"" + projectid + "\"")
@@ -65,6 +69,7 @@ def update_project_status(projectid, status):
     cursor.close()
 
 def get_user_permissions(userid, projectid):
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT read_permission, write_permission, modify_permission \
         FROM projects_users WHERE projectid = \"" + projectid + 
@@ -86,6 +91,7 @@ def get_projects_by_status_and_category(categoryid, project_status):
         :type project_status: str
         :return: A list of projects
     """
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT * FROM projects WHERE project_status = \"" + 
         project_status + "\" AND categoryid = \"" + categoryid + "\"")
@@ -95,6 +101,7 @@ def get_projects_by_status_and_category(categoryid, project_status):
     return projects
 
 def get_projects_by_owner(userid):
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT * FROM projects WHERE userid = \"" + userid + "\"")
     cursor.execute(query)
@@ -111,6 +118,7 @@ def get_projects_by_status_and_owner(userid, project_status):
         :type project_status: str
         :return: A list of projects
     """
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT * FROM projects WHERE project_status = \"" + 
         project_status + "\" AND userid = \"" + userid + "\"")
@@ -128,10 +136,12 @@ def get_projects_by_participant_and_status(userid, project_status):
         :type project_status: str
         :return: A list of projects
     """
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT * FROM projects, projects_users WHERE projects.project_status = \"" + 
         project_status + "\" AND projects_users.userid = \"" + userid + 
         "\" AND projects_users.projectid = projects.projectid")
+    db.connect()
     cursor.execute(query)
     projects = cursor.fetchall()
     return projects
@@ -149,6 +159,7 @@ def set_task(projectid, task_title, task_description, budget):
         :type task_description: str
         :type budget: str
     """
+    db.connect()
     cursor = db.cursor()
     query = ("INSERT INTO tasks (projectid, title, task_description, budget, task_status) VALUES (\"" +
         projectid + "\", \"" + task_title + "\", \"" +
@@ -158,6 +169,7 @@ def set_task(projectid, task_title, task_description, budget):
     cursor.close
 
 def update_task_status(taskid, status):
+    db.connect()
     cursor = db.cursor()
     query = ("UPDATE tasks SET task_status = \"" + status + 
         "\" WHERE taskid = \"" + taskid + "\"")
@@ -173,6 +185,7 @@ def get_tasks_by_project_id(projectid):
         :type project_id: str
         :return: List of tasks
     """
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT * FROM tasks WHERE projectid = \"" + projectid + "\"")
     cursor.execute(query)
@@ -181,6 +194,7 @@ def get_tasks_by_project_id(projectid):
     return tasks
 
 def set_task_file(taskid, filename):
+    db.connect()
     cursor = db.cursor()
     query = ("INSERT INTO task_files (taskid, filename) VALUES (\"" + 
         taskid + "\", \"" + filename + "\")")
@@ -190,6 +204,7 @@ def set_task_file(taskid, filename):
     cursor.close()
 
 def get_task_files(taskid):
+    db.connect()
     cursor = db.cursor()
     query = ("SELECT filename FROM task_files WHERE taskid = \"" + str(taskid) + "\"")
     cursor.execute(query)
@@ -201,6 +216,7 @@ def get_task_files(taskid):
 
 def set_projects_user(projectid, userid, read_permission="TRUE", 
         write_permission="NULL", modify_permission="NULL"):
+    db.connect()
     cursor = db.cursor()
     query = ("INSERT INTO projects_users VALUES (\"" + projectid + "\", \"" + 
         userid + "\", " + read_permission + ", " + 
