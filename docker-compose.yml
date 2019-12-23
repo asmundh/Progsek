@@ -7,21 +7,23 @@ services:
       dockerfile: Dockerfile
     networks:
       backend:
-        ipv4_address: 10.5.0.5
+        ipv4_address: 10.${groupid}.0.5
 
   app:
+    env_file:
+     - .env
     build: 
      context: ./src
      dockerfile: Dockerfile
 
     ports:
-      - "8080:8080"
-      - "443:443"
+      - "80${groupid}:8080"
+      - "4${groupid}:443"
     depends_on:
       - db
     networks:
       backend:
-        ipv4_address: 10.5.0.6
+        ipv4_address: 10.${groupid}.0.6
 
 networks:
   
@@ -29,5 +31,5 @@ networks:
     driver: bridge
     ipam:
         config:
-          - subnet: 10.5.0.0/16
+          - subnet: 10.${groupid}.0.0/16
   

@@ -1,4 +1,8 @@
 import mysql.connector
+from dotenv import load_dotenv
+import os
+
+groupid = os.getenv("groupid")
 
 """
 Connect the webserver to the database using the python mysql connecter. 
@@ -8,7 +12,7 @@ preconfigured docker container address use the Docker address. The default port 
 db = mysql.connector.connect(
     user='root', 
     password='root',
-    host='10.5.0.5',   # Docker address
+    host='10.' + groupid + '.0.5',   # Docker address
     #host='0.0.0.0',    # Local address
     database='db'
 )
