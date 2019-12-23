@@ -97,7 +97,7 @@ def get_user_form_elements(identifier=0, user_name="", read_permission=True, wri
         :return: The form elements to add users to a project
     """
     user_form_elements = (
-        form.Textbox("user_name_" + str(identifier), description="User", value=user_name),        
+        form.Textbox("user_name_" + str(identifier), description="User", value=user_name, placeholder="Leave blank for open project"),        
         form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission, value=True),
         form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission, value=True),
         form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=modify_permission, value=True)

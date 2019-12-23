@@ -45,30 +45,44 @@ def set_project(categoryid, userid, project_title, project_description, project_
 def get_project_by_id(projectid):
     """
     Retrieve a project by its id
+
         :param projectid: The project id
         :type projectid: str
         :return: The selected project
     """
     db.connect()
     cursor = db.cursor()
-    query = ("SELECT * FROM projects WHERE projectid = \"" + 
-        projectid + "\"")
+    query = ("SELECT * FROM projects WHERE projectid = \"" + projectid + "\"")
     cursor.execute(query)
     project = cursor.fetchall()
     cursor.close()
     return project[0]
 
 def update_project_status(projectid, status):
+    """
+    Change the status of a selected project
+        :param projectid: The project id
+        :param status: The status to change to, should be either open, in progress or finished
+        :type projectid: str
+        :type status: str
+    """
     db.connect()
     cursor = db.cursor()
     query = ("UPDATE projects SET project_status = \"" + status + 
         "\" WHERE projectid = \"" + projectid + "\"")
-    print(query)
     cursor.execute(query)
     db.commit()
     cursor.close()
 
 def get_user_permissions(userid, projectid):
+    """
+    Get permissions for a selected users in a specific project
+        :param userid: The id of the user
+        :param projectid: The id of the project
+        :type userid: str
+        :type projectid: str
+        :return: Permissions as an array of numbers as boolean values
+    """
     db.connect()
     cursor = db.cursor()
     query = ("SELECT read_permission, write_permission, modify_permission \
@@ -101,6 +115,12 @@ def get_projects_by_status_and_category(categoryid, project_status):
     return projects
 
 def get_projects_by_owner(userid):
+    """
+    Retrieve all projects created by a specific user
+        :param userid: The id of the user
+        :type userid: str
+        :return: An array of projects
+    """
     db.connect()
     cursor = db.cursor()
     query = ("SELECT * FROM projects WHERE userid = \"" + userid + "\"")
@@ -194,28 +214,51 @@ def get_tasks_by_project_id(projectid):
     return tasks
 
 def set_task_file(taskid, filename):
+    """
+    Register a new task - file relationship
+
+        :param taskid: The task id
+        :param filename: The name of the file
+        :type taskid: str
+        :type filename: str
+    """
     db.connect()
     cursor = db.cursor()
     query = ("INSERT INTO task_files (taskid, filename) VALUES (\"" + 
         taskid + "\", \"" + filename + "\")")
-    print(query)
     cursor.execute(query)
     db.commit()
     cursor.close()
 
 def get_task_files(taskid):
+    """
+        Retrieve all filenames registered in a task
+        :param taskid: The task id
+        :type taskid: str
+        :return: An array of filenames
+    """
     db.connect()
     cursor = db.cursor()
     query = ("SELECT filename FROM task_files WHERE taskid = \"" + str(taskid) + "\"")
     cursor.execute(query)
     filenames = cursor.fetchall()
-    print(query)
-    print(filenames)
     cursor.close
     return filenames
 
 def set_projects_user(projectid, userid, read_permission="TRUE", 
         write_permission="NULL", modify_permission="NULL"):
+    """
+    Add a user to a project with specific permissions
+        :param projectid: The project id
+        :param userid: The user id
+        :param read_permission: Describes whether a user can view information about a project
+        :param write_permission: Describes whether a user can add files to tasks
+        :param modify_permission: Describes wheter a user can deliver tasks
+        :type projectid: str
+        :type userid: str
+        :type read_permission: str
+        :type write_permission: str
+    """
     db.connect()
     cursor = db.cursor()
     query = ("INSERT INTO projects_users VALUES (\"" + projectid + "\", \"" + 

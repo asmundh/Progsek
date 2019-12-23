@@ -14,6 +14,11 @@ def get_users():
     return users
 
 def get_user_id_by_name(username):
+    """
+    Get the id of the unique username
+        :param username: Name of the user
+        :return: The id of the user
+    """
     db.connect()
     cursor = db.cursor()
     query = ("SELECT userid from users WHERE username =\"" + username + "\"")
@@ -26,6 +31,11 @@ def get_user_id_by_name(username):
     return userid
 
 def get_user_name_by_id(userid):
+    """
+    Get username from user id
+        :param userid: The id of the user
+        :return: The name of the user
+    """
     db.connect()
     cursor = db.cursor()
     query = ("SELECT username from users WHERE userid =\"" + userid + "\"")

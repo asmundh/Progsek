@@ -14,29 +14,6 @@ CREATE TABLE users (
   PRIMARY KEY (userid)
 );
 
-/*
-* Project tables
-*/
-
-/*
-CREATE TABLE teams (
-  teamid INT UNSIGNED AUTO_INCREMENT,
-  team_name VARCHAR(200) NOT NULL,
-  write_permission BOOLEAN,
-  PRIMARY KEY (teamid)
-);
-*/
-
-/*
-CREATE TABLE teams_users (
-  teamid INT UNSIGNED NOT NULL,
-  userid INT UNSIGNED NOT NULL,
-  PRIMARY KEY (teamid, userid),
-  FOREIGN KEY (teamid) REFERENCES teams(teamid),
-  FOREIGN KEY (userid) REFERENCES users(userid)  
-);
-*/
-
 CREATE TABLE project_category (
   categoryid INT UNSIGNED AUTO_INCREMENT,
   category_name VARCHAR(200) UNIQUE NOT NULL,
@@ -77,14 +54,12 @@ CREATE TABLE projects_users (
 CREATE TABLE tasks (
   taskid INT UNSIGNED AUTO_INCREMENT,
   projectid INT UNSIGNED NOT NULL,
-  /*teamid INT UNSIGNED,*/
   title VARCHAR(200) NOT NULL,
   task_description VARCHAR(500) NOT NULL,
   budget INT NOT NULL,
   task_status VARCHAR(64) NOT NULL, -- This should be Waiting for delivery, delivered, accepted and declined delivery
   feedback VARCHAR(500) NULL,
   PRIMARY KEY (taskid),
-  /*FOREIGN KEY (teamid) REFERENCES teams(teamid),*/
   FOREIGN KEY (projectid) REFERENCES projects(projectid)
 );
 
@@ -96,35 +71,6 @@ CREATE TABLE task_files (
   FOREIGN KEY (taskid) REFERENCES tasks(taskid)
 );
 
-/*
-CREATE TABLE delivery (
-  deliveryid INT UNSIGNED AUTO_INCREMENT,
-  taskid INT UNSIGNED NOT NULL,
-  userid INT UNSIGNED NOT NULL,
-  filename VARCHAR(45) NOT NULL,
-  comment VARCHAR(500),
-  delivery_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-  responding_userid INT NOT NULL,
-  responding_time DATETIME,
-  delivery_status VARCHAR(16), -- Should be Accepted, Pending or Declined
-  feedback VARCHAR(500),
-  PRIMARY KEY (deliveryid),
-  FOREIGN KEY (taskid) REFERENCES tasks(taskid),
-  FOREIGN KEY (userid) REFERENCES users(userid)
-);*/
-
-/*
-CREATE TABLE task_offer (
-  offerid INT UNSIGNED AUTO_INCREMENT,
-  taskid INT UNSIGNED NOT NULL,
-  title VARCHAR(200) NOT NULL,
-  price INT,
-  description VARCHAR(500),
-  offer_status VARCHAR(16), -- Should be Accepted, Pending or Declined
-  feedback VARCHAR(500),
-  PRIMARY KEY (offerid),
-  FOREIGN KEY (taskid) REFERENCES tasks(taskid)
-);*/
 
 /*
 * Initial data
@@ -144,7 +90,3 @@ Create default database user
 CREATE USER 'root'@'10.5.0.6' IDENTIFIED BY 'root';
 GRANT ALL PRIVILEGES ON db.* TO 'root'@'10.5.0.6';
 
-/*
-Can be used to connect local webserver to the database
-GRANT ALL PRIVILEGES ON db.* TO 'root'@'localhost';
-*/
