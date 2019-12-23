@@ -6,6 +6,7 @@ EXPOSE 8080
 
 # Define environment
 COPY ./app /app
+RUN echo ${groupid} > /app/models/.env
 WORKDIR /app
 ENV PYTHONPATH=/app
 

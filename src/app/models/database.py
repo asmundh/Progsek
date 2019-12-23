@@ -2,7 +2,7 @@ import mysql.connector
 from dotenv import load_dotenv
 import os
 
-groupid = os.getenv("groupid")
+groupid = os.getenv("groupid").lstrip("0")
 
 """
 Connect the webserver to the database using the python mysql connecter. 
