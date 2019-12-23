@@ -81,7 +81,6 @@ class Apply:
         permissions = []
         # Create the lists of current applying users and their permissions
         for i in range (0, user_count):
-            print("Raw applicant", data["user_"+str(i)])
             applicant = data["user_"+str(i)][1:][:-1].split(",")
             applicants.append([ int(applicant[0]), applicant[1][2:][:-1] ])
 
