@@ -47,7 +47,6 @@ latex_elements = {
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-'rinoh.frontend.sphinx',
 'sphinx.ext.autodoc',
 ]
 

@@ -42,7 +42,7 @@ Welcome to beelance2's documentation!
 .. automodule:: views.utils
     :members:
 
-.. automodule:: models.login
+.. automodule:: models.user
     :members:
 
 .. automodule:: models.project
