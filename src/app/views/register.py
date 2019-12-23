@@ -1,7 +1,7 @@
 import web
 from views.forms import register_form
 import models.register
-import models.login
+import models.user
 from views.utils import get_nav_bar
 import hashlib
 import re
@@ -37,7 +37,7 @@ class Register:
             return render.register(nav, register, "All fields must be valid.")
 
         # Check if user exists
-        if models.login.get_user_id_by_name(data.username):
+        if models.user.get_user_id_by_name(data.username):
             return render.register(nav, register, "Invalid user, already exists.")
 
         models.register.set_user(data.username, 

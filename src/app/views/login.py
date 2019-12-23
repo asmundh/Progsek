@@ -1,6 +1,6 @@
 import web
 from views.forms import login_form
-import models.login
+import models.user
 from views.utils import get_nav_bar
 import os, hmac, base64, pickle
 import hashlib
@@ -39,7 +39,7 @@ class Login():
 
         # Validate login credential with database query
         password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
-        user = models.login.match_user(data.username, password_hash)
+        user = models.user.match_user(data.username, password_hash)
         
         # If there is a matching user/password in the database the user is logged in
         if user:
@@ -81,7 +81,7 @@ class Login():
 
         # If the users signed cookie matches the host signature then log in
         if self.sign_username(username) == sign:
-            userid = models.login.get_user_id_by_name(username)
+            userid = models.user.get_user_id_by_name(username)
             self.login(username, userid, False)
 
     def rememberme(self):

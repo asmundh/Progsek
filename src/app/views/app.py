@@ -4,7 +4,6 @@ from views.utils import get_nav_bar
 from views.login import Login
 from views.logout import Logout
 from views.register import Register
-from views.admin import Admin
 from views.new_project import New_project
 from views.open_projects import Open_projects
 from views.project import Project
@@ -20,7 +19,6 @@ urls = (
     '/new_project', 'New_project',
     '/open_projects', 'Open_projects',
     '/project', 'Project',
-    '/admin', 'Admin',
     '/apply', 'Apply',
 )
                               

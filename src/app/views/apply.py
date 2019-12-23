@@ -1,6 +1,6 @@
 import web
 import models.project
-from models.login import get_user_name_by_id
+from models.user import get_user_name_by_id
 from views.utils import get_nav_bar, get_element_count
 from views.forms import get_apply_form, get_apply_permissions_form
 

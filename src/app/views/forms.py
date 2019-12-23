@@ -1,6 +1,6 @@
 from web import form
 from models.project import get_categories 
-from models.login import get_users, get_user_id_by_name
+from models.user import get_users, get_user_id_by_name
 
 
 # Regex for input validation

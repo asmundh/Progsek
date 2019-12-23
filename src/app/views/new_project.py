@@ -2,7 +2,7 @@ import web
 from web import form
 from views.forms import get_task_form_elements, get_project_form_elements, get_user_form_elements, project_buttons
 import models.project
-import models.login
+import models.user
 from views.utils import get_nav_bar, get_element_count
 
 # Get html templates
@@ -74,7 +74,7 @@ class New_project:
 
             # Validate the input user names
             for i in range(0, user_count):
-                if len(data["user_name_"+str(i)]) and not models.login.get_user_id_by_name(data["user_name_"+str(i)]):    
+                if len(data["user_name_"+str(i)]) and not models.user.get_user_id_by_name(data["user_name_"+str(i)]):    
                     return render.new_project(nav, project_form, project_buttons,  "Invalid user: " + data["user_name_"+str(i)])
 
             # Save the project to the database
@@ -89,7 +89,7 @@ class New_project:
             # Save the users in the database given that the input field is not empty
             for i in range(0, user_count):
                     if len(data["user_name_"+str(i)]):
-                        userid = models.login.get_user_id_by_name(data["user_name_"+str(i)])
+                        userid = models.user.get_user_id_by_name(data["user_name_"+str(i)])
                         read, write, modify = "FALSE", "FALSE", "FALSE"
                         try:
                             data["read_permission_"+str(i)]
