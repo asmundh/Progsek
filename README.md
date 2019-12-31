@@ -6,8 +6,9 @@ Web Server image: https://github.com/tiangolo/uwsgi-nginx-docker
 webpy framework: http://webpy.org/
 
 
-### Prerequisites:
-docker https://www.docker.com/
+## Prerequisites:
+
+Docker https://www.docker.com/
 
 On linux docker is started with
 
@@ -17,28 +18,37 @@ To run docker-compose without sudo the user must be added to the usergroup:
 
 https://docs.docker.com/install/linux/linux-postinstall/
 
-### Build & Run
+## Run
 
-$ docker-compose up --build
+$ docker-compose up
 
-### Prune/Recreate
-If you need a fresh rebuild in case of startup issues use this command (WARNING this will remove all your docker images)
+### Build / Rebuild
+
+Upon changes in the code the docker image must be built again for the changes to take effect. Some changes might not get reflected even on build, which is when the --force-recreate attribute can be used.
+
+$ docker-compose up --build --force-recreate
+
+### Prune / Recreate
+If you need a completely fresh rebuild (WARNING this will remove all your docker images). This will reset the images including the database which is not necessary affected by only rebuilding the images
 
 $ docker system prune -a
 
-$ docker-compose up --build
+$ docker-compose up
 
 # Deploy locally
 
-Prerequisites:
+Running the application outside of containers might be useful for development because the images does not need to be rebuilt for every change in the code.
+
+## Prerequisites:
 
 mysql
 
-python3
+python 3.6.8 or higher
 
 src/app/requirements.txt
 
-### Run Datatbase:
+## Run Datatbase:
+
 Launch mysql at default port (3306)
 
 $ systemctl start mysqld
@@ -57,12 +67,15 @@ Insert mysql queries
 
 Then populate databse by posting mysql/sql/init.sql into mysql
 
-Edit src/app/models/database.py to point at local server
 
+## Run app
 
-
-###Run app
+Edit src/app/models/database.py to point at local database server
 
 $ cd src/app/
 
 $ python3 src/app/main.py
+
+# Config
+
+The ip and ports for the web server and database is set with the .env file using the groupid variable.

@@ -26,4 +26,4 @@ ENTRYPOINT ["/entrypoint.sh"]
 RUN chmod +x ./wait-for-it.sh
 
 # Hold the webserver from launching until the database is ready with 50s timeout
-CMD ["./wait-for-it.sh", "-t", "50", "-h", "10.5.0.5", "db:3306", "--", "/start.sh"]
+CMD ["./wait-for-it.sh", "-t", "50", "-h", "10.${groupid}.0.5", "db:3306", "--", "/start.sh"]
