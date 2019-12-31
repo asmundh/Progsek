@@ -57,13 +57,16 @@ Log in to database
 
 $ sudo mysql -u root
 
-Insert mysql queries
+Insert mysql queries:
 
-"CREATE database db;"
+CREATE database db;
 
-"USE db;"
+USE db;
 
-"SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');"
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');
+
+GRANT ALL PRIVILEGES ON db.* TO 'root'@'localhost';
+
 
 Then populate databse by posting mysql/sql/init.sql into mysql
 
