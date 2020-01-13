@@ -11,7 +11,7 @@ webpy framework: http://webpy.org/
 Docker https://www.docker.com/
 
 IMPORTANT Windows users use:
-> git clone <repositoryURL> --config core.autocrlf=input
+git clone <repositoryURL> --config core.autocrlf=input
 
 On linux docker is started with
 
