@@ -10,6 +10,7 @@ from views.project import Project
 from views.index import Index
 from views.apply import Apply
 
+
 # Define application routes
 urls = (
     '/', 'Index',
@@ -47,4 +48,7 @@ def session_hook():
     web.template.Template.globals['session'] = session
 
 app.add_processor(web.loadhook(session_hook))
+
+app = app.wsgifunc()
+
 
