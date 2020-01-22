@@ -6,7 +6,7 @@ from models.user import get_users, get_user_id_by_name
 # Regex for input validation
 vemail = form.regexp(r".*@.*", "- Must be a valid email address")
 vpass = form.regexp(r".{6,100}$", '- Must be atleast 6 characters long')
-number = form.regexp(r"^[1-9]+$", "- Must be a number")
+number = form.regexp(r"^[0-9]+$", "- Must be a number")
 not_empty = form.regexp(r".+", "- This field is required")
 
 # Define the login form 
