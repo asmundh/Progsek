@@ -10,6 +10,10 @@ from views.project import Project
 from views.index import Index
 from views.apply import Apply
 
+# Connect to smtp server, enables web.sendmail()
+groupid = os.getenv("groupid").lstrip("0")
+web.config.smtp_server = '10.' + groupid + '.0.7:25'
+#web.sendmail("mailserver@beelance2.com", "some@user.com", "Hello", "Grz, the beelance app is running")
 
 # Define application routes
 urls = (
@@ -50,5 +54,3 @@ def session_hook():
 app.add_processor(web.loadhook(session_hook))
 
 app = app.wsgifunc()
-
-

@@ -21,9 +21,20 @@ services:
       - "4${groupid}:443"
     depends_on:
       - db
+      - smtp
     networks:
       backend:
         ipv4_address: 10.${groupid}.0.6
+
+  smtp:
+    build:
+      context: ./docker-smtp
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      backend:
+        ipv4_address: 10.${groupid}.0.7  
+      
 
 networks:
   
