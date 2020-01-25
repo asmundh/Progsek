@@ -1,4 +1,5 @@
 from models.database import db
+import mysql.connector
 
 def get_users():
     """
@@ -8,9 +9,16 @@ def get_users():
     db.connect()
     cursor = db.cursor()
     query = ("SELECT userid, username from users")
-    cursor.execute(query)
-    users = cursor.fetchall()
-    cursor.close()
+    try:
+        cursor.execute(query)
+        users = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        users = []
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     return users
 
 def get_user_id_by_name(username):
@@ -25,9 +33,13 @@ def get_user_id_by_name(username):
     cursor.execute(query)
     try:
         userid = cursor.fetchall()[0][0]
-    except:
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
         userid = None
-    cursor.close()
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     return userid
 
 def get_user_name_by_id(userid):
@@ -42,8 +54,13 @@ def get_user_name_by_id(userid):
     cursor.execute(query)
     try:
         username = cursor.fetchall()[0][0]
-    except:
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
         username = None
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     cursor.close()
     return username
 
@@ -64,7 +81,15 @@ def match_user(username, password):
     cursor.execute(query)
     try:
         user = cursor.fetchall()[0]
-    except:
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
         user = None
-    cursor.close()
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     return user
+
+        
+    
+
