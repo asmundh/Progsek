@@ -1,4 +1,5 @@
 from models.database import db
+import mysql.connector
 
 def get_categories():
     """
@@ -9,9 +10,16 @@ def get_categories():
     db.connect()
     cursor = db.cursor()
     query = ("SELECT * FROM project_category")
-    cursor.execute(query)
-    categories = cursor.fetchall()
-    cursor.close()
+    try:
+        cursor.execute(query)
+        categories = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        categories = []
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     return categories
 
 def set_project(categoryid, userid, project_title, project_description, project_status):
@@ -35,11 +43,18 @@ def set_project(categoryid, userid, project_title, project_description, project_
     query = ("INSERT INTO projects VALUES (NULL, \"" + 
         categoryid + "\", \"" + userid + "\", \"" + project_title + "\", \"" + 
         project_description + "\", \"" + project_status + "\")")
-    cursor.execute(query)
-    db.commit()
-    cursor.close()
-    users_projects = get_projects_by_owner(userid) 
-    projectid = users_projects[-1][0]
+    try:
+        cursor.execute(query)
+        db.commit()
+        users_projects = get_projects_by_owner(userid) 
+        projectid = users_projects[-1][0]
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        projectid = None
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     return projectid
 
 def get_project_by_id(projectid):
@@ -53,9 +68,16 @@ def get_project_by_id(projectid):
     db.connect()
     cursor = db.cursor()
     query = ("SELECT * FROM projects WHERE projectid = \"" + projectid + "\"")
-    cursor.execute(query)
-    project = cursor.fetchall()
-    cursor.close()
+    try:
+        cursor.execute(query)
+        project = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        project = []
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     return project[0]
 
 def update_project_status(projectid, status):
@@ -70,9 +92,15 @@ def update_project_status(projectid, status):
     cursor = db.cursor()
     query = ("UPDATE projects SET project_status = \"" + status + 
         "\" WHERE projectid = \"" + projectid + "\"")
-    cursor.execute(query)
-    db.commit()
-    cursor.close()
+    try:
+        cursor.execute(query)
+        db.commit()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
 
 def get_user_permissions(userid, projectid):
     """
@@ -88,9 +116,15 @@ def get_user_permissions(userid, projectid):
     query = ("SELECT read_permission, write_permission, modify_permission \
         FROM projects_users WHERE projectid = \"" + projectid + 
         "\" AND userid = \"" + userid + "\"")
-    cursor.execute(query)
-    permissions = cursor.fetchall()
-    cursor.close()
+    try:
+        cursor.execute(query)
+        permissions = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     if len(permissions):
         return permissions[0]
     return [0,0,0]
@@ -109,9 +143,16 @@ def get_projects_by_status_and_category(categoryid, project_status):
     cursor = db.cursor()
     query = ("SELECT * FROM projects WHERE project_status = \"" + 
         project_status + "\" AND categoryid = \"" + categoryid + "\"")
-    cursor.execute(query)
-    projects = cursor.fetchall()
-    cursor.close()
+    try:
+        cursor.execute(query)
+        projects = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        projects = []
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     return projects
 
 def get_projects_by_owner(userid):
@@ -124,8 +165,16 @@ def get_projects_by_owner(userid):
     db.connect()
     cursor = db.cursor()
     query = ("SELECT * FROM projects WHERE userid = \"" + userid + "\"")
-    cursor.execute(query)
-    projects = cursor.fetchall()
+    try:
+        cursor.execute(query)
+        projects = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        projects = []
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     return projects
 
 def get_projects_by_status_and_owner(userid, project_status):
@@ -142,8 +191,16 @@ def get_projects_by_status_and_owner(userid, project_status):
     cursor = db.cursor()
     query = ("SELECT * FROM projects WHERE project_status = \"" + 
         project_status + "\" AND userid = \"" + userid + "\"")
-    cursor.execute(query)
-    projects = cursor.fetchall()
+    try:
+        cursor.execute(query)
+        projects = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        projects = []
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     return projects
 
 def get_projects_by_participant_and_status(userid, project_status):
@@ -162,8 +219,16 @@ def get_projects_by_participant_and_status(userid, project_status):
         project_status + "\" AND projects_users.userid = \"" + userid + 
         "\" AND projects_users.projectid = projects.projectid")
     db.connect()
-    cursor.execute(query)
-    projects = cursor.fetchall()
+    try:
+        cursor.execute(query)
+        projects = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        projects = []
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     return projects
 
 def set_task(projectid, task_title, task_description, budget):
@@ -184,10 +249,16 @@ def set_task(projectid, task_title, task_description, budget):
     query = ("INSERT INTO tasks (projectid, title, task_description, budget, task_status) VALUES (\"" +
         projectid + "\", \"" + task_title + "\", \"" +
         task_description + "\", \"" + budget + "\", \"waiting for delivery\")")
-    cursor.execute(query)
-    db.commit()
-    cursor.close
-
+    try:
+        cursor.execute(query)
+        db.commit()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
+        
 def update_task_status(taskid, status):
     db.connect()
     cursor = db.cursor()
@@ -208,9 +279,16 @@ def get_tasks_by_project_id(projectid):
     db.connect()
     cursor = db.cursor()
     query = ("SELECT * FROM tasks WHERE projectid = \"" + projectid + "\"")
-    cursor.execute(query)
-    tasks = cursor.fetchall()
-    cursor.close
+    try:
+        cursor.execute(query)
+        tasks = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        tasks = []
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     return tasks
 
 def set_task_file(taskid, filename):
@@ -226,9 +304,15 @@ def set_task_file(taskid, filename):
     cursor = db.cursor()
     query = ("INSERT INTO task_files (taskid, filename) VALUES (\"" + 
         taskid + "\", \"" + filename + "\")")
-    cursor.execute(query)
-    db.commit()
-    cursor.close()
+    try:
+        cursor.execute(query)
+        db.commit()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
 
 def get_task_files(taskid):
     """
@@ -240,9 +324,16 @@ def get_task_files(taskid):
     db.connect()
     cursor = db.cursor()
     query = ("SELECT filename FROM task_files WHERE taskid = \"" + str(taskid) + "\"")
-    cursor.execute(query)
-    filenames = cursor.fetchall()
-    cursor.close
+    try:
+        cursor.execute(query)
+        filenames = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        filenames = []
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
     return filenames
 
 def set_projects_user(projectid, userid, read_permission="TRUE", 
@@ -264,6 +355,12 @@ def set_projects_user(projectid, userid, read_permission="TRUE",
     query = ("INSERT INTO projects_users VALUES (\"" + projectid + "\", \"" + 
         userid + "\", " + read_permission + ", " + 
         write_permission + ", " + modify_permission + ")")
-    cursor.execute(query)
-    db.commit()
-    cursor.close()
+    try:
+        cursor.execute(query)
+        db.commit()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()

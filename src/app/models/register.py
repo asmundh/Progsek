@@ -1,4 +1,5 @@
 from models.database import db
+import mysql.connector
 
 def set_user(username, password, full_name, company, email, 
         street_address, city, state, postal_code, country):
@@ -31,6 +32,12 @@ def set_user(username, password, full_name, company, email,
         password + "\", \"" + full_name + "\" , \"" + company + "\", \"" + 
         email + "\", \"" + street_address + "\", \"" + city + "\", \"" + 
         state  + "\", \"" + postal_code + "\", \"" + country + "\")")
-    cursor.execute(query)
-    db.commit()
-    cursor.close()
+    try:
+        cursor.execute(query)
+        db.commit()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
