@@ -15,6 +15,7 @@ def get_users():
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
         users = []
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -30,12 +31,16 @@ def get_user_id_by_name(username):
     db.connect()
     cursor = db.cursor()
     query = ("SELECT userid from users WHERE username =\"" + username + "\"")
-    cursor.execute(query)
+    
+    userid = None
     try:
-        userid = cursor.fetchall()[0][0]
+        cursor.execute(query)
+        users = cursor.fetchall()
+        if(len(users)):
+            userid = users[0][0]
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
-        userid = None
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -51,12 +56,15 @@ def get_user_name_by_id(userid):
     db.connect()
     cursor = db.cursor()
     query = ("SELECT username from users WHERE userid =\"" + userid + "\"")
-    cursor.execute(query)
+    username = None
     try:
-        username = cursor.fetchall()[0][0]
+        cursor.execute(query)
+        users = cursor.fetchall()
+        if len(users):
+            username = users[0][0]
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
-        username = None
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -78,12 +86,15 @@ def match_user(username, password):
     cursor = db.cursor()
     query = ("SELECT userid, username from users where username = \"" + username + 
             "\" and password = \"" + password + "\"")
-    cursor.execute(query)
+    user = None
     try:
-        user = cursor.fetchall()[0]
+        cursor.execute(query)
+        users = cursor.fetchall()
+        if len(users):
+            user = users[0]
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
-        user = None
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()

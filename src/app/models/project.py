@@ -16,6 +16,7 @@ def get_categories():
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
         categories = []
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -51,6 +52,7 @@ def set_project(categoryid, userid, project_title, project_description, project_
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
         projectid = None
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -74,6 +76,7 @@ def get_project_by_id(projectid):
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
         project = []
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -97,6 +100,7 @@ def update_project_status(projectid, status):
         db.commit()
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -121,6 +125,7 @@ def get_user_permissions(userid, projectid):
         permissions = cursor.fetchall()
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -149,6 +154,7 @@ def get_projects_by_status_and_category(categoryid, project_status):
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
         projects = []
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -171,6 +177,7 @@ def get_projects_by_owner(userid):
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
         projects = []
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -197,6 +204,7 @@ def get_projects_by_status_and_owner(userid, project_status):
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
         projects = []
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -225,6 +233,7 @@ def get_projects_by_participant_and_status(userid, project_status):
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
         projects = []
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -254,6 +263,7 @@ def set_task(projectid, task_title, task_description, budget):
         db.commit()
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -264,9 +274,16 @@ def update_task_status(taskid, status):
     cursor = db.cursor()
     query = ("UPDATE tasks SET task_status = \"" + status + 
         "\" WHERE taskid = \"" + taskid + "\"")
-    cursor.execute(query)
-    db.commit()
-    cursor.close()
+    try:
+        cursor.execute(query)
+        db.commit()
+    except:
+        print("Failed executing query: {}".format(err))
+        cursor.fetchall()
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
 
 def get_tasks_by_project_id(projectid):
     """
@@ -285,6 +302,7 @@ def get_tasks_by_project_id(projectid):
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
         tasks = []
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -309,6 +327,7 @@ def set_task_file(taskid, filename):
         db.commit()
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -330,6 +349,7 @@ def get_task_files(taskid):
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
         filenames = []
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
@@ -360,6 +380,7 @@ def set_projects_user(projectid, userid, read_permission="TRUE",
         db.commit()
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()

@@ -37,6 +37,7 @@ def set_user(username, password, full_name, company, email,
         db.commit()
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
+        cursor.fetchall()
         exit(1)
     finally:
         cursor.close()
