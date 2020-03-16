@@ -30,11 +30,11 @@ def get_user_id_by_name(username):
     """
     db.connect()
     cursor = db.cursor()
-    query = ("SELECT userid from users WHERE username =\"" + username + "\"")
+    query = ("""SELECT userid from users WHERE username = %(username)s """)
     
     userid = None
     try:
-        cursor.execute(query)
+        cursor.execute(query, username)
         users = cursor.fetchall()
         if(len(users)):
             userid = users[0][0]
@@ -55,10 +55,10 @@ def get_user_name_by_id(userid):
     """
     db.connect()
     cursor = db.cursor()
-    query = ("SELECT username from users WHERE userid =\"" + userid + "\"")
+    query = ("""SELECT username from users WHERE userid = %(userid)s""")
     username = None
     try:
-        cursor.execute(query)
+        cursor.execute(query, userid)
         users = cursor.fetchall()
         if len(users):
             username = users[0][0]
@@ -83,11 +83,10 @@ def match_user(username, password):
     """
     db.connect()
     cursor = db.cursor()
-    query = ("SELECT userid, username from users where username = \"" + username + 
-            "\" and password = \"" + password + "\"")
+    query = ("""SELECT userid, username FROM users WHERE username = %(username)s AND password = %(password)s""")
     user = None
     try:
-        cursor.execute(query)
+        cursor.execute(query, (username, password))
         users = cursor.fetchall()
         if len(users):
             user = users[0]
@@ -99,7 +98,3 @@ def match_user(username, password):
         cursor.close()
         db.close()
     return user
-
-        
-    
-
