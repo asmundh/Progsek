@@ -2,8 +2,7 @@ import web
 from views.forms import register_form
 import models.register
 import models.user
-from views.utils import get_nav_bar
-import hashlib
+from views.utils import get_nav_bar, hash_password
 import re
 
 # Get html templates
@@ -40,10 +39,9 @@ class Register:
         if models.user.get_user_id_by_name(data.username):
             return render.register(nav, register, "Invalid user, already exists.")
 
-        models.register.set_user(data.username, 
-            hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest(), 
-            data.full_name, data.company, data.email, data.street_address, 
-            data.city, data.state, data.postal_code, data.country)
-        
-        return render.register(nav, register_form, "User registered!")
+        models.register.set_user(data.username,
+                                 hash_password(data.password),
+                                 data.full_name, data.company, data.email, data.street_address,
+                                 data.city, data.state, data.postal_code, data.country)
 
+        return render.register(nav, register_form, "User registered!")
