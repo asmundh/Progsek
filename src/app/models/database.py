@@ -16,4 +16,3 @@ db = mysql.connector.connect(
     #host='0.0.0.0',    # Local address
     database='db'
 )
-    
