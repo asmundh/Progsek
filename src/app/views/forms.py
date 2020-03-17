@@ -32,6 +32,7 @@ register_form = form.Form(
     form.Button("Register", type="submit", description="Register")
 )
 
+
 # Define the project view form
 project_form = form.Form(
     form.Input("myfile", type="file"),

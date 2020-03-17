@@ -5,10 +5,12 @@ import models.user
 from views.utils import get_nav_bar
 import hashlib
 import re
+import uuid
 
 # Get html templates
 render = web.template.render('templates/')
 
+web.config.smtp_server = 'molde.idi.ntnu.no:25'
 
 class Register:
 
@@ -42,7 +44,7 @@ class Register:
 
        # Create verification key
         verification_key = hashlib.sha256(uuid.uuid4().hex.encode('utf-8')).hexdigest()
-        
+
         models.register.set_user(data.username, 
             hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest(), 
             data.full_name, data.company, data.email, data.street_address, 
@@ -51,7 +53,6 @@ class Register:
         # Send verification mail
         topic= "Verification"
         message = "To confirm your registration, visit the link http://localhost:8052/verify{}".format(verification_key)
-        print(message)
         web.sendmail("beelance@ntnu.no", data.email, topic, message)
 
 
