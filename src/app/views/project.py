@@ -2,8 +2,10 @@ import web
 import models.project
 from views.utils import get_nav_bar
 from views.forms import project_form
+from models.project import project_exists
 import os
 from time import sleep
+import re
 
 # Get html templates
 render = web.template.render('templates/')
@@ -52,15 +54,34 @@ class Project:
         tasks = models.project.get_tasks_by_project_id(data.projectid)
 
         # Upload file (if present)
+        print(" LINE 55 ")
         try:
             if fileitem.filename:
+                print(" LINE 58 ")
                 # Check if user has write permission
                 if not permissions[1]:
+                    print(" LINE 61 ")
                     raise web.seeother(('/project?projectid=' + data.projectid))
 
-                fn = fileitem.filename
+                filename, filetype = os.path.splitext(fileitem.filename)
+                print("filname, filetype: "+filename+", "+filetype)
+
+                if filetype != ".pdf":
+                    print(" LINE 70 ")
+                    raise ValueError("Filetype not approved, file not uploaded")
+
+                if not project_exists(data.projectid):
+                    print(" LINE 74 ")
+                    raise ValueError("Incorrect projectid")
+
+                regex = re.compile('[@!#$%^&*()<>?/\|}{~:;.]')
+                if regex.search(filename) is not None:
+                    print(" LINE 79 ")
+                    raise ValueError("Unaccepted filename")
+
                 # Create the project directory if it doesnt exist
                 path = 'static/project' + data.projectid
+                print(" LINE 84 ")
                 if not os.path.isdir(path):
                     command = 'mkdir ' + path
                     os.popen(command)
@@ -70,11 +91,11 @@ class Project:
                     command = 'mkdir ' + path
                     os.popen(command)
                     sleep(0.2)
-                open(path + '/' + fn, 'wb').write(fileitem.file.read())
-                models.project.set_task_file(data.taskid, (path + "/" + fn))
-        except:
+                open(path + '/' + filename, 'wb').write(fileitem.file.read())
+                models.project.set_task_file(data.taskid, (path + "/" + filename))
+        except Exception as e:
             # Throws exception if no file present
-            pass
+            return e
 
         # Determine status of the targeted task
         all_tasks_accepted = True
