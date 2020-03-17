@@ -41,7 +41,7 @@ class Project:
             project = [[]]
             tasks = [[]]
         render = web.template.render('templates/', globals={'get_task_files':models.project.get_task_files, 'session':session})
-        return render.project(nav, project_form, project, tasks,permissions, categories)
+        return render.project(nav, project_form, project, tasks,permissions, categories, "No sketchy filenames, only pdfs and no sketchy projectids")
 
     def POST(self):
         # Get session
@@ -54,34 +54,26 @@ class Project:
         tasks = models.project.get_tasks_by_project_id(data.projectid)
 
         # Upload file (if present)
-        print(" LINE 55 ")
         try:
             if fileitem.filename:
-                print(" LINE 58 ")
                 # Check if user has write permission
                 if not permissions[1]:
-                    print(" LINE 61 ")
                     raise web.seeother(('/project?projectid=' + data.projectid))
 
                 filename, filetype = os.path.splitext(fileitem.filename)
-                print("filname, filetype: "+filename+", "+filetype)
 
                 if filetype != ".pdf":
-                    print(" LINE 70 ")
                     raise ValueError("Filetype not approved, file not uploaded")
 
                 if not project_exists(data.projectid):
-                    print(" LINE 74 ")
                     raise ValueError("Incorrect projectid")
 
                 regex = re.compile('[@!#$%^&*()<>?/\|}{~:;.]')
                 if regex.search(filename) is not None:
-                    print(" LINE 79 ")
                     raise ValueError("Unaccepted filename")
 
                 # Create the project directory if it doesnt exist
                 path = 'static/project' + data.projectid
-                print(" LINE 84 ")
                 if not os.path.isdir(path):
                     command = 'mkdir ' + path
                     os.popen(command)
@@ -95,7 +87,7 @@ class Project:
                 models.project.set_task_file(data.taskid, (path + "/" + filename))
         except Exception as e:
             # Throws exception if no file present
-            return e
+            pass
 
         # Determine status of the targeted task
         all_tasks_accepted = True

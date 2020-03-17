@@ -1,4 +1,4 @@
-$def with (nav, project_form, project, tasks, permissions, categories)
+$def with (nav, project_form, project, tasks, permissions, categories, message)
 
 <head>
     <title>Beelance2</title>
@@ -32,6 +32,7 @@ $def with (nav, project_form, project, tasks, permissions, categories)
                     <p>Description: $task[3]</p>
                     <p>Budget: $task[4]</p>
                     <p>Status: $task[5]</p>
+                    <p>$message</p>
                     $if project[5] != "open":
                         $for filename in get_task_files(task[0]):
                             <a href="$filename[0]" download>$filename[0].split("/")[-1]</a>
