@@ -1,4 +1,4 @@
-$def with (nav, apply_form, get_apply_permission_form, project, applicants, permissions)
+$def with (nav, apply_form, get_apply_permission_form, project, applicants, permissions, message)
 
 <head>
         <title>Beelance2</title>
@@ -31,6 +31,7 @@ $def with (nav, apply_form, get_apply_permission_form, project, applicants, perm
                     $ apply_permissions_form = get_apply_permissions_form(i, permissions[i][0], permissions[i][1], permissions[i][2], applicants[i])
                     $:apply_permissions_form.render()    
                 </div>
-        </form> 
-            
+        </form>
+    <p>$message</p>
+
 </body>

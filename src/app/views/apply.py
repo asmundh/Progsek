@@ -32,7 +32,7 @@ class Apply:
         permissions = [["TRUE", "TRUE", "TRUE"]]
         render = web.template.render('templates/', globals={"get_apply_permissions_form":get_apply_permissions_form, 'session':session})
 
-        return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions)
+        return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "")
 
     def POST(self):
         """
@@ -55,14 +55,15 @@ class Apply:
             if data.add_user:
                 applicants, permissions = self.get_applicants(data, "add_user")
                 if (applicants, permissions) == (None, None):
-                    #return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "Invalid: user does not exist")
-                    return
+                    applicants = [[session.userid, session.username]]
+                    permissions = [["TRUE", "TRUE", "TRUE"]]
+                    return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "Invalid: user does not exist")
                 else:
-                    return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions)
+                    return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "")
 
             elif data.remove_user:
                         applicants, permissions = self.get_applicants(data, "remove_user")
-                        return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions)     
+                        return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "")
             
             # Set users as working on project and set project status in progress
             elif data.apply:
