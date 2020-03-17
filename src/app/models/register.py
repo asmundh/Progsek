@@ -28,7 +28,7 @@ def set_user(username, password, full_name, company, email,
     """
     db.connect()
     cursor = db.cursor()
-    query = ("INSERT INTO users VALUES (NULL, %(username)s, %(password)s, %(full_name)s, %(company)s, %(email)s, %(street_address)s, %(city)s, %(state)s, %(postal_code)s, %(country)s)""")
+    query = ("""INSERT INTO users VALUES (NULL, %(username)s, %(password)s, %(full_name)s, %(company)s, %(email)s, %(street_address)s, %(city)s, %(state)s, %(postal_code)s, %(country)s)""")
     try:
         cursor.execute(query, (username, password, full_name, company, email, street_adress, city, state, postal_code, country))
         db.commit()
