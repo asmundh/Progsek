@@ -40,10 +40,20 @@ class Register:
         if models.user.get_user_id_by_name(data.username):
             return render.register(nav, register, "Invalid user, already exists.")
 
+       # Create verification key
+        verification_key = hashlib.sha256(uuid.uuid4().hex.encode('utf-8')).hexdigest()
+        
         models.register.set_user(data.username, 
             hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest(), 
             data.full_name, data.company, data.email, data.street_address, 
-            data.city, data.state, data.postal_code, data.country)
-        
+            data.city, data.state, data.postal_code, data.country, verification_key)
+
+        # Send verification mail
+        topic= "Verification"
+        message = "To confirm your registration, visit the link http://localhost:8052/verify{}".format(verification_key)
+        print(message)
+        web.sendmail("beelance@ntnu.no", data.email, topic, message)
+
+
         return render.register(nav, register_form, "User registered!")
 
