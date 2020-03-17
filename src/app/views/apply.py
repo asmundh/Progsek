@@ -1,6 +1,6 @@
 import web
 import models.project
-from models.user import get_user_name_by_id
+from models.user import get_user_name_by_id, get_users, check_user_exists, get_user_id_by_name
 from views.utils import get_nav_bar, get_element_count
 from views.forms import get_apply_form, get_apply_permissions_form
 
@@ -54,7 +54,11 @@ class Apply:
 
             if data.add_user:
                 applicants, permissions = self.get_applicants(data, "add_user")
-                return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants,permissions)     
+                if (applicants, permissions) == (None, None):
+                    #return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "Invalid: user does not exist")
+                    return
+                else:
+                    return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions)
 
             elif data.remove_user:
                         applicants, permissions = self.get_applicants(data, "remove_user")
@@ -115,12 +119,20 @@ class Apply:
                     break
 
         elif operation == "add_user":
-            user_id_to_add = data.user_to_add
-            user_name_to_add = get_user_name_by_id(user_id_to_add)
-            new_applicant = [ int(user_id_to_add), user_name_to_add ]
-            if new_applicant not in applicants:
-                applicants.append(new_applicant)
-                permissions.append(["TRUE", "FALSE", "FALSE"])
+            #user_id_to_add = data.user_to_add
+            user_name_to_add = data.user_to_add
+            user_exists = check_user_exists(user_name_to_add)
+            print("USERS: " + user_name_to_add + str(user_exists), get_users())
+            if not user_exists:
+                    # DO something
+                    return None, None
+            else:
+                user_id_to_add = get_user_id_by_name(user_name_to_add)
+                #user_name_to_add = get_user_name_by_id(user_id_to_add)
+                new_applicant = [int(user_id_to_add), user_name_to_add]
+                if new_applicant not in applicants:
+                    applicants.append(new_applicant)
+                    permissions.append(["TRUE", "FALSE", "FALSE"])
 
         return applicants, permissions
             

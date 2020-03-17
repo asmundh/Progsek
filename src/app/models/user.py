@@ -22,6 +22,15 @@ def get_users():
         db.close()
     return users
 
+def check_user_exists(username):
+    """
+    Checks if username exists in db
+
+    :param username:
+    :return: true or false
+    """
+    return username in (tuple[1] for tuple in get_users())
+
 def get_user_id_by_name(username):
     """
     Get the id of the unique username
