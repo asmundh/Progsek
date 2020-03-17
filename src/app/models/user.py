@@ -147,7 +147,7 @@ def check_if_user_is_verified_by_username(username):
     finally:
         cursor.close()
         db.close()
-    return result == 1
+    return result[0][0] == 1
 
 def check_if_user_is_verified_by_verification_key(verification_key):
     db.connect()

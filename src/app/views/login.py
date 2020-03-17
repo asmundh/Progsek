@@ -41,8 +41,14 @@ class Login():
         password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
         user = models.user.match_user(data.username, password_hash)
         
+        user_is_verified = models.user.check_if_user_is_verified_by_username(data.username)
+        print(user_is_verified)
+
         # If there is a matching user/password in the database the user is logged in
         if user:
+            if not user_is_verified:
+                return render.login(nav, login_form, "- User not verified")
+            
             self.login(user[1], user[0], data.remember)
             raise web.seeother("/")
         else:
@@ -54,7 +60,8 @@ class Login():
         """
         session = web.ctx.session
         session.username = username
-        session.userid = userid
+        session.userid = userid            
+
         if remember:
             rememberme = self.rememberme()
             web.setcookie('remember', rememberme , 300000000)
