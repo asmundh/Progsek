@@ -42,11 +42,13 @@ class Login():
         user = models.user.match_user(data.username, password_hash)
         
         user_is_verified = models.user.check_if_user_is_verified_by_username(data.username)
+
         print(user_is_verified)
 
         # If there is a matching user/password in the database the user is logged in
         if user:
             if not user_is_verified:
+                print("NOT VERIFIED")
                 return render.login(nav, login_form, "- User not verified")
             
             self.login(user[1], user[0], data.remember)
