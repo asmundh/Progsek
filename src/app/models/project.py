@@ -359,9 +359,11 @@ def set_projects_user(projectid, userid, read_permission="TRUE",
     """
     db.connect()
     cursor = db.cursor()
+    # query = ("INSERT INTO projects_users VALUES (%s, %s, %s, %s, %s)")
     query = ("INSERT INTO projects_users VALUES (%s, %s, %s, %s, %s)")
     try:
-        cursor.execute(query, (projectid, userid, read_permission, write_permission, modify_permission))
+        # cursor.execute(query, (projectid, userid, read_permission, write_permission, modify_permission))
+        cursor.execute(query, (projectid, userid, read_permission=="TRUE", write_permission=="TRUE", modify_permission=="TRUE"))
         db.commit()
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
