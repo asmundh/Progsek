@@ -21,7 +21,7 @@ def get_nav_bar(session):
     result += '</nav>'
     return result
 
-                        
+
 def get_element_count(data, element):
     """
     Determine the number of tasks created by removing 
@@ -59,3 +59,28 @@ def verify_password(stored_password, provided_password):
 
     return pwdhash == stored_password
 
+
+def validate_password(password, attributes):
+    with open("10-million-password-list-top-10000.txt") as doc:
+        content = doc.read()
+        if password in content:
+            return False, "too common"
+
+    for val in attributes:
+        if val.lower() in password.lower() and len(val) > 3:
+            return False, "Password cannot contain any input from the input fields"
+
+    if len(password) < 8:
+        return False, "Password must be at least 8 characters"
+    elif not re.search("[a-z]", password):
+        return False, "Password must contain at least one lowercase character"
+    elif not re.search("[A-Z]", password):
+        return False, "Password must contain at least one uppercase character"
+    elif not re.search("[0-9]", password):
+        return False, "Password must contain include at least one number"
+    elif not re.search("[_@$?]", password):
+        return False, "Password must contain at least one of the characters: _@$?"
+    elif re.search("\s", password):
+        return False, "Password cannot contain whitespaces"
+
+    return True, "Password is good"

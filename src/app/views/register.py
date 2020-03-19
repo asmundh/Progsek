@@ -2,7 +2,7 @@ import web
 from views.forms import register_form
 import models.register
 import models.user
-from views.utils import get_nav_bar, hash_password
+from views.utils import get_nav_bar, hash_password, validate_password
 import re
 
 # Get html templates
@@ -38,6 +38,14 @@ class Register:
         # Check if user exists
         if models.user.get_user_id_by_name(data.username):
             return render.register(nav, register, "Invalid user, already exists.")
+
+        # Check if password is strong enough
+        password_checked_if_valid = validate_password(data.password, [data.username, data.full_name, data.company, data.email, data.street_address, data.city, data.state, data.country])
+        password_feedback = password_checked_if_valid[1]
+        print(data.password+" invalid because: "+password_feedback)
+
+        if not password_checked_if_valid[0]:
+            return render.register(nav, register, "Password: "+str(password_feedback))
 
         models.register.set_user(data.username,
                                  hash_password(data.password),
