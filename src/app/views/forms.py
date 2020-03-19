@@ -1,11 +1,11 @@
 from web import form
 from models.project import get_categories 
-from models.user import get_users, get_user_id_by_name
+from models.user import get_users, get_user_id_by_name, check_user_exists
 
 
 # Regex for input validation
 vemail = form.regexp(r".*@.*", "- Must be a valid email address")
-vpass = form.regexp(r".{6,100}$", '- Must be atleast 6 characters long')
+vpass = form.regexp(r".{8,100}$", '- Must be atleast 8 characters long')
 number = form.regexp(r"^[0-9]+$", "- Must be a number")
 not_empty = form.regexp(r".+", "- This field is required")
 
@@ -114,14 +114,13 @@ project_buttons =  form.Form(
     form.Button("create_project", type="submit", description="Create Project", value="create_project", html="Create Project")
 )
 
-def get_apply_form():
+def get_apply_form(user_to_add=""):
     """
     Get the form used to add users to an application and apply
         :return: A form object
     """
-    users = get_users()
     apply_form = form.Form(
-        form.Dropdown("user_to_add", description="User", args=users),
+        form.Textbox("user_to_add", not_empty, description="User to add", value=user_to_add),
         form.Button("add_user", type="submit", description="Add User", value="add_user", html="Add User"),
         form.Button("apply", type="submit", description="Apply", value="apply", html="Apply")
     )

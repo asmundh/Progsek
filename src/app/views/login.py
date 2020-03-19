@@ -1,11 +1,12 @@
 import web
 from views.forms import login_form
 import models.user
-from views.utils import get_nav_bar
+from views.utils import get_nav_bar, hash_password, verify_password
 import os, hmac, base64, pickle
-import hashlib
 
 # Get html templates
+
+
 render = web.template.render('templates/')
 
 
@@ -37,18 +38,22 @@ class Login():
         nav = get_nav_bar(session)
         data = web.input(username="", password="", remember=False)
 
-        # Validate login credential with database query
-        password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
-        user = models.user.match_user(data.username, password_hash)
+        # Validate login credential with database query      
+        user_exists = models.user.check_user_exists(data.username)
+
+        if not user_exists:
+            return render.login(nav, login_form, "- User authentication failed")
+
+        stored_password = models.user.get_password_by_user_name(data.username)
+        if(verify_password(stored_password , data.password)):
+            user = models.user.match_user(data.username, stored_password)
+
         
         user_is_verified = models.user.check_if_user_is_verified_by_username(data.username)
-
-        print(user_is_verified)
 
         # If there is a matching user/password in the database the user is logged in
         if user:
             if not user_is_verified:
-                print("NOT VERIFIED")
                 return render.login(nav, login_form, "- User not verified")
             
             self.login(user[1], user[0], data.remember)
@@ -66,7 +71,7 @@ class Login():
 
         if remember:
             rememberme = self.rememberme()
-            web.setcookie('remember', rememberme , 300000000)
+            web.setcookie('remember', rememberme , 4320)
 
     def check_rememberme(self):
         """
