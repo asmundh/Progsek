@@ -48,20 +48,20 @@ def validate_password(password, attributes):
             return False, "too common"
 
     for val in attributes:
-        if val.lower() in password.lower():
-            return False, "contains one of the fields listed above"
+        if val.lower() in password.lower() and len(val) > 3:
+            return False, "Password cannot contain any input from the input fields"
 
     if len(password) < 8:
-        return False, "too short"
+        return False, "Password must be at least 8 characters"
     elif not re.search("[a-z]", password):
-        return False, "use at least one lowercase character"
+        return False, "Password must contain at least one lowercase character"
     elif not re.search("[A-Z]", password):
-        return False, "use at least one uppercase character"
+        return False, "Password must contain at least one uppercase character"
     elif not re.search("[0-9]", password):
-        return False, "include numberrs"
+        return False, "Password must contain include at least one number"
     elif not re.search("[_@$?]", password):
-        return False, "add at least one of the characters: _@$="
+        return False, "Password must contain at least one of the characters: _@$?"
     elif re.search("\s", password):
-        return False, "no whitespaces"
+        return False, "Password cannot contain whitespaces"
 
     return True, "Password is good"
