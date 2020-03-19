@@ -5,6 +5,7 @@ from views.login import Login
 from views.logout import Logout
 from views.register import Register
 from views.new_project import New_project
+from views.verify import Verify
 from views.open_projects import Open_projects
 from views.project import Project
 from views.index import Index
@@ -31,6 +32,7 @@ urls = (
     '/open_projects', 'Open_projects',
     '/project', 'Project',
     '/apply', 'Apply',
+    '/verify(.*)', 'Verify'
 )
                               
 # Initialize application using the web py framework

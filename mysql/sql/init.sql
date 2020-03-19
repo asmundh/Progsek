@@ -11,6 +11,8 @@ CREATE TABLE users (
   state VARCHAR(50),
   postal_code VARCHAR(50),
   country VARCHAR(50),
+  verification_key VARCHAR(64) UNIQUE,
+  verified INT UNSIGNED NOT NULL,
   PRIMARY KEY (userid)
 );
 

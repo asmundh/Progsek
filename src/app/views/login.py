@@ -38,13 +38,24 @@ class Login():
         nav = get_nav_bar(session)
         data = web.input(username="", password="", remember=False)
 
-        # Validate login credential with database query
+        # Validate login credential with database query      
+        user_exists = models.user.check_user_exists(data.username)
+
+        if not user_exists:
+            return render.login(nav, login_form, "- User authentication failed")
+
         stored_password = models.user.get_password_by_user_name(data.username)
         if(verify_password(stored_password , data.password)):
             user = models.user.match_user(data.username, stored_password)
 
+        
+        user_is_verified = models.user.check_if_user_is_verified_by_username(data.username)
+
         # If there is a matching user/password in the database the user is logged in
         if user:
+            if not user_is_verified:
+                return render.login(nav, login_form, "- User not verified")
+            
             self.login(user[1], user[0], data.remember)
             raise web.seeother("/")
         else:
@@ -56,7 +67,8 @@ class Login():
         """
         session = web.ctx.session
         session.username = username
-        session.userid = userid
+        session.userid = userid            
+
         if remember:
             rememberme = self.rememberme()
             web.setcookie('remember', rememberme , 4320)
