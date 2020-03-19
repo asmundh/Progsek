@@ -86,6 +86,6 @@ insert into project_category values (NULL, "Grocery shopping");
 Create default database user 
 */
 
-CREATE USER 'MothraGodzilla'@'10.5.0.6' IDENTIFIED BY 'root';
+CREATE USER 'MothraGodzilla'@'10.5.0.6' IDENTIFIED BY '2ba1bf64a5ae4aa8adb10ba2bcba7a91dadb1e59fa06cc53e3e379707267d2a47f0a4fbe23487acb5e6093c1f2446fd292cff64f81ae42f6bef08de91158d8c2e3284e57bcc64106ac6424a33a300bea1439bca0f190ab8db5bf7aac629e956a';
 GRANT ALL PRIVILEGES ON db.* TO 'MothraGodzilla'@'10.5.0.6';
 
