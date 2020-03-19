@@ -12,7 +12,6 @@ render = web.template.render('templates/')
 
 
 class Login():
-
     # Get the server secret to perform signatures
     secret = web.config.get('session_parameters')['secret_key']
 
@@ -42,23 +41,21 @@ class Login():
         # Validate login credential with database query
         password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
         user = models.user.match_user(data.username, password_hash)
-        
+
         # If there is a matching user/password in the database the user is logged in
         if user:
-            #self.login(user[1], user[0], data.remember)
+            # self.login(user[1], user[0], data.remember)
             session.unauth_username = user[1]
             session.unauth_userid = user[0]
             session.unauth_remember = 1 if data.remember else 0
             user = get_user(session.unauth_userid)
-            print(user)
             email = user[0][5]
             url = generate_url("beelance", email, get_key(session.unauth_username))
             session.auth_url = url
-            #generate_qrcode(url)
+            # generate_qrcode(url)
             raise web.seeother("/verify")
         else:
             return render.login(nav, login_form, "- User authentication failed")
-
 
     def check_rememberme(self):
         """
@@ -85,7 +82,6 @@ class Login():
             userid = models.user.get_user_id_by_name(username)
             self.login(username, userid, False)
 
-
     @classmethod
     def sign_username(self, username):
         """
@@ -104,7 +100,7 @@ class Login():
         session.userid = userid
         if remember:
             rememberme = self.rememberme()
-            web.setcookie('remember', rememberme , 300000000)
+            web.setcookie('remember', rememberme, 300000000)
 
     def rememberme(self):
         """
@@ -114,5 +110,5 @@ class Login():
             :return: base64 object consisting of signed username and username
         """
         session = web.ctx.session
-        creds = [ session.username, self.sign_username(session.username) ]
+        creds = [session.username, self.sign_username(session.username)]
         return base64.b64encode(pickle.dumps(creds))

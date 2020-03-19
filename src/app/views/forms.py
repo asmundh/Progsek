@@ -1,7 +1,6 @@
 from web import form
-from models.project import get_categories 
+from models.project import get_categories
 from models.user import get_users, get_user_id_by_name, check_user_exists
-
 
 # Regex for input validation
 vemail = form.regexp(r".*@.*", "- Must be a valid email address")
@@ -11,15 +10,15 @@ not_empty = form.regexp(r".+", "- This field is required")
 
 # Verify form
 verify_form = form.Form(
-    form.Textbox("key", description="Key from google authenticator"),
-    form.Button("Authenticate", type="submit", description="Athenticate"),
+    form.Textbox("key", description=""),
+    form.Button("Authenticate", type="submit", description="Authenticate"),
 )
 
 # Define the login form 
 login_form = form.Form(
     form.Textbox("username", description="Username"),
     form.Password("password", description="Password"),
-    form.Checkbox("remember", description= "Remember me", checked=True, value=False),
+    form.Checkbox("remember", description="Remember me", checked=True, value=False),
     form.Button("Log In", type="submit", description="Login"),
 )
 
@@ -48,6 +47,7 @@ project_form = form.Form(
     form.Button("declined", type="submit", value=True, html="Decline Delivery")
 )
 
+
 def get_task_form_elements(identifier=0, task_title="", task_description="", budget=""):
     """
     Generate a set of task form elements
@@ -63,10 +63,12 @@ def get_task_form_elements(identifier=0, task_title="", task_description="", bud
     """
     task_form_elements = (
         form.Textbox("task_title_" + str(identifier), not_empty, description="Task title", value=task_title),
-        form.Textarea("task_description_" + str(identifier), not_empty,description="Task description", value=task_description),
+        form.Textarea("task_description_" + str(identifier), not_empty, description="Task description",
+                      value=task_description),
         form.Textbox("budget_" + str(identifier), number, description="Task budget", value=str(budget))
     )
     return task_form_elements
+
 
 def get_project_form_elements(project_title="", project_description="", category_name=""):
     """
@@ -81,13 +83,15 @@ def get_project_form_elements(project_title="", project_description="", category
     """
     categories = get_categories()
     project_form_elements = (
-    form.Textbox("project_title", not_empty, description="Title", value=project_title),
-    form.Textarea("project_description", not_empty, description="Description", value=project_description),
-    form.Dropdown("category_name", description="Category", args=categories)
+        form.Textbox("project_title", not_empty, description="Title", value=project_title),
+        form.Textarea("project_description", not_empty, description="Description", value=project_description),
+        form.Dropdown("category_name", description="Category", args=categories)
     )
     return project_form_elements
 
-def get_user_form_elements(identifier=0, user_name="", read_permission=True, write_permission=False, modify_permission=False):
+
+def get_user_form_elements(identifier=0, user_name="", read_permission=True, write_permission=False,
+                           modify_permission=False):
     """
     Get the user form elements used to set users in project upon creation
         :param identifier: The id of this element
@@ -103,21 +107,28 @@ def get_user_form_elements(identifier=0, user_name="", read_permission=True, wri
         :return: The form elements to add users to a project
     """
     user_form_elements = (
-        form.Textbox("user_name_" + str(identifier), description="User", value=user_name, placeholder="Leave blank for open project"),        
-        form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission, value=True),
-        form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission, value=True),
-        form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=modify_permission, value=True)
+        form.Textbox("user_name_" + str(identifier), description="User", value=user_name,
+                     placeholder="Leave blank for open project"),
+        form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=read_permission,
+                      value=True),
+        form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=write_permission,
+                      value=True),
+        form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission",
+                      checked=modify_permission, value=True)
     )
     return user_form_elements
 
+
 # Define buttons to modify the project form or create a project
-project_buttons =  form.Form(
+project_buttons = form.Form(
     form.Button("add_user", type="submit", description="Add User", value="add_user", html="Add User"),
     form.Button("remove_user", type="submit", description="Remove User", value="remove_user", html="Remove User"),
     form.Button("add_task", type="submit", description="Add Task", value="add_task", html="Add Task"),
     form.Button("remove_task", type="submit", description="Remove Task ", value="remove_task", html="Remove Task"),
-    form.Button("create_project", type="submit", description="Create Project", value="create_project", html="Create Project")
+    form.Button("create_project", type="submit", description="Create Project", value="create_project",
+                html="Create Project")
 )
+
 
 def get_apply_form(user_to_add=""):
     """
@@ -131,7 +142,9 @@ def get_apply_form(user_to_add=""):
     )
     return apply_form
 
-def get_apply_permissions_form(identifier=0, read_permission="TRUE", write_permission="FALSE", modify_permission="FALSE", userid=None):
+
+def get_apply_permissions_form(identifier=0, read_permission="TRUE", write_permission="FALSE",
+                               modify_permission="FALSE", userid=None):
     """
     Get the form used to set permissions for each applicant
             :param identifier: The id of this element
@@ -148,9 +161,12 @@ def get_apply_permissions_form(identifier=0, read_permission="TRUE", write_permi
     """
     user_permissions = form.Form(
         form.Button("remove_user", type="submit", description="User to remove", value=userid, html="X"),
-        form.Hidden("user_"+str(identifier), description="User to apply for project", value=userid),
-        form.Checkbox("read_permission_" + str(identifier), description="Read Permission", checked=(read_permission=="TRUE"), value=True),
-        form.Checkbox("write_permission_" + str(identifier), description="Write Permission", checked=(write_permission=="TRUE"), value=True),
-        form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission", checked=(modify_permission=="TRUE"), value=True)
-    )    
+        form.Hidden("user_" + str(identifier), description="User to apply for project", value=userid),
+        form.Checkbox("read_permission_" + str(identifier), description="Read Permission",
+                      checked=(read_permission == "TRUE"), value=True),
+        form.Checkbox("write_permission_" + str(identifier), description="Write Permission",
+                      checked=(write_permission == "TRUE"), value=True),
+        form.Checkbox("modify_permission_" + str(identifier), description="Modify Permission",
+                      checked=(modify_permission == "TRUE"), value=True)
+    )
     return user_permissions
