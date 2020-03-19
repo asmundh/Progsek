@@ -1,11 +1,12 @@
 import web
 from views.forms import login_form
 import models.user
-from views.utils import get_nav_bar
+from views.utils import get_nav_bar, hash_password, verify_password
 import os, hmac, base64, pickle
-import hashlib
 
 # Get html templates
+
+
 render = web.template.render('templates/')
 
 
@@ -38,9 +39,10 @@ class Login():
         data = web.input(username="", password="", remember=False)
 
         # Validate login credential with database query
-        password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
-        user = models.user.match_user(data.username, password_hash)
-        
+        stored_password = models.user.get_password_by_user_name(data.username)
+        if(verify_password(stored_password , data.password)):
+            user = models.user.match_user(data.username, stored_password)
+
         # If there is a matching user/password in the database the user is logged in
         if user:
             self.login(user[1], user[0], data.remember)

@@ -56,6 +56,27 @@ def get_user_id_by_name(username):
         db.close()
     return userid
 
+def get_password_by_user_name(username):
+    db.connect()
+    cursor = db.cursor()
+    query = ("SELECT password from users WHERE username = %s")
+
+    password = None
+
+    try:
+        cursor.execute(query, (username,))
+        users = cursor.fetchall()
+        if(len(users)):
+            password = users[0][0]
+
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        cursor.fetchall()
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
+    return password
 
 def get_user_name_by_id(userid):
     """
