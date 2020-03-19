@@ -5,7 +5,7 @@ from models.user import get_users, get_user_id_by_name, check_user_exists
 
 # Regex for input validation
 vemail = form.regexp(r".*@.*", "- Must be a valid email address")
-vpass = form.regexp(r".{6,100}$", '- Must be atleast 6 characters long')
+vpass = form.regexp(r".{8,100}$", '- Must be atleast 8 characters long')
 number = form.regexp(r"^[0-9]+$", "- Must be a number")
 not_empty = form.regexp(r".+", "- This field is required")
 
