@@ -22,6 +22,27 @@ def get_users():
         db.close()
     return users
 
+def get_user(userid):
+    """
+    Retreive all information about user by userid
+        :return: users
+    """
+    db.connect()
+    cursor = db.cursor()
+    query = ("SELECT * FROM users WHERE userid = %s")
+    try:
+        cursor.execute(query, (userid,))
+        user = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        users = []
+        cursor.fetchall()
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
+    return user
+
 def check_user_exists(username):
     """
     Checks if username exists in db

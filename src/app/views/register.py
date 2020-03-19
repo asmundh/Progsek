@@ -5,6 +5,7 @@ import models.user
 from views.utils import get_nav_bar, validate_password
 import hashlib
 import re
+from authenticator.authenticator import add_to_secrets
 
 # Get html templates
 render = web.template.render('templates/')
@@ -46,6 +47,8 @@ class Register:
         print(data.password+" invalid because: "+password_string)
         if not password_validation[0]:
             return render.register(nav, register, "Password: "+str(password_string))
+
+        add_to_secrets(data.username)
 
         models.register.set_user(data.username, 
             hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest(), 

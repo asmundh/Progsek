@@ -2,8 +2,10 @@ import web
 from views.forms import login_form
 import models.user
 from views.utils import get_nav_bar
+from models.user import get_user
 import os, hmac, base64, pickle
 import hashlib
+from authenticator.authenticator import generate_qrcode, generate_url, get_key
 
 # Get html templates
 render = web.template.render('templates/')
@@ -43,21 +45,20 @@ class Login():
         
         # If there is a matching user/password in the database the user is logged in
         if user:
-            self.login(user[1], user[0], data.remember)
-            raise web.seeother("/")
+            #self.login(user[1], user[0], data.remember)
+            session.unauth_username = user[1]
+            session.unauth_userid = user[0]
+            session.unauth_remember = 1 if data.remember else 0
+            user = get_user(session.unauth_userid)
+            print(user)
+            email = user[0][5]
+            url = generate_url("beelance", email, get_key(session.unauth_username))
+            session.auth_url = url
+            #generate_qrcode(url)
+            raise web.seeother("/verify")
         else:
             return render.login(nav, login_form, "- User authentication failed")
 
-    def login(self, username, userid, remember):
-        """
-        Log in to the application
-        """
-        session = web.ctx.session
-        session.username = username
-        session.userid = userid
-        if remember:
-            rememberme = self.rememberme()
-            web.setcookie('remember', rememberme , 300000000)
 
     def check_rememberme(self):
         """
@@ -84,6 +85,27 @@ class Login():
             userid = models.user.get_user_id_by_name(username)
             self.login(username, userid, False)
 
+
+    @classmethod
+    def sign_username(self, username):
+        """
+        Sign the current users name with the hosts secret key
+            :return: The users signed name
+        """
+        secret = base64.b64decode(self.secret)
+        return hmac.HMAC(secret, username.encode('ascii')).hexdigest()
+
+    def login(self, username, userid, remember=False):
+        """
+        Log in to the application
+        """
+        session = web.ctx.session
+        session.username = username
+        session.userid = userid
+        if remember:
+            rememberme = self.rememberme()
+            web.setcookie('remember', rememberme , 300000000)
+
     def rememberme(self):
         """
         Encode a base64 object consisting of the username signed with the
@@ -94,13 +116,3 @@ class Login():
         session = web.ctx.session
         creds = [ session.username, self.sign_username(session.username) ]
         return base64.b64encode(pickle.dumps(creds))
-
-    @classmethod
-    def sign_username(self, username):
-        """
-        Sign the current users name with the hosts secret key
-            :return: The users signed name
-        """
-        secret = base64.b64decode(self.secret)
-        return hmac.HMAC(secret, username.encode('ascii')).hexdigest()
- 

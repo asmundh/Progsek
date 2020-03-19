@@ -9,6 +9,12 @@ vpass = form.regexp(r".{8,100}$", '- Must be atleast 8 characters long')
 number = form.regexp(r"^[0-9]+$", "- Must be a number")
 not_empty = form.regexp(r".+", "- This field is required")
 
+# Verify form
+verify_form = form.Form(
+    form.Textbox("key", description="Key from google authenticator"),
+    form.Button("Authenticate", type="submit", description="Athenticate"),
+)
+
 # Define the login form 
 login_form = form.Form(
     form.Textbox("username", description="Username"),
