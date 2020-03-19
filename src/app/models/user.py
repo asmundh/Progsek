@@ -59,7 +59,7 @@ def get_user_id_by_name(username):
 def get_password_by_user_name(username):
     db.connect()
     cursor = db.cursor()
-    query = ("SELECT password from users WHERE username = %s)
+    query = ("SELECT password from users WHERE username = %s")
 
     password = None
 
