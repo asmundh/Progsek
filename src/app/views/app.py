@@ -38,7 +38,7 @@ app = web.application(urls, globals())
 
 # Get html templates
 render = web.template.render('templates/')
-
+# web.debug = False
 # Set session timeout
 web.config.session_parameters['timeout'] = 15000000
 

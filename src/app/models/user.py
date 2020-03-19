@@ -22,6 +22,15 @@ def get_users():
         db.close()
     return users
 
+def check_user_exists(username):
+    """
+    Checks if username exists in db
+
+    :param username:
+    :return: true or false
+    """
+    return username in (tuple[1] for tuple in get_users())
+
 def get_user_id_by_name(username):
     """
     Get the id of the unique username
@@ -30,11 +39,11 @@ def get_user_id_by_name(username):
     """
     db.connect()
     cursor = db.cursor()
-    query = ("SELECT userid from users WHERE username =\"" + username + "\"")
+    query = ("SELECT userid from users WHERE username = %s")
     
     userid = None
     try:
-        cursor.execute(query)
+        cursor.execute(query, (username,))
         users = cursor.fetchall()
         if(len(users)):
             userid = users[0][0]
@@ -47,6 +56,7 @@ def get_user_id_by_name(username):
         db.close()
     return userid
 
+
 def get_user_name_by_id(userid):
     """
     Get username from user id
@@ -55,10 +65,10 @@ def get_user_name_by_id(userid):
     """
     db.connect()
     cursor = db.cursor()
-    query = ("SELECT username from users WHERE userid =\"" + userid + "\"")
+    query = ("SELECT username from users WHERE userid = %s")
     username = None
     try:
-        cursor.execute(query)
+        cursor.execute(query, (userid,))
         users = cursor.fetchall()
         if len(users):
             username = users[0][0]
@@ -83,11 +93,10 @@ def match_user(username, password):
     """
     db.connect()
     cursor = db.cursor()
-    query = ("SELECT userid, username from users where username = \"" + username + 
-            "\" and password = \"" + password + "\"")
+    query = ("SELECT userid, username FROM users WHERE username = %s AND password = %s")
     user = None
     try:
-        cursor.execute(query)
+        cursor.execute(query, (username, password))
         users = cursor.fetchall()
         if len(users):
             user = users[0]
@@ -99,7 +108,3 @@ def match_user(username, password):
         cursor.close()
         db.close()
     return user
-
-        
-    
-
