@@ -25,7 +25,8 @@ content_server=$content_server"        alias $USE_STATIC_PATH;\n"
 content_server=$content_server'    }\n'
 content_server=$content_server'}\n'
 
-content_server=$content_server"add_header X-Frame-Options deny always;"
+content_server=$content_server"add_header X-Frame-Options sameorigin always;"
+ccontent_server=$content_server"add_header X-Content-Type-Options nosniff always;"
 
 
 # Configuration skeleton for using SSL
