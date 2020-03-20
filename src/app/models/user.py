@@ -65,8 +65,7 @@ def get_user_id_by_name(username):
     db.connect()
     cursor = db.cursor()
     query = ("SELECT userid from users WHERE username = %s")
-
-    userid = None
+    # userid = None
     try:
         cursor.execute(query, (username,))
         users = cursor.fetchall()

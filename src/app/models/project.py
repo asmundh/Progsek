@@ -32,7 +32,6 @@ def get_projects():
     finally:
         cursor.close()
         db.close()
-    print(projects)
     return [val[0] for val in projects]
 
 def get_categories():

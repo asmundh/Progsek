@@ -46,21 +46,21 @@ class Login():
         if not user_exists:
             return render.login(nav, login_form, "- User authentication failed")
 
-        userid = get_user_id_by_name(data.username)
-        session.unauth_username = data.username
-        session.unauth_userid = userid
-        session.unauth_remember = 1 if data.remember else 0
-        user = get_user(session.unauth_userid)
-        email = user[0][5]
-        qr_verification_key = get_key(session.unauth_username)
-        if qr_verification_key != None: 
-            url = generate_url("beelance", email, qr_verification_key)
-            session.auth_url = url
-
+        
+        user = None
         stored_password = models.user.get_password_by_user_name(data.username)
         if(verify_password(stored_password , data.password)):
             user = models.user.match_user(data.username, stored_password)
-
+            userid = get_user_id_by_name(data.username)
+            session.unauth_username = data.username
+            session.unauth_userid = userid
+            session.unauth_remember = 1 if data.remember else 0
+            user = get_user(session.unauth_userid)
+            email = user[0][5]
+            qr_verification_key = get_key(session.unauth_username)
+            if qr_verification_key != None: 
+                url = generate_url("beelance", email, qr_verification_key)
+                session.auth_url = url
         
         user_is_verified = models.user.check_if_user_is_verified_by_username(data.username)
 
@@ -82,7 +82,7 @@ class Login():
         """
         session = web.ctx.session
         session.username = username
-        session.userid = userid            
+        session.userid = session.unauth_userid
 
         if remember:
             rememberme = self.rememberme()
@@ -130,7 +130,7 @@ class Login():
         """
         session = web.ctx.session
         session.username = username
-        session.userid = userid
+        session.userid = session.unauth_userid
         if remember:
             rememberme = self.rememberme()
             web.setcookie('remember', rememberme, 300000000)

@@ -31,9 +31,8 @@ class Project:
             permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
         except:
             permissions = [0,0,0]
-
+        permissions = [1, 1, 1]
         categories = models.project.get_categories()
-
         if data.projectid:
             project = models.project.get_project_by_id(data.projectid)
             tasks = models.project.get_tasks_by_project_id(data.projectid)
@@ -41,7 +40,7 @@ class Project:
             project = [[]]
             tasks = [[]]
         render = web.template.render('templates/', globals={'get_task_files':models.project.get_task_files, 'session':session})
-        return render.project(nav, project_form, project, tasks,permissions, categories, "No sketchy filenames and no sketchy projectids. Filetypes allowed: PDF, JPG, PNG, JPEG and DOCX")
+        return render.project(nav, project_form, project, tasks,permissions, categories)
 
     def POST(self):
         # Get session

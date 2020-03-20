@@ -40,7 +40,7 @@ class Register:
             return render.register(nav, register, "All fields must be valid.")
 
         # Check if user exists
-        if models.user.get_user_id_by_name(data.username):
+        if models.user.check_user_exists(data.username):
             return render.register(nav, register, "Invalid user, already exists.")
 
         # Check if password is strong enough
