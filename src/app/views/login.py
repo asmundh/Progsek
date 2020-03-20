@@ -8,14 +8,13 @@ import hashlib
 from authenticator.authenticator import generate_qrcode, generate_url, get_key
 from views.utils import get_nav_bar, hash_password, verify_password
 import os, hmac, base64, pickle
-
+from uuid import uuid4
 from logs.log import write_requests as log
 from logs.log import write_to_logins, remove_from_logins
 
 # Get html templates
 
-
-render = web.template.render('templates/')
+render = web.template.render('templates/', globals())
 
 
 class Login():
@@ -34,7 +33,10 @@ class Login():
         # Log the user in if the rememberme cookie is set and valid
         self.check_rememberme()
 
-        return render.login(nav, login_form, "")
+        if not session.has_key('csrf_token'):
+            session.csrf_token = uuid4().hex
+
+        return render.login(nav, login_form, "", session.csrf_token)
 
 
     def POST(self):
@@ -46,9 +48,13 @@ class Login():
         nav = get_nav_bar(session)
         data = web.input(username="", password="", remember=False)
 
+        inp = web.input()
+        if not ('csrf_token' in inp and inp.csrf_token == session.pop('csrf_token', None)):
+            raise web.badrequest()
+        
         # Validate login credential with database query
         user_exists = models.user.check_user_exists(data.username)
-
+        print("USEREXIST: {}".format(user_exists))
         if not user_exists:
             # Lockout if too many failed attempts
             if not (write_to_logins(str(web.ctx['ip']))):
@@ -56,7 +62,8 @@ class Login():
 
             log("LOGIN", web.ctx['ip'],
                 [('Username', data.username), ("Response: ", "Login failed, user does not exist")])
-            return render.login(nav, login_form, "- User authentication failed")
+            session.csrf_token = uuid4().hex
+            return render.login(nav, login_form, "- User authentication failed", session.csrf_token)
 
         
         user = None
@@ -79,23 +86,25 @@ class Login():
         # If there is a matching user/password in the database the user is logged in
         if user:
             if not user_is_verified:
+                session.csrf_token = uuid4().hex
                 # Lockout if failed attempts
                 if not (write_to_logins(str(web.ctx['ip']))):
-                    return render.login(nav, login_form, "- Too many login attempts in short amount of time")
+                    return render.login(nav, login_form, "- Too many login attempts in short amount of time", session.csrf_token)
 
                 log("LOGIN", web.ctx['ip'], [('Username', data.username), ("Password", stored_password),
                                              ("Response: ", "Login failed, User not verified")])
-                return render.login(nav, login_form, "- User not verified")
+                return render.login(nav, login_form, "- User not verified", session.csrf_token)
 
             if qr_verification_key == None:
                 # Lockout if failed attempts
+                session.csrf_token = uuid4().hex
                 if not (write_to_logins(str(web.ctx['ip']))):
-                    return render.login(nav, login_form, "- Too many login attempts in short amount of time")
+                    return render.login(nav, login_form, "- Too many login attempts in short amount of time", session.csrf_token)
 
                 log("LOGIN", web.ctx['ip'], [('Username', data.username), ("Password", stored_password),
                                              ("Response: ", "Login failed, docker might have restarted")])
                 return render.login(nav, login_form,
-                                    "- User authentication failed. This might be because docker demon has restarted")
+                                    "- User authentication failed. This might be because docker demon has restarted", session.csrf_token)
             else:
                 log("LOGIN", web.ctx['ip'], [('Username', data.username), ("Password", stored_password),
                                              ("Response: ", "Login accepted, forwarded to two factor auth")])
@@ -104,11 +113,12 @@ class Login():
         else:
             log("LOGIN", web.ctx['ip'], [('Username', data.username), ("Password", stored_password),
                                          ("Response: ", "Login failed, username/password mismatch")])
+            session.csrf_token = uuid4().hex
             # Lockout if failed attempts
             if not (write_to_logins(str(web.ctx['ip']))):
-                return render.login(nav, login_form, "- Too many login attempts in short amount of time")
+                return render.login(nav, login_form, "- Too many login attempts in short amount of time", session.csrf_token)
 
-            return render.login(nav, login_form, "- User authentication failed")
+            return render.login(nav, login_form, "- User authentication failed", session.csrf_token)
 
     def login(self, username, userid, remember=False):
         """

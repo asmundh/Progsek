@@ -1,4 +1,4 @@
-$def with (nav, register_form, message)
+$def with (nav, register_form, message, csrf_token)
 
 <head>
     <title>Beelance2</title>
@@ -15,6 +15,7 @@ $def with (nav, register_form, message)
     <h2>Register user!</h2>
     
     <form method="POST">
+        <input type="hidden" value="$csrf_token" name="csrf_token">
         $:register_form.render()
     </form>
 

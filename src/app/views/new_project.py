@@ -19,12 +19,16 @@ class New_project:
         session = web.ctx.session
         nav = get_nav_bar(session)
 
+        if not session.has_key('csrf_token'):
+            from uuid import uuid4
+            session.csrf_token = uuid4().hex
+
         # Retrive the required components to compose the form
         project_form_elements = get_project_form_elements()
         task_form_elements = get_task_form_elements()
         user_form_elements = get_user_form_elements()
         project_form = form.Form(*(project_form_elements + task_form_elements + user_form_elements))
-        return render.new_project(nav, project_form, project_buttons,  "")
+        return render.new_project(nav, project_form, project_buttons,  "", session.csrf_token)
 
     def POST(self):
         """
@@ -35,6 +39,16 @@ class New_project:
         session = web.ctx.session
         nav = get_nav_bar(session)
 
+        inp = web.input()
+        if not ('csrf_token' in inp and inp.csrf_token == session.pop('csrf_token', None)):
+            raise web.badrequest
+
+        if not session.has_key('csrf_token'):
+            from uuid import uuid4
+            session.csrf_token = uuid4().hex
+
+
+
         # Try the different URL input parameters to determine how to generate the form
         data = web.input(add_user=None, remove_user=None, 
             add_task=None, remove_task = None, create_project=None)
@@ -42,27 +56,27 @@ class New_project:
         # Add a set of task fields to the form
         if data.add_task:
             project_form = self.compose_form(data, "add_task")
-            return render.new_project(nav, project_form, project_buttons,  "") 
+            return render.new_project(nav, project_form, project_buttons,  "", session.csrf_token)
         
         # Remove a set of task fields from the form
         if data.remove_task:
             project_form = self.compose_form(data, "remove_task")
-            return render.new_project(nav, project_form, project_buttons,  "")     
+            return render.new_project(nav, project_form, project_buttons,  "", session.csrf_token)
         
         if data.add_user:
             project_form = self.compose_form(data, "add_user")
-            return render.new_project(nav, project_form, project_buttons,  "")     
+            return render.new_project(nav, project_form, project_buttons,  "", session.csrf_token)
         
         if data.remove_user:
             project_form = self.compose_form(data, "remove_user")
-            return render.new_project(nav, project_form, project_buttons,  "")    
+            return render.new_project(nav, project_form, project_buttons,  "", session.csrf_token)
             
         # Post the form data and save the project in the database
         if data.create_project:
                             
             project_form = self.compose_form(data, None)
             if not project_form.validates():
-                return render.new_project(nav, project_form, project_buttons,  "")    
+                return render.new_project(nav, project_form, project_buttons,  "", session.csrf_token)
 
             task_count = get_element_count(data, "task_title_")
             user_count = get_element_count(data, "user_name_")
@@ -75,7 +89,7 @@ class New_project:
             # Validate the input user names
             for i in range(0, user_count):
                 if len(data["user_name_"+str(i)]) and not models.user.get_user_id_by_name(data["user_name_"+str(i)]):    
-                    return render.new_project(nav, project_form, project_buttons,  "Invalid user: " + data["user_name_"+str(i)])
+                    return render.new_project(nav, project_form, project_buttons,  "Invalid user: " + data["user_name_"+str(i)], session.csrf_token)
 
             # Save the project to the database
             projectid = models.project.set_project(data.category_name, str(session.userid), 

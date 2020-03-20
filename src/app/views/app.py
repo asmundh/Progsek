@@ -52,13 +52,17 @@ if web.config.get('_session') is None:
 else:
     session = web.config._session
 
+
 # Add session to global variables
 render._add_global(session, 'session')
+
 
 # Make the session available cross modules through webctx
 def session_hook():
     web.ctx.session = session
     web.template.Template.globals['session'] = session
+
+
 
 app.add_processor(web.loadhook(session_hook))
 

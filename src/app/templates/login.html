@@ -1,4 +1,4 @@
-$def with (nav, login_form, message)
+$def with (nav, login_form, message, csrf_token)
 
 <head>
     <title>Beelance2</title>
@@ -15,8 +15,9 @@ $def with (nav, login_form, message)
     $if not session.username:
         <h3>Log In</h3>
         <form method="POST">
+            <input type="hidden" name="csrf_token" value=$csrf_token>
             $:login_form.render()
-        </form> 
+        </form>
 
     $else:
         <h1>Logged in as $session.username</h1>
