@@ -1,6 +1,7 @@
 from models.database import db
 import mysql.connector
 
+
 def get_users():
     """
     Retreive all registrered users from the database
@@ -22,6 +23,29 @@ def get_users():
         db.close()
     return users
 
+
+def get_user(userid):
+    """
+    Retreive all information about user by userid
+        :return: all rows of user
+    """
+    db.connect()
+    cursor = db.cursor()
+    query = ("SELECT * FROM users WHERE userid = %s")
+    try:
+        cursor.execute(query, (userid,))
+        user = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        users = []
+        cursor.fetchall()
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
+    return user
+
+
 def check_user_exists(username):
     """
     Checks if username exists in db
@@ -30,6 +54,7 @@ def check_user_exists(username):
     :return: true or false
     """
     return username in (tuple[1] for tuple in get_users())
+
 
 def get_user_id_by_name(username):
     """
@@ -40,12 +65,12 @@ def get_user_id_by_name(username):
     db.connect()
     cursor = db.cursor()
     query = ("SELECT userid from users WHERE username = %s")
-    
+
     userid = None
     try:
         cursor.execute(query, (username,))
         users = cursor.fetchall()
-        if(len(users)):
+        if (len(users)):
             userid = users[0][0]
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))
@@ -101,6 +126,7 @@ def get_user_name_by_id(userid):
         cursor.close()
         db.close()
     return username
+
 
 def match_user(username, password):
     """

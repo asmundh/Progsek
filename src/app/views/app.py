@@ -10,7 +10,7 @@ from views.open_projects import Open_projects
 from views.project import Project
 from views.index import Index
 from views.apply import Apply
-
+from views.qr_verify import QRVerify
 # Connect to smtp server, enables web.sendmail()
 try:
     smtp_server = os.getenv("smtp_server") + ":25"
@@ -32,7 +32,8 @@ urls = (
     '/open_projects', 'Open_projects',
     '/project', 'Project',
     '/apply', 'Apply',
-    '/verify(.*)', 'Verify'
+    '/qr_verify', 'QRVerify',
+    '/verify(.*)', 'Verify',
 )
                               
 # Initialize application using the web py framework

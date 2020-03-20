@@ -4,6 +4,7 @@ import models.register
 import models.user
 from views.utils import get_nav_bar, hash_password, validate_password
 import re
+from authenticator.authenticator import add_to_secrets
 import hashlib
 import uuid
 
@@ -43,8 +44,10 @@ class Register:
             return render.register(nav, register, "Invalid user, already exists.")
 
         # Check if password is strong enough
+
         password_checked_if_valid = validate_password(data.password, [data.username, data.full_name, data.company, data.email, data.street_address, data.city, data.state, data.country])
         password_feedback = password_checked_if_valid[1]
+        add_to_secrets(data.username)
 
         if not password_checked_if_valid[0]:
             return render.register(nav, register, "Password: "+str(password_feedback))
