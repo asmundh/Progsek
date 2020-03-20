@@ -41,7 +41,7 @@ class Project:
             project = [[]]
             tasks = [[]]
         render = web.template.render('templates/', globals={'get_task_files':models.project.get_task_files, 'session':session})
-        return render.project(nav, project_form, project, tasks,permissions, categories, "No sketchy filenames, only pdfs and no sketchy projectids")
+        return render.project(nav, project_form, project, tasks,permissions, categories, "No sketchy filenames and no sketchy projectids. Filetypes allowed: PDF, JPG, PNG, JPEG and DOCX")
 
     def POST(self):
         # Get session
@@ -62,7 +62,7 @@ class Project:
 
                 filename, filetype = os.path.splitext(fileitem.filename)
 
-                if filetype != ".pdf":
+                if not filetype in [".pdf", ".png", ".jpg", ".jpeg", ".docx"]:
                     raise ValueError("Filetype not approved, file not uploaded")
 
                 if not project_exists(data.projectid):
