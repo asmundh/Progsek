@@ -1,5 +1,5 @@
 import web
-from views.forms import verify_qr_form
+from views.forms import qr_verify_form
 import models.user
 from views.utils import get_nav_bar
 import sys, os, hmac, base64, pickle
@@ -11,7 +11,7 @@ from views.login import Login
 render = web.template.render('templates/')
 
 
-class Verify():
+class QRVerify():
     # Get the server secret to perform signatures
     secret = web.config.get('session_parameters')['secret_key']
 
@@ -23,7 +23,7 @@ class Verify():
         """
         session = web.ctx.session
 
-        return render.verify_qr(session.auth_url, verify_qr_form, "")
+        return render.qr_verify(session.auth_url, qr_verify_form, "")
 
     def POST(self):
         """
@@ -37,7 +37,7 @@ class Verify():
         # Check if inputted is correct
         validated = validate_key(session.unauth_username, data.key)
         if not validated: 
-            return render.verify_qr(session.auth_url, verify_qr_form, "Wrong authenticator code") 
+            return render.qr_verify(session.auth_url, qr_verify_form, "Wrong authenticator code") 
         if validated:
             Login.login(session.unauth_userid, session.unauth_username, session.unauth_remember)
             raise web.seeother("/")

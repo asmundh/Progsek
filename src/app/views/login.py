@@ -1,7 +1,7 @@
 import web
 from views.forms import login_form
 import models.user
-from models.user import get_user
+from models.user import get_user, get_user_id_by_name
 import hashlib
 from authenticator.authenticator import generate_qrcode, generate_url, get_key
 from views.utils import get_nav_bar, hash_password, verify_password
@@ -46,13 +46,16 @@ class Login():
         if not user_exists:
             return render.login(nav, login_form, "- User authentication failed")
 
-        session.unauth_username = user[1]
-        session.unauth_userid = user[0]
+        userid = get_user_id_by_name(data.username)
+        session.unauth_username = data.username
+        session.unauth_userid = userid
         session.unauth_remember = 1 if data.remember else 0
         user = get_user(session.unauth_userid)
         email = user[0][5]
-        url = generate_url("beelance", email, get_key(session.unauth_username))
-        session.auth_url = url
+        qr_verification_key = get_key(session.unauth_username)
+        if qr_verification_key != None: 
+            url = generate_url("beelance", email, qr_verification_key)
+            session.auth_url = url
 
         stored_password = models.user.get_password_by_user_name(data.username)
         if(verify_password(stored_password , data.password)):
@@ -66,8 +69,10 @@ class Login():
             if not user_is_verified:
                 return render.login(nav, login_form, "- User not verified")
             
-            self.login(user[1], user[0], data.remember)
-            raise web.seeother("/verify_qr")
+            if qr_verification_key == None:
+                return render.login(nav, login_form, "- User authentication failed. This might be because docker demon has restarted")
+            else: 
+                raise web.seeother("/qr_verify")
         else:
             return render.login(nav, login_form, "- User authentication failed")
 

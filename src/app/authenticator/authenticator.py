@@ -132,7 +132,10 @@ def get_key(username):
     rel = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     with open(os.path.join(rel, 'secrets.json'), 'r') as f:
         keys = json.load(f)
-    return keys[username]
+    try:
+        return keys[username]
+    except KeyError as err:
+        return None
 
 
 def get_temp_key(username):
