@@ -9,6 +9,9 @@ from authenticator.authenticator import generate_qrcode, generate_url, get_key
 from views.utils import get_nav_bar, hash_password, verify_password
 import os, hmac, base64, pickle
 
+from logs.log import write_requests as log
+from logs.log import write_to_logins, remove_from_logins
+
 # Get html templates
 
 
@@ -33,6 +36,7 @@ class Login():
 
         return render.login(nav, login_form, "")
 
+
     def POST(self):
         """
         Log in to the web application and register the session
@@ -46,12 +50,18 @@ class Login():
         user_exists = models.user.check_user_exists(data.username)
 
         if not user_exists:
+            # Lockout if too many failed attempts
+            if not (write_to_logins(str(web.ctx['ip']))):
+                return render.login(nav, login_form, "- Too many login attempts in short amount of time")
+
+            log("LOGIN", web.ctx['ip'],
+                [('Username', data.username), ("Response: ", "Login failed, user does not exist")])
             return render.login(nav, login_form, "- User authentication failed")
 
         
         user = None
         stored_password = models.user.get_password_by_user_name(data.username)
-        if(verify_password(stored_password , data.password)):
+        if (verify_password(stored_password, data.password)):
             user = models.user.match_user(data.username, stored_password)
             userid = get_user_id_by_name(data.username)
             session.unauth_username = data.username
@@ -69,16 +79,38 @@ class Login():
         # If there is a matching user/password in the database the user is logged in
         if user:
             if not user_is_verified:
+                # Lockout if failed attempts
+                if not (write_to_logins(str(web.ctx['ip']))):
+                    return render.login(nav, login_form, "- Too many login attempts in short amount of time")
+
+                log("LOGIN", web.ctx['ip'], [('Username', data.username), ("Password", stored_password),
+                                             ("Response: ", "Login failed, User not verified")])
                 return render.login(nav, login_form, "- User not verified")
-            
+
             if qr_verification_key == None:
-                return render.login(nav, login_form, "- User authentication failed. This might be because docker demon has restarted")
-            else: 
+                # Lockout if failed attempts
+                if not (write_to_logins(str(web.ctx['ip']))):
+                    return render.login(nav, login_form, "- Too many login attempts in short amount of time")
+
+                log("LOGIN", web.ctx['ip'], [('Username', data.username), ("Password", stored_password),
+                                             ("Response: ", "Login failed, docker might have restarted")])
+                return render.login(nav, login_form,
+                                    "- User authentication failed. This might be because docker demon has restarted")
+            else:
+                log("LOGIN", web.ctx['ip'], [('Username', data.username), ("Password", stored_password),
+                                             ("Response: ", "Login accepted, forwarded to two factor auth")])
+
                 raise web.seeother("/qr_verify")
         else:
+            log("LOGIN", web.ctx['ip'], [('Username', data.username), ("Password", stored_password),
+                                         ("Response: ", "Login failed, username/password mismatch")])
+            # Lockout if failed attempts
+            if not (write_to_logins(str(web.ctx['ip']))):
+                return render.login(nav, login_form, "- Too many login attempts in short amount of time")
+
             return render.login(nav, login_form, "- User authentication failed")
 
-    def login(self, username, userid, remember):
+    def login(self, username, userid, remember=False):
         """
         Log in to the application
         """
@@ -88,9 +120,7 @@ class Login():
 
         if remember:
             rememberme = self.rememberme()
-            web.setcookie('remember', rememberme , 4320)
-
-
+            web.setcookie('remember', rememberme, 259200)
 
     def check_rememberme(self):
         """
@@ -129,14 +159,3 @@ class Login():
         """
         secret = base64.b64decode(self.secret)
         return hmac.HMAC(secret, username.encode('ascii')).hexdigest()
-
-    def login(self, username, userid, remember=False):
-        """
-        Log in to the application
-        """
-        session = web.ctx.session
-        session.username = username
-        session.userid = session.unauth_userid
-        if remember:
-            rememberme = self.rememberme()
-            web.setcookie('remember', rememberme, 300000000)
