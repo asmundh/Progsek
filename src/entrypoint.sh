@@ -45,6 +45,7 @@ content_server=$content_server'}\n'
 content_server=$content_server"add_header X-Frame-Options sameorigin always;"
 content_server=$content_server"add_header X-Content-Type-Options nosniff always;"
 
+web.config.debug = False
 
 # Save generated server /etc/nginx/conf.d/nginx.conf
 printf "$content_server" > /etc/nginx/conf.d/nginx.conf
