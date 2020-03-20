@@ -1,4 +1,4 @@
-$def with (auth_url, qr_verify_form, message)
+$def with (auth_url, qr_verify_form, message, csrf_token)
 <head>
     <meta charset="UTF-8">
     <title>Authenticate</title>
@@ -24,6 +24,7 @@ $def with (auth_url, qr_verify_form, message)
          height="200"
     />
     <form method="POST" class="center">
+        <input type="hidden" name="csrf_token" value=$csrf_token    
         $:qr_verify_form.render()
     </form>
     <h>$:message</h2>

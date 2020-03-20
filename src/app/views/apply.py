@@ -18,6 +18,10 @@ class Apply:
         # Get navbar
         nav = get_nav_bar(session)
 
+        if not session.has_key('csrf_token'):
+            from uuid import uuid4
+            session.csrf_token = uuid4().hex
+
         data = web.input(projectid=0)
         if data.projectid:
             project = models.project.get_project_by_id(data.projectid)
@@ -32,7 +36,7 @@ class Apply:
         permissions = [["TRUE", "TRUE", "TRUE"]]
         render = web.template.render('templates/', globals={"get_apply_permissions_form":get_apply_permissions_form, 'session':session})
 
-        return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "")
+        return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "", session.csrf_token)
 
     def POST(self):
         """
@@ -41,6 +45,10 @@ class Apply:
         data = web.input(projectid=0, add_user=None, remove_user=None, apply=None)
         session = web.ctx.session
         nav = get_nav_bar(session)
+
+        inp = web.input()
+        if not ('csrf_token' in inp and inp.csrf_token == session.pop('csrf_token', None)):
+            raise web.badrequest
 
         # Assemble form
         applicants = [session.username]
@@ -57,13 +65,12 @@ class Apply:
                 if (applicants, permissions) == (None, None):
                     applicants = [[session.userid, session.username]]
                     permissions = [["TRUE", "TRUE", "TRUE"]]
-                    return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "Invalid: user does not exist")
+                    return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "Invalid: user does not exist", session.csrf_token)
+                elif data.remove_user:
+                    applicants, permissions = self.get_applicants(data, "remove_user")
+                    return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "", session.csrf_token)
                 else:
-                    return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "")
-
-            elif data.remove_user:
-                        applicants, permissions = self.get_applicants(data, "remove_user")
-                        return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "")
+                    return render.apply(nav, apply_form, get_apply_permissions_form, project, applicants, permissions, "", session.csrf_token)
             
             # Set users as working on project and set project status in progress
             elif data.apply:
