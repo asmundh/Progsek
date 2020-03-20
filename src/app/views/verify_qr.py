@@ -1,5 +1,5 @@
 import web
-from views.forms import verify_form
+from views.forms import verify_qr_form
 import models.user
 from views.utils import get_nav_bar
 import sys, os, hmac, base64, pickle
@@ -17,13 +17,13 @@ class Verify():
 
     def GET(self):
         """
-        Show the verify page
+        Show the verify_qr page
 
-            :return: The verify page showing other users if logged in
+            :return: The verify_qr page showing other users if logged in
         """
         session = web.ctx.session
 
-        return render.verify(session.auth_url, verify_form, "")
+        return render.verify_qr(session.auth_url, verify_qr_form, "")
 
     def POST(self):
         """
@@ -37,7 +37,7 @@ class Verify():
         # Check if inputted is correct
         validated = validate_key(session.unauth_username, data.key)
         if not validated: 
-            return render.verify(session.auth_url, verify_form, "Wrong authenticator code") 
+            return render.verify_qr(session.auth_url, verify_qr_form, "Wrong authenticator code") 
         if validated:
             Login.login(session.unauth_userid, session.unauth_username, session.unauth_remember)
             raise web.seeother("/")

@@ -53,7 +53,7 @@ class Login():
             url = generate_url("beelance", email, get_key(session.unauth_username))
             session.auth_url = url
             # generate_qrcode(url)
-            raise web.seeother("/verify")
+            raise web.seeother("/verify_qr")
         else:
             return render.login(nav, login_form, "- User authentication failed")
 

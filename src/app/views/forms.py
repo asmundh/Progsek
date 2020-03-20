@@ -9,7 +9,7 @@ number = form.regexp(r"^[0-9]+$", "- Must be a number")
 not_empty = form.regexp(r".+", "- This field is required")
 
 # Verify form
-verify_form = form.Form(
+verify_qr_form = form.Form(
     form.Textbox("key", description=""),
     form.Button("Authenticate", type="submit", description="Authenticate"),
 )
