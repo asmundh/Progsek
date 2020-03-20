@@ -1,7 +1,6 @@
 import re
 import hashlib, binascii, os
 
-
 def get_nav_bar(session):
     """
     Generates the page nav bar
