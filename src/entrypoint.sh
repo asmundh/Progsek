@@ -13,6 +13,7 @@ USE_LISTEN_PORT=${LISTEN_PORT:-8080}
 #if [ -f /app/nginx.conf ]; then
 #    cat /app/nginx.conf > /etc/nginx/conf.d/nginx.conf
 #else
+
 content_server='server {\n'
 content_server=$content_server"    listen ${USE_LISTEN_PORT};\n"
 content_server=$content_server'    location / {\n'
@@ -23,6 +24,9 @@ content_server=$content_server"    location $USE_STATIC_URL {\n"
 content_server=$content_server"        alias $USE_STATIC_PATH;\n"
 content_server=$content_server'    }\n'
 content_server=$content_server'}\n'
+
+content_server=$content_server"add_header X-Frame-Options sameorigin always;"
+content_server=$content_server"add_header X-Content-Type-Options nosniff always;"
 
 
 # Configuration skeleton for using SSL
