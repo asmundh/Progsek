@@ -23,7 +23,7 @@ class Verify():
         """
         session = web.ctx.session
 
-        return render.verify(session.auth_url, verify_form)
+        return render.verify(session.auth_url, verify_form, "")
 
     def POST(self):
         """
@@ -36,7 +36,8 @@ class Verify():
 
         # Check if inputted is correct
         validated = validate_key(session.unauth_username, data.key)
-        # TODO: handle wrong key input
+        if not validated: 
+            return render.verify(session.auth_url, verify_form, "Wrong authenticator code") 
         if validated:
             Login.login(session.unauth_userid, session.unauth_username, session.unauth_remember)
             raise web.seeother("/")
