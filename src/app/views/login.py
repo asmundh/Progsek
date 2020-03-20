@@ -1,6 +1,8 @@
 import web
 from views.forms import login_form
 import models.user
+from views.utils import get_nav_bar, hash_password, verify_password
+import hmac, base64
 from models.user import get_user, get_user_id_by_name
 import hashlib
 from authenticator.authenticator import generate_qrcode, generate_url, get_key
@@ -100,12 +102,11 @@ class Login():
         try:
             # Fetch the users cookies if it exists
             cookies = web.cookies()
-            # Fetch the remember cookie and convert from string to bytes
-            remember_hash = bytes(cookies.remember[2:][:-1], 'ascii')
-            # Decode the hash
-            decode = base64.b64decode(remember_hash)
-            # Load the decoded hash to receive the host signature and the username
-            username, sign = pickle.loads(decode)
+            remember_hash = hash_password(cookies)
+            if verify_password(remember_hash, self.rememberme(self)):
+
+
+                username, sign = remember_hash
         except AttributeError as e:
             # The user did not have the stored remember me cookie
             pass
@@ -114,6 +115,11 @@ class Login():
         if self.sign_username(username) == sign:
             userid = models.user.get_user_id_by_name(username)
             self.login(username, userid, False)
+
+    def rememberme(self):
+        session = web.ctx.session
+        creds = self.sign_username(session.username)
+        return hash_password(creds)
 
     @classmethod
     def sign_username(self, username):
@@ -134,14 +140,3 @@ class Login():
         if remember:
             rememberme = self.rememberme()
             web.setcookie('remember', rememberme, 300000000)
-
-    def rememberme(self):
-        """
-        Encode a base64 object consisting of the username signed with the
-        host secret key and the username. Can be reassembled with the
-        hosts secret key to validate user.
-            :return: base64 object consisting of signed username and username
-        """
-        session = web.ctx.session
-        creds = [session.username, self.sign_username(session.username)]
-        return base64.b64encode(pickle.dumps(creds))
