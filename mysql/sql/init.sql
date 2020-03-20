@@ -2,7 +2,7 @@
 CREATE TABLE users (
   userid INT UNSIGNED AUTO_INCREMENT,
   username VARCHAR(45) UNIQUE NOT NULL,
-  password VARCHAR(45) NOT NULL,
+  password VARCHAR(200) NOT NULL,
   full_name VARCHAR(200) NOT NULL,
   company VARCHAR(50),
   email VARCHAR(50) NOT NULL,
@@ -11,6 +11,8 @@ CREATE TABLE users (
   state VARCHAR(50),
   postal_code VARCHAR(50),
   country VARCHAR(50),
+  verification_key VARCHAR(64) UNIQUE,
+  verified INT UNSIGNED NOT NULL,
   PRIMARY KEY (userid)
 );
 
@@ -72,11 +74,6 @@ CREATE TABLE task_files (
 );
 
 
-/*
-* Initial data
-*/
-
-insert into users values (NULL, "admin", "48bead1bb864138c2cafaf1bd41332ab", "Admin Modsen", "ntnu", 'mail@ntnu.no', "street", "trondheim", "trondheim", "1234", "norway");
 
 insert into project_category values (NULL, "Gardening");
 insert into project_category values (NULL, "Programming");
@@ -87,6 +84,6 @@ insert into project_category values (NULL, "Grocery shopping");
 Create default database user 
 */
 
-CREATE USER 'root'@'10.5.0.6' IDENTIFIED BY 'root';
-GRANT ALL PRIVILEGES ON db.* TO 'root'@'10.5.0.6';
+CREATE USER 'MothraGodzilla'@'10.52.0.5' IDENTIFIED BY 'RedPowerRangerBestPowerRanger';
+GRANT ALL PRIVILEGES ON db.* TO 'MothraGodzilla'@'10.52.0.5';
 

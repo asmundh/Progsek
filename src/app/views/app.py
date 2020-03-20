@@ -5,11 +5,12 @@ from views.login import Login
 from views.logout import Logout
 from views.register import Register
 from views.new_project import New_project
+from views.verify import Verify
 from views.open_projects import Open_projects
 from views.project import Project
 from views.index import Index
 from views.apply import Apply
-from views.verify_qr import Verify
+from views.qr_verify import Verify
 # Connect to smtp server, enables web.sendmail()
 try:
     smtp_server = os.getenv("smtp_server") + ":25"
@@ -31,7 +32,8 @@ urls = (
     '/open_projects', 'Open_projects',
     '/project', 'Project',
     '/apply', 'Apply',
-    '/verify_qr', 'Verify'
+    '/qr_verify', 'Verify_qr'
+    '/verify(.*)', 'Verify'
 )
                               
 # Initialize application using the web py framework
@@ -41,7 +43,7 @@ app = web.application(urls, globals())
 render = web.template.render('templates/')
 # web.debug = False
 # Set session timeout
-web.config.session_parameters['timeout'] = 15000000
+web.config.session_parameters['timeout'] = 3600
 
 # Workaround to use sessions with reloader (debugger) http://webpy.org/cookbook/session_with_reloader
 if web.config.get('_session') is None:

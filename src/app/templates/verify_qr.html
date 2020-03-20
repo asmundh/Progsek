@@ -1,4 +1,4 @@
-$def with (auth_url, verify_qr_form, message)
+$def with (auth_url, qr_verify_form, message)
 <head>
     <meta charset="UTF-8">
     <title>Authenticate</title>
@@ -24,7 +24,7 @@ $def with (auth_url, verify_qr_form, message)
          height="200"
     />
     <form method="POST" class="center">
-        $:verify_qr_form.render()
+        $:qr_verify_form.render()
     </form>
     <h>$:message</h2>
 </body>

@@ -123,7 +123,6 @@ class Apply:
             #user_id_to_add = data.user_to_add
             user_name_to_add = data.user_to_add
             user_exists = check_user_exists(user_name_to_add)
-            print("USERS: " + user_name_to_add + str(user_exists), get_users())
             if not user_exists:
                     # DO something
                     return None, None

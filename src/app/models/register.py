@@ -2,7 +2,7 @@ from models.database import db
 import mysql.connector
 
 def set_user(username, password, full_name, company, email, 
-        street_address, city, state, postal_code, country):
+        street_address, city, state, postal_code, country, verification_key):
     """
     Register a new user in the database
         :param username: The users unique user name
@@ -28,9 +28,9 @@ def set_user(username, password, full_name, company, email,
     """
     db.connect()
     cursor = db.cursor()
-    query = ("INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+    query = ("INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 0)")
     try:
-        cursor.execute(query, (username, password, full_name, company, email, street_address, city, state, postal_code, country))
+        cursor.execute(query, (username, password, full_name, company, email, street_address, city, state, postal_code, country, verification_key))
         db.commit()
     except mysql.connector.Error as err:
         print("Failed executing query: {}".format(err))

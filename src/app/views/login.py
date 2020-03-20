@@ -1,13 +1,15 @@
 import web
 from views.forms import login_form
 import models.user
-from views.utils import get_nav_bar
 from models.user import get_user
-import os, hmac, base64, pickle
 import hashlib
 from authenticator.authenticator import generate_qrcode, generate_url, get_key
+from views.utils import get_nav_bar, hash_password, verify_password
+import os, hmac, base64, pickle
 
 # Get html templates
+
+
 render = web.template.render('templates/')
 
 
@@ -39,23 +41,49 @@ class Login():
         data = web.input(username="", password="", remember=False)
 
         # Validate login credential with database query
-        password_hash = hashlib.md5(b'TDT4237' + data.password.encode('utf-8')).hexdigest()
-        user = models.user.match_user(data.username, password_hash)
+        user_exists = models.user.check_user_exists(data.username)
+
+        if not user_exists:
+            return render.login(nav, login_form, "- User authentication failed")
+
+        session.unauth_username = user[1]
+        session.unauth_userid = user[0]
+        session.unauth_remember = 1 if data.remember else 0
+        user = get_user(session.unauth_userid)
+        email = user[0][5]
+        url = generate_url("beelance", email, get_key(session.unauth_username))
+        session.auth_url = url
+
+        stored_password = models.user.get_password_by_user_name(data.username)
+        if(verify_password(stored_password , data.password)):
+            user = models.user.match_user(data.username, stored_password)
+
+        
+        user_is_verified = models.user.check_if_user_is_verified_by_username(data.username)
 
         # If there is a matching user/password in the database the user is logged in
         if user:
-            # self.login(user[1], user[0], data.remember)
-            session.unauth_username = user[1]
-            session.unauth_userid = user[0]
-            session.unauth_remember = 1 if data.remember else 0
-            user = get_user(session.unauth_userid)
-            email = user[0][5]
-            url = generate_url("beelance", email, get_key(session.unauth_username))
-            session.auth_url = url
-            # generate_qrcode(url)
+            if not user_is_verified:
+                return render.login(nav, login_form, "- User not verified")
+            
+            self.login(user[1], user[0], data.remember)
             raise web.seeother("/verify_qr")
         else:
             return render.login(nav, login_form, "- User authentication failed")
+
+    def login(self, username, userid, remember):
+        """
+        Log in to the application
+        """
+        session = web.ctx.session
+        session.username = username
+        session.userid = userid            
+
+        if remember:
+            rememberme = self.rememberme()
+            web.setcookie('remember', rememberme , 4320)
+
+
 
     def check_rememberme(self):
         """

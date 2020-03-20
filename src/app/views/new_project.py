@@ -78,7 +78,6 @@ class New_project:
                     return render.new_project(nav, project_form, project_buttons,  "Invalid user: " + data["user_name_"+str(i)])
 
             # Save the project to the database
-            print(session.userid)
             projectid = models.project.set_project(data.category_name, str(session.userid), 
             data.project_title, data.project_description, status)
 

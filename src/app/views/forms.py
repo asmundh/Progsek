@@ -9,7 +9,7 @@ number = form.regexp(r"^[0-9]+$", "- Must be a number")
 not_empty = form.regexp(r".+", "- This field is required")
 
 # Verify form
-verify_qr_form = form.Form(
+qr_verify_form = form.Form(
     form.Textbox("key", description=""),
     form.Button("Authenticate", type="submit", description="Authenticate"),
 )
@@ -36,6 +36,7 @@ register_form = form.Form(
     form.Password("password", vpass, description="Password"),
     form.Button("Register", type="submit", description="Register")
 )
+
 
 # Define the project view form
 project_form = form.Form(
