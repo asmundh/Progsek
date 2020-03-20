@@ -1,0 +1,30 @@
+$def with (auth_url, qr_verify_form, message)
+<head>
+    <meta charset="UTF-8">
+    <title>Authenticate</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/stylesheet.css">
+    <link rel="shortcut icon" type="image/png" href="static/honeybee.png"/>
+    <script type="text/javascript">
+        function generateBarCode()
+        {
+            var nric = $('#auth_url');
+            var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=200x200';
+            $('#barcode').attr('src', url);
+        }
+    </script>
+</head>
+<body class="center">
+    <h2>Scan the below QR code for 2-factor-authentication </h2>
+    <img id='barcode'
+         src="https://api.qrserver.com/v1/create-qr-code/?data=$auth_url&amp;size=100x100"
+         alt=$auth_url
+         title="QRCode"
+         width="200"
+         height="200"
+    />
+    <form method="POST" class="center">
+        $:qr_verify_form.render()
+    </form>
+    <h>$:message</h2>
+</body>
