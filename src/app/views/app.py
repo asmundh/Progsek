@@ -35,7 +35,7 @@ urls = (
     '/qr_verify', 'QRVerify',
     '/verify(.*)', 'Verify',
 )
-                              
+
 # Initialize application using the web py framework
 app = web.application(urls, globals())
 

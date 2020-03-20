@@ -1,6 +1,40 @@
 from models.database import db
 import mysql.connector
 
+def project_exists(projectid):
+    """
+    Returns true if a project exists in db, false otherwise
+
+    :param projectid:
+    :return: true if exists, false otherwise
+    """
+    projects = get_projects()
+    if int(projectid) in projects:
+        return True
+    return False
+
+def get_projects():
+    """
+    Gets all projects
+    :return: list of projectids
+    """
+    db.connect()
+    cursor = db.cursor()
+    query = ("SELECT projectid from projects")
+    try:
+        cursor.execute(query)
+        projects = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print("Failed executing query: {}".format(err))
+        users = []
+        cursor.fetchall()
+        exit(1)
+    finally:
+        cursor.close()
+        db.close()
+    print(projects)
+    return [val[0] for val in projects]
+
 def get_categories():
     """
     Get all categories
