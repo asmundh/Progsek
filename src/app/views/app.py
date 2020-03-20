@@ -63,7 +63,6 @@ def session_hook():
     web.template.Template.globals['session'] = session
 
 
-
 app.add_processor(web.loadhook(session_hook))
 
 app = app.wsgifunc()

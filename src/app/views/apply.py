@@ -61,6 +61,7 @@ class Apply:
             project = models.project.get_project_by_id(data.projectid)
 
             if data.add_user:
+                session.csrf_token = uuid4().hex
                 applicants, permissions = self.get_applicants(data, "add_user")
                 if (applicants, permissions) == (None, None):
                     applicants = [[session.userid, session.username]]

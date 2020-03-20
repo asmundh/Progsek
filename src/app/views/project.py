@@ -31,7 +31,6 @@ class Project:
             permissions = models.project.get_user_permissions(str(session.userid), data.projectid)
         except:
             permissions = [0,0,0]
-        permissions = [1, 1, 1]
         categories = models.project.get_categories()
         if data.projectid:
             project = models.project.get_project_by_id(data.projectid)

@@ -76,7 +76,7 @@ class Register:
 
         # Send verification mail
         topic= "Verification"
-        message = "To confirm your registration, visit the link http://localhost:8052/verify{}".format(verification_key)
+        message = "To confirm your registration, visit the link https://localhost:452/verify{}".format(verification_key)
         web.sendmail("beelance@ntnu.no", data.email, topic, message)
 
         return render.register(nav, register_form, "User registered!", session.csrf_token)
