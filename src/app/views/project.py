@@ -39,6 +39,7 @@ class Project:
         else:
             project = [[]]
             tasks = [[]]
+
         render = web.template.render('templates/', globals={'get_task_files':models.project.get_task_files, 'session':session})
         return render.project(nav, project_form, project, tasks,permissions, categories)
 

@@ -7,6 +7,8 @@ import hashlib
 from authenticator.authenticator import validate_key
 from views.login import Login
 
+from logs.log import write_requests as log
+
 # Get html templates
 render = web.template.render('templates/')
 
@@ -36,8 +38,10 @@ class QRVerify():
 
         # Check if inputted is correct
         validated = validate_key(session.unauth_username, data.key)
-        if not validated: 
+        if not validated:
+            log("TWO-FACTOR", web.ctx['ip'], [('Username',session.unauth_username), ("Key", data.key), ("Response: ", "Login failed, auth key is wrong")])
             return render.qr_verify(session.auth_url, qr_verify_form, "Wrong authenticator code") 
         if validated:
+            log("TWO-FACTOR", web.ctx['ip'], [('Username',session.unauth_username), ("Key", data.key), ("Response: ", "Login OK, auth key correct")])
             Login.login(session.unauth_userid, session.unauth_username, session.unauth_remember)
             raise web.seeother("/")
