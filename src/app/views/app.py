@@ -62,6 +62,7 @@ def session_hook():
     web.ctx.session = session
     web.template.Template.globals['session'] = session
 
+web.config.debug = False
 
 app.add_processor(web.loadhook(session_hook))
 
